@@ -1,2 +1,2 @@
 # Mechanical-Ageing
-A Minecraft mod with stage controlled machines
+A Minecraft mod with stage controlled machines.
