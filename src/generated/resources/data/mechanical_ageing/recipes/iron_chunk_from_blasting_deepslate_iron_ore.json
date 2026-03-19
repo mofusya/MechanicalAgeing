@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.25,
+  "group": "iron",
+  "ingredient": {
+    "item": "mechanical_ageing:deepslate_iron_ore"
+  },
+  "result": "mechanical_ageing:iron_chunk"
+}

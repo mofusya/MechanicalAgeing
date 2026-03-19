@@ -1,0 +1,5 @@
+// 1.20.1	2026-03-19T17:38:26.1881292	Loot Tables
+e10cdbb501578d491840759472ca7d23c832874e data/mechanical_ageing/loot_tables/blocks/compressed_iron_block.json
+fdb8ff4d8aa7c26d856dd8e34150296fe6021438 data/mechanical_ageing/loot_tables/blocks/deepslate_iron_ore.json
+948c887c6d98deb58eaf42a891bf7c384593d1cd data/mechanical_ageing/loot_tables/blocks/iron_block.json
+861afd0c4b27bb859c4922a750a4b7e426ff9618 data/mechanical_ageing/loot_tables/blocks/iron_ore.json

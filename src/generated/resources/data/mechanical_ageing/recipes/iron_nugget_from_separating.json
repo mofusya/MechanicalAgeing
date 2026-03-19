@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "mechanical_ageing:iron_chunk"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "mechanical_ageing:iron_nugget"
+  }
+}
