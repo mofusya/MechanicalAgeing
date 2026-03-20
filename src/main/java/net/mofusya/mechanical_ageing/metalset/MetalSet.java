@@ -22,11 +22,13 @@ public final class MetalSet {
     private final RegistryObject<Item> raw;
     private final RegistryObject<Item> nugget;
     private final TagKey<Block> mineableWith;
+    private final int color;
+    private final int oreColor;
 
     private final String modId;
     private final String id;
 
-    public MetalSet(String modId, String id, RegistryObject<Block> compressedBlock, RegistryObject<Block> block, RegistryObject<Block> ore, RegistryObject<Block> deepslateOre, RegistryObject<Item> ingot, RegistryObject<Item> chunk, RegistryObject<Item> pureDust, RegistryObject<Item> dust, RegistryObject<Item> dirtyDust, RegistryObject<Item> particle, RegistryObject<Item> raw, RegistryObject<Item> nugget, TagKey<Block> mineableWith) {
+    public MetalSet(String modId, String id, RegistryObject<Block> compressedBlock, RegistryObject<Block> block, RegistryObject<Block> ore, RegistryObject<Block> deepslateOre, RegistryObject<Item> ingot, RegistryObject<Item> chunk, RegistryObject<Item> pureDust, RegistryObject<Item> dust, RegistryObject<Item> dirtyDust, RegistryObject<Item> particle, RegistryObject<Item> raw, RegistryObject<Item> nugget, TagKey<Block> mineableWith, int color, int oreColor) {
         this.modId = modId;
         this.id = id;
         this.compressedBlock = compressedBlock;
@@ -42,6 +44,8 @@ public final class MetalSet {
         this.raw = raw;
         this.nugget = nugget;
         this.mineableWith = mineableWith;
+        this.color = color;
+        this.oreColor = oreColor;
     }
 
     public Block compressedBlock() {
@@ -96,6 +100,14 @@ public final class MetalSet {
         return this.mineableWith;
     }
 
+    public int color(){
+        return this.color;
+    }
+
+    public int oreColor() {
+        return this.oreColor;
+    }
+
     public String getModId() {
         return this.modId;
     }
@@ -106,17 +118,21 @@ public final class MetalSet {
 
     public static class Builder{
         private final double density;
+        private final double hardness;
         private final int meltingPoint;
         private final int boilingPoint;
         private float radiationMultiplier = 1f;
         private boolean magnetic = false;
         private TagKey<Block> mineableWith = BlockTags.NEEDS_IRON_TOOL;
+        private int color = 0xFFFFFF;
+        private int oreColor = -404;
 
         private Item.Properties itemBuild = new Item.Properties();
         private BlockBehaviour.Properties blockBuild = BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK);
 
-        public Builder(double density, int meltingPoint, int boilingPoint) {
+        public Builder(double density, double hardness, int meltingPoint, int boilingPoint) {
             this.density = density;
+            this.hardness = hardness;
             this.meltingPoint = meltingPoint;
             this.boilingPoint = boilingPoint;
         }
@@ -146,8 +162,22 @@ public final class MetalSet {
             return this;
         }
 
+        public Builder color(int color){
+            this.color = color;
+            return this;
+        }
+
+        public Builder oreColor(int oreColor){
+            this.oreColor = oreColor;
+            return this;
+        }
+
         public double getDensity() {
             return this.density;
+        }
+
+        public double getHardness() {
+            return this.hardness;
         }
 
         public int getBoilingPoint() {
@@ -176,6 +206,14 @@ public final class MetalSet {
 
         public BlockBehaviour.Properties getBlockBuild() {
             return this.blockBuild;
+        }
+
+        public int getColor() {
+            return this.color;
+        }
+
+        public int getOreColor() {
+            return this.oreColor;
         }
     }
 }

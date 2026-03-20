@@ -50,7 +50,7 @@ description = '''${mod_description}'''
 [[dependencies."${mod_id}"]]
     modId = "ornatelib"
     mandatory = true
-    versionRange = "1.20.1-alpha0.4a-forge"
+    versionRange = "1.20.1-alpha0.4b-forge"
     ordering = "NONE"
     side = "BOTH"
 [[dependencies."${mod_id}"]]

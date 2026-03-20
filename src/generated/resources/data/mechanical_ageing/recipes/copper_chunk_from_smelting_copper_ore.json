@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.25,
+  "group": "copper",
+  "ingredient": {
+    "item": "mechanical_ageing:copper_ore"
+  },
+  "result": "mechanical_ageing:copper_chunk"
+}

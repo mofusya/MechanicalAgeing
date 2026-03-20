@@ -46,7 +46,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
 
                 ModelFile model = models()
-                        .withExistingParent(name, mcLoc("block/cube_all"))
+                        .withExistingParent(name, modLoc("block/tint_block"))
                         .texture("all", modLoc("block/block"));
 
                 this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(model).build());
@@ -60,7 +60,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
 
                 ModelFile model = models()
-                        .withExistingParent(name, mcLoc("block/cube_all"))
+                        .withExistingParent(name, modLoc("block/tint_block"))
                         .texture("all", modLoc("block/compressed_block"));
 
                 this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(model).build());

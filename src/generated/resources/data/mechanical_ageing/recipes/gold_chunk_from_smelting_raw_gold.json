@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.25,
+  "group": "gold",
+  "ingredient": {
+    "item": "mechanical_ageing:raw_gold"
+  },
+  "result": "mechanical_ageing:gold_chunk"
+}

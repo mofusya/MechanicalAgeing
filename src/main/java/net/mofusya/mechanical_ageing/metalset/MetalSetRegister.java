@@ -3,11 +3,11 @@ package net.mofusya.mechanical_ageing.metalset;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.DropExperienceBlock;
-import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+import net.mofusya.mechanical_ageing.items.item.ToppedAttributedBlockItem;
+import net.mofusya.mechanical_ageing.items.item.ToppedAttributedItem;
 import net.mofusya.ornatelib.item.AttributedItem;
 import net.mofusya.ornatelib.registries.OrnateBlockDeferredRegister;
 import net.mofusya.ornatelib.registries.OrnateItemDeferredRegister;
@@ -32,37 +32,38 @@ public class MetalSetRegister {
     }
 
     public MetalSet register(String id, MetalSet.Builder builder, int slot) {
-        RegistryObject<Block> compressedBlock = this.blockRegisters.register("compressed_" + id + "_block", createDefferBlockBuilder(builder), slot);
-        RegistryObject<Block> block = this.blockRegisters.register(id + "_block", createDefferBlockBuilder(builder), slot);
         RegistryObject<Block> ore = this.blockRegisters.register(id + "_ore", createDefferBlockBuilder(builder), slot);
         RegistryObject<Block> deepslateOre = this.blockRegisters.register("deepslate_" + id + "_ore", createDefferBlockBuilder(builder), slot);
-        RegistryObject<Item> ingot = this.itemRegisters.register(id + "_ingot", () -> new AttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        RegistryObject<Item> chunk = this.itemRegisters.register(id + "_chunk", () -> new AttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        RegistryObject<Item> pureDust = this.itemRegisters.register("pure_" + id + "_dust", () -> new AttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        RegistryObject<Item> dust = this.itemRegisters.register(id + "_dust", () -> new AttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        RegistryObject<Item> dirtyDust = this.itemRegisters.register("dirty_" + id + "_dust", () -> new AttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        RegistryObject<Item> particle = this.itemRegisters.register(id + "_particle", () -> new AttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        RegistryObject<Item> raw = this.itemRegisters.register("raw_" + id, () -> new AttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        RegistryObject<Item> nugget = this.itemRegisters.register(id + "_nugget", () -> new AttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        MetalSet toReturn = new MetalSet(this.modId, id, compressedBlock, block, ore, deepslateOre, ingot, chunk, pureDust, dust, dirtyDust, particle, raw, nugget, builder.getMineableWith());
+        RegistryObject<Block> block = this.blockRegisters.register(id + "_block", createDefferBlockBuilder(builder), slot);
+        RegistryObject<Block> compressedBlock = this.blockRegisters.register("compressed_" + id + "_block", createDefferBlockBuilder(builder), slot);
+        RegistryObject<Item> ingot = this.itemRegisters.register(id + "_ingot", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
+        RegistryObject<Item> chunk = this.itemRegisters.register(id + "_chunk", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
+        RegistryObject<Item> pureDust = this.itemRegisters.register("pure_" + id + "_dust", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
+        RegistryObject<Item> dust = this.itemRegisters.register(id + "_dust", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
+        RegistryObject<Item> dirtyDust = this.itemRegisters.register("dirty_" + id + "_dust", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
+        RegistryObject<Item> particle = this.itemRegisters.register(id + "_particle", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
+        RegistryObject<Item> nugget = this.itemRegisters.register(id + "_nugget", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
+        RegistryObject<Item> raw = this.itemRegisters.register("raw_" + id, () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
+        MetalSet toReturn = new MetalSet(this.modId, id, compressedBlock, block, ore, deepslateOre, ingot, chunk, pureDust, dust, dirtyDust, particle, raw, nugget, builder.getMineableWith(), builder.getColor(), builder.getOreColor());
         this.metalSets.add(toReturn);
         return toReturn;
     }
 
     private static OrnateBlockDeferredRegister.Builder createDefferBlockBuilder(MetalSet.Builder builder) {
         return new OrnateBlockDeferredRegister.Builder()
-                .attribute(createMetalAttribute(builder))
+                .itemFunc((block, properties) -> new ToppedAttributedBlockItem(block, properties, createMetalAttribute(builder)))
                 .itemBuild(builder.getItemBuild())
                 .blockBuild(builder.getBlockBuild());
     }
 
     private static AttributedItem.Builder createMetalAttribute(MetalSet.Builder builder) {
         return new AttributedItem.Builder()
-                .attribute("density", builder.getDensity())
-                .attribute("melting_point", builder.getMeltingPoint())
-                .attribute("boiling_point", builder.getBoilingPoint())
-                .attribute("radiation_multiplier", builder.getRadiationMultiplier())
-                .attribute("magnetic", builder.isMagnetic());
+                .attribute("density", builder.getDensity(), true)
+                .attribute("hardness", builder.getHardness(), true)
+                .attribute("melting_point", builder.getMeltingPoint(), true)
+                .attribute("boiling_point", builder.getBoilingPoint(), true)
+                .attribute("radiation_multiplier", builder.getRadiationMultiplier(), true)
+                .attribute("magnetic", builder.isMagnetic(), true);
     }
 
     public void register(IEventBus eventBus) {
@@ -129,7 +130,7 @@ public class MetalSetRegister {
         return toReturn;
     }
 
-    public List<MetalSet> getEntries(){
+    public List<MetalSet> getEntries() {
         return new ArrayList<>(this.metalSets);
     }
 

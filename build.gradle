@@ -162,7 +162,7 @@ dependencies {
     implementation fg.deobf("curse.maven:mekanism-generators-268566:6552914")
     implementation fg.deobf("curse.maven:mekanism-additions-345425:6552913")
 
-    implementation fg.deobf("curse.maven:ornatelib-1479095:7755676")
+    implementation fg.deobf("curse.maven:ornatelib-1479095:7779710")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 

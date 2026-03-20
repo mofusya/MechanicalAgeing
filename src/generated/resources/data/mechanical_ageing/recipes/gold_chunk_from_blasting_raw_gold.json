@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.25,
+  "group": "gold",
+  "ingredient": {
+    "item": "mechanical_ageing:raw_gold"
+  },
+  "result": "mechanical_ageing:gold_chunk"
+}
