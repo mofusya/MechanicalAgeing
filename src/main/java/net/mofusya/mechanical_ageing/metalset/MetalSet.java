@@ -1,14 +1,25 @@
 package net.mofusya.mechanical_ageing.metalset;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.registries.RegistryObject;
+import net.mofusya.mechanical_ageing.world_generation.ModBiomeModifiers;
+import net.mofusya.mechanical_ageing.world_generation.ModConfiguredFeatures;
+import net.mofusya.mechanical_ageing.world_generation.ModPlacedFeatures;
 
 public final class MetalSet {
+    private final ResourceKey<ConfiguredFeature<?, ?>> oreKey;
+    private final ResourceKey<PlacedFeature> orePlacedKey;
+    private final ResourceKey<BiomeModifier> oreBiomeKey;
+
     private final RegistryObject<Block> compressedBlock;
     private final RegistryObject<Block> block;
     private final RegistryObject<Block> ore;
@@ -46,6 +57,10 @@ public final class MetalSet {
         this.mineableWith = mineableWith;
         this.color = color;
         this.oreColor = oreColor;
+
+        this.oreKey = ModConfiguredFeatures.registerKey(id + "_ore");
+        this.orePlacedKey = ModPlacedFeatures.registerKey(id + "_ore_placed");
+        this.oreBiomeKey = ModBiomeModifiers.registerKey("add_" + id + "_ore");
     }
 
     public Block compressedBlock() {
@@ -96,11 +111,11 @@ public final class MetalSet {
         return this.nugget.get();
     }
 
-    public TagKey<Block> mineableWith(){
+    public TagKey<Block> mineableWith() {
         return this.mineableWith;
     }
 
-    public int color(){
+    public int color() {
         return this.color;
     }
 
@@ -116,7 +131,19 @@ public final class MetalSet {
         return this.id;
     }
 
-    public static class Builder{
+    public ResourceKey<ConfiguredFeature<?, ?>> getOreKey() {
+        return this.oreKey;
+    }
+
+    public ResourceKey<PlacedFeature> getOrePlacedKey() {
+        return this.orePlacedKey;
+    }
+
+    public ResourceKey<BiomeModifier> getOreBiomeKey() {
+        return this.oreBiomeKey;
+    }
+
+    public static class Builder {
         private final double density;
         private final double hardness;
         private final int meltingPoint;
@@ -137,37 +164,37 @@ public final class MetalSet {
             this.boilingPoint = boilingPoint;
         }
 
-        public Builder radiationMultiplier(float radiationMultiplier){
+        public Builder radiationMultiplier(float radiationMultiplier) {
             this.radiationMultiplier = radiationMultiplier;
             return this;
         }
 
-        public Builder magnetic(){
+        public Builder magnetic() {
             this.magnetic = true;
             return this;
         }
 
-        public Builder mineableWith(TagKey<Block> mineableWith){
+        public Builder mineableWith(TagKey<Block> mineableWith) {
             this.mineableWith = mineableWith;
             return this;
         }
 
-        public Builder itemBuild(Item.Properties itemBuild){
+        public Builder itemBuild(Item.Properties itemBuild) {
             this.itemBuild = itemBuild;
             return this;
         }
 
-        public Builder blockBuild(BlockBehaviour.Properties blockBuild){
+        public Builder blockBuild(BlockBehaviour.Properties blockBuild) {
             this.blockBuild = blockBuild;
             return this;
         }
 
-        public Builder color(int color){
+        public Builder color(int color) {
             this.color = color;
             return this;
         }
 
-        public Builder oreColor(int oreColor){
+        public Builder oreColor(int oreColor) {
             this.oreColor = oreColor;
             return this;
         }
