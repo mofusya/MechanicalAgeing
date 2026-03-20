@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "mechanical_ageing:lead_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "mechanical_ageing:lead_ingot"
+  }
+}

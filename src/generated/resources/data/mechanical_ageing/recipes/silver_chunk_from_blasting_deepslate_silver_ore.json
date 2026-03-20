@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.25,
+  "group": "silver",
+  "ingredient": {
+    "item": "mechanical_ageing:deepslate_silver_ore"
+  },
+  "result": "mechanical_ageing:silver_chunk"
+}

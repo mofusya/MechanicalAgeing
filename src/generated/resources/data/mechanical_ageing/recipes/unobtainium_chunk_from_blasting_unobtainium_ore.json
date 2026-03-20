@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.25,
+  "group": "unobtainium",
+  "ingredient": {
+    "item": "mechanical_ageing:unobtainium_ore"
+  },
+  "result": "mechanical_ageing:unobtainium_chunk"
+}

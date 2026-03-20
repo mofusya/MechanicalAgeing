@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "mechanical_ageing:compressed_silver_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "mechanical_ageing:silver_block"
+  }
+}

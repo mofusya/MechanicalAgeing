@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.25,
+  "group": "nickel",
+  "ingredient": {
+    "item": "mechanical_ageing:raw_nickel"
+  },
+  "result": "mechanical_ageing:nickel_chunk"
+}

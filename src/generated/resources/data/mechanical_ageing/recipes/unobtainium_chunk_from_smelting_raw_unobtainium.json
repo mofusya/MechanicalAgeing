@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.25,
+  "group": "unobtainium",
+  "ingredient": {
+    "item": "mechanical_ageing:raw_unobtainium"
+  },
+  "result": "mechanical_ageing:unobtainium_chunk"
+}

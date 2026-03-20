@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.25,
+  "group": "aluminum",
+  "ingredient": {
+    "item": "mechanical_ageing:aluminum_ore"
+  },
+  "result": "mechanical_ageing:aluminum_chunk"
+}

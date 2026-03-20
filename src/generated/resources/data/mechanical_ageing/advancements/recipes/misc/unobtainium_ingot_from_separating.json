@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "mechanical_ageing:unobtainium_ingot_from_separating"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_unobtainium_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mechanical_ageing:unobtainium_block"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_unobtainium_block",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mechanical_ageing:unobtainium_ingot_from_separating"
+    ]
+  },
+  "sends_telemetry_event": false
+}

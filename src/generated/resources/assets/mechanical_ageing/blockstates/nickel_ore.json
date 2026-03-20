@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "mechanical_ageing:block/nickel_ore"
+    }
+  }
+}

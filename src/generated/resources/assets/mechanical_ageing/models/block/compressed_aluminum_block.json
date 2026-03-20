@@ -1,0 +1,6 @@
+{
+  "parent": "mechanical_ageing:block/tint_block",
+  "textures": {
+    "all": "mechanical_ageing:block/compressed_block"
+  }
+}
