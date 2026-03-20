@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.25,
+  "group": "mithril",
+  "ingredient": {
+    "item": "mechanical_ageing:raw_mithril"
+  },
+  "result": "mechanical_ageing:mithril_chunk"
+}

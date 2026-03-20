@@ -31,6 +31,10 @@
     "mechanical_ageing:unobtainium_ore",
     "mechanical_ageing:deepslate_unobtainium_ore",
     "mechanical_ageing:unobtainium_block",
-    "mechanical_ageing:compressed_unobtainium_block"
+    "mechanical_ageing:compressed_unobtainium_block",
+    "mechanical_ageing:mithril_ore",
+    "mechanical_ageing:deepslate_mithril_ore",
+    "mechanical_ageing:mithril_block",
+    "mechanical_ageing:compressed_mithril_block"
   ]
 }

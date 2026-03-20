@@ -12,7 +12,8 @@ public class ModMetalSet {
     public static final MetalSet ALUMINUM = METAL_SET.register("aluminum", new MetalSet.Builder(2.70, 9, 933, 2743).color(0xBDBDBD).oreColor(0xCC7460));
     public static final MetalSet SILVER = METAL_SET.register("silver", new MetalSet.Builder(10.49, 49, 1235, 2435).color(0xE3E0FF));
     public static final MetalSet LEAD = METAL_SET.register("lead", new MetalSet.Builder(11.34, 11, 600, 2022).color(0x7C8BB2));
-    public static final MetalSet UNOBTAINIUM = METAL_SET.register("unobtainium", new MetalSet.Builder(5.83, 0.01, Integer.MAX_VALUE, Integer.MAX_VALUE).color(0xEED5FF));
+    public static final MetalSet UNOBTAINIUM = METAL_SET.register("unobtainium", new MetalSet.Builder(5.83, 0.01, Integer.MAX_VALUE, Integer.MAX_VALUE).color(0xDD8FFF));
+    public static final MetalSet MITHRIL = METAL_SET.register("mithril", new MetalSet.Builder(10.25, 1570, 2223, 3493).color(0xEED5FF));
 
     //検索用めも
     /*

@@ -1,4 +1,6 @@
 {
+  "tab.mechanical_ageing.material": "MechanicalAgeing-Materials-",
+
   "block.mechanical_ageing.compressed_iron_block": "Compressed Iron Block",
   "block.mechanical_ageing.iron_block": "Iron Block",
   "block.mechanical_ageing.iron_ore": "Iron Ore",
@@ -102,6 +104,19 @@
   "item.mechanical_ageing.unobtainium_particle": "Unobtainium Particle",
   "item.mechanical_ageing.raw_unobtainium": "Raw Unobtainium",
   "item.mechanical_ageing.unobtainium_nugget": "Unobtainium Nugget",
+
+  "block.mechanical_ageing.compressed_mithril_block": "Compressed Mithril Block",
+  "block.mechanical_ageing.mithril_block": "Mithril Block",
+  "block.mechanical_ageing.mithril_ore": "Mithril Ore",
+  "block.mechanical_ageing.deepslate_mithril_ore": "Deepslate Mithril Ore",
+  "item.mechanical_ageing.mithril_ingot": "Mithril Ingots",
+  "item.mechanical_ageing.mithril_chunk": "Mithril Chunk",
+  "item.mechanical_ageing.pure_mithril_dust": "Pure Mithril Dust",
+  "item.mechanical_ageing.mithril_dust": "Mithril Dust",
+  "item.mechanical_ageing.dirty_mithril_dust": "Dirty Mithril Dust",
+  "item.mechanical_ageing.mithril_particle": "Mithril Particle",
+  "item.mechanical_ageing.raw_mithril": "Raw Mithril",
+  "item.mechanical_ageing.mithril_nugget": "Mithril Nugget",
 
   "item.mechanical_ageing.attributed_item.density": "§7Density§8(g/cm³)",
   "item.mechanical_ageing.attributed_item.hardness": "§7Hardness§8(MPa)",
