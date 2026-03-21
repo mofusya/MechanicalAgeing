@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.25,
+  "group": "titanium",
+  "ingredient": {
+    "item": "mechanical_ageing:raw_titanium"
+  },
+  "result": "mechanical_ageing:titanium_chunk"
+}

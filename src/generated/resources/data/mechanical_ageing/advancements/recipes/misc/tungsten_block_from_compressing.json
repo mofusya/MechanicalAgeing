@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "mechanical_ageing:tungsten_block_from_compressing"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_tungsten_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mechanical_ageing:tungsten_ingot"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_tungsten_ingot",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mechanical_ageing:tungsten_block_from_compressing"
+    ]
+  },
+  "sends_telemetry_event": false
+}

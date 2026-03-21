@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "mechanical_ageing:titanium_chunk"
+    }
+  },
+  "pattern": [
+    "AA"
+  ],
+  "result": {
+    "item": "mechanical_ageing:titanium_ingot"
+  },
+  "show_notification": true
+}

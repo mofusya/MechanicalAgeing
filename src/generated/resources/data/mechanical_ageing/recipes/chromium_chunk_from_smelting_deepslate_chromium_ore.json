@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.25,
+  "group": "chromium",
+  "ingredient": {
+    "item": "mechanical_ageing:deepslate_chromium_ore"
+  },
+  "result": "mechanical_ageing:chromium_chunk"
+}

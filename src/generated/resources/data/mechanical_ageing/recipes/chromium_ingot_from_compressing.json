@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "mechanical_ageing:chromium_chunk"
+    }
+  },
+  "pattern": [
+    "AA"
+  ],
+  "result": {
+    "item": "mechanical_ageing:chromium_ingot"
+  },
+  "show_notification": true
+}

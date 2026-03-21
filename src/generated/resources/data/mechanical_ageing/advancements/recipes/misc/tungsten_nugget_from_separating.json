@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "mechanical_ageing:tungsten_nugget_from_separating"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_tungsten_chunk": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mechanical_ageing:tungsten_chunk"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_tungsten_chunk",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mechanical_ageing:tungsten_nugget_from_separating"
+    ]
+  },
+  "sends_telemetry_event": false
+}

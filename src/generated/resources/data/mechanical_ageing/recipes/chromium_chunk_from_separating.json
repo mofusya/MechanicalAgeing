@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "mechanical_ageing:chromium_ingot"
+    }
+  ],
+  "result": {
+    "count": 2,
+    "item": "mechanical_ageing:chromium_chunk"
+  }
+}

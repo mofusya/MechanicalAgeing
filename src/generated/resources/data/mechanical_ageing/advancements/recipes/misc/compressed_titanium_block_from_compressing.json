@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "mechanical_ageing:compressed_titanium_block_from_compressing"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_titanium_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mechanical_ageing:titanium_block"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_titanium_block",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mechanical_ageing:compressed_titanium_block_from_compressing"
+    ]
+  },
+  "sends_telemetry_event": false
+}
