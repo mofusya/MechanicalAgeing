@@ -14,8 +14,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.mofusya.mechanical_ageing.blocks.ModBlocks;
 import net.mofusya.mechanical_ageing.items.ModItem;
 import net.mofusya.mechanical_ageing.items.ModTabs;
+import net.mofusya.mechanical_ageing.machinetiles.ModMachines;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
 import net.mofusya.mechanical_ageing.metalset.ModMetalSet;
 import org.slf4j.Logger;
@@ -33,6 +35,8 @@ public class MechanicalAgeing {
         ModItem.ITEMS.register(modEventBus);
         ModMetalSet.METAL_SET.register(modEventBus);
         ModTabs.TABS.register(modEventBus);
+        ModBlocks.BLOCKS.register(modEventBus);
+        ModMachines.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);

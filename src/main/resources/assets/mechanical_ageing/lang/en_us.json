@@ -1,5 +1,6 @@
 {
   "tab.mechanical_ageing.material": "MechanicalAgeing-Materials-",
+  "tab.mechanical_ageing.machines": "MechanicalAgeing-Machines-",
 
   "block.mechanical_ageing.compressed_iron_block": "Compressed Iron Block",
   "block.mechanical_ageing.iron_block": "Iron Block",
