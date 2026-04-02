@@ -5,11 +5,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MechanicalAgeing;
-import net.mofusya.mechanical_ageing.machinetiles.ModMachines;
 import net.mofusya.mechanical_ageing.metalset.ModMetalSet;
 
 import java.util.ArrayList;
@@ -31,6 +29,7 @@ public class ModTabs {
             })
             .build());
 
+    /*
     public static final RegistryObject<CreativeModeTab> MACHINES = TABS.register("machines", () -> CreativeModeTab.builder()
             .title(Component.translatable("tab." + MechanicalAgeing.MOD_ID + ".machines"))
             .icon(() -> new ItemStack(ModMachines.DESTROYER.get()))
@@ -43,4 +42,5 @@ public class ModTabs {
                 }
             })
             .build());
+     */
 }

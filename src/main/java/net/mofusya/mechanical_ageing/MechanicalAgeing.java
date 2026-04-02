@@ -82,7 +82,7 @@ public class MechanicalAgeing {
 
                 event.register((state, level, pos, tintIndex) -> {
                     if (tintIndex == 0) {
-                        if (metalSet.oreColor() == -404){
+                        if (metalSet.oreColor() == -404) {
                             return metalSet.color();
                         }
                         return metalSet.oreColor();
@@ -92,7 +92,7 @@ public class MechanicalAgeing {
 
                 event.register((state, level, pos, tintIndex) -> {
                     if (tintIndex == 0) {
-                        if (metalSet.oreColor() == -404){
+                        if (metalSet.oreColor() == -404) {
                             return metalSet.color();
                         }
                         return metalSet.oreColor();
@@ -133,7 +133,7 @@ public class MechanicalAgeing {
                 for (Item item : oreItems) {
                     event.register((itemStack, tintIndex) -> {
                         if (tintIndex == 0) {
-                            if (metalSet.oreColor() == -404){
+                            if (metalSet.oreColor() == -404) {
                                 return metalSet.color();
                             }
                             return metalSet.oreColor();
