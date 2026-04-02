@@ -15,10 +15,12 @@ import net.mofusya.ornatelib.registries.OrnateBlockDeferredRegister;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.awt.SystemColor.menu;
+
 public class MachineRegister {
-    private static final Map<ResourceLocation,RegistryObject<Block>> blockMap = new HashMap<>();
-    private static final Map<ResourceLocation,RegistryObject<BlockEntityType<MachineBlockEntity>>> blockEntityMap = new HashMap<>();
-    private static final Map<ResourceLocation,RegistryObject<MenuType<MachineMenu>>> menuMap = new HashMap<>();
+    private static final Map<ResourceLocation,LazyPointer<RegistryObject<Block>>> blockMap = new HashMap<>();
+    private static final Map<ResourceLocation,LazyPointer<RegistryObject<BlockEntityType<MachineBlockEntity>>>> blockEntityMap = new HashMap<>();
+    private static final Map<ResourceLocation,LazyPointer<RegistryObject<MenuType<MachineMenu>>>> menuMap = new HashMap<>();
 
     protected final String modid;
     protected final OrnateBlockDeferredRegister BLOCKS;
@@ -36,9 +38,15 @@ public class MachineRegister {
         // 疑似的なポインターを作成。これにより、nullを回避し、遅延初期化を実現する。
         final LazyPointer<RegistryObject<Block>> lazyBlock = new LazyPointer<>();
         final LazyPointer<RegistryObject<BlockEntityType<MachineBlockEntity>>> lazyBlockEntity = new LazyPointer<>();
+        final LazyPointer<RegistryObject<MenuType<MachineMenu>>> lazyMenu = new LazyPointer<>();
 
         // 実際のパスを作成。これはDeferredRegisterの内部で使用されるキーと一致する
         final ResourceLocation resourceLocation = new ResourceLocation(modid, id);
+
+        // マップに登録
+        blockMap.put(resourceLocation, lazyBlock);
+        blockEntityMap.put(resourceLocation, lazyBlockEntity);
+        menuMap.put(resourceLocation, lazyMenu);
 
         final MachineTile propertyTile = sup.create(resourceLocation);
 
@@ -77,11 +85,7 @@ public class MachineRegister {
         // ポインターに実際のRegistryObjectをセット
         lazyBlock.set(block);
         lazyBlockEntity.set(blockEntity);
-
-        // マップに登録
-        blockMap.put(resourceLocation, block);
-        blockEntityMap.put(resourceLocation, blockEntity);
-        menuMap.put(resourceLocation, menu);
+        lazyMenu.set(menu);
 
         // 登録キーを返す
         return resourceLocation;
@@ -93,15 +97,15 @@ public class MachineRegister {
         MENUS.register(eventBus);
     }
 
-    public static RegistryObject<Block> getBlock(ResourceLocation id) {
+    public static LazyPointer<RegistryObject<Block>> getBlock(ResourceLocation id) {
         return blockMap.get(id);
     }
 
-    public static RegistryObject<BlockEntityType<MachineBlockEntity>> getBlockEntity(ResourceLocation id) {
+    public static LazyPointer<RegistryObject<BlockEntityType<MachineBlockEntity>>> getBlockEntity(ResourceLocation id) {
         return blockEntityMap.get(id);
     }
 
-    public static RegistryObject<MenuType<MachineMenu>> getMenu(ResourceLocation id) {
+    public static LazyPointer<RegistryObject<MenuType<MachineMenu>>> getMenu(ResourceLocation id) {
         return menuMap.get(id);
     }
 
