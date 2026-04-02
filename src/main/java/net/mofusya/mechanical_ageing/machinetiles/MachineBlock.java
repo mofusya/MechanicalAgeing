@@ -19,18 +19,12 @@ import java.util.function.Supplier;
 
 public class MachineBlock extends BaseEntityBlock {
 
-    private final MachineTile machineTile;
 
     private final Supplier<BlockEntityType<? extends MachineBlockEntity>> blockEntity;
 
     public MachineBlock(Supplier<BlockEntityType<? extends MachineBlockEntity>> blockEntity, MachineTile machineTile) {
         super(machineTile.getBlockBuild());
-        this.machineTile = machineTile;
         this.blockEntity = blockEntity;
-    }
-
-    public MachineTile getMachineTile() {
-        return this.machineTile;
     }
 
     /*BLOCK ENTITY*/

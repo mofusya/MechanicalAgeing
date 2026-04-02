@@ -36,7 +36,7 @@ public class MechanicalAgeing {
         ModMetalSet.METAL_SET.register(modEventBus);
         ModTabs.TABS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
-        ModMachines.register(modEventBus);
+        ModMachines.MACHINES.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);

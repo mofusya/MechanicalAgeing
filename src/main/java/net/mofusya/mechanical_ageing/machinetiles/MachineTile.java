@@ -2,6 +2,7 @@ package net.mofusya.mechanical_ageing.machinetiles;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -24,6 +25,12 @@ public abstract class MachineTile {
         this.block = block;
         this.blockEntity = blockEntity;
         this.menu = menu;
+    }
+
+    public MachineTile(ResourceLocation location) {
+        this.block = MachineRegister.getBlock(location);
+        this.blockEntity = MachineRegister.getBlockEntity(location);
+        this.menu = MachineRegister.getMenu(location);
     }
 
     public abstract Component getDisplayName();
