@@ -2,6 +2,7 @@ package net.mofusya.mechanical_ageing.machinetiles;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -14,16 +15,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Supplier;
+
 public abstract class MachineTile {
 
-    private final @NotNull RegistryObject<Block> block;
-    private final @NotNull RegistryObject<BlockEntityType<MachineBlockEntity>> blockEntity;
-    private final @NotNull RegistryObject<MenuType<MachineMenu>> menu;
+    private final @NotNull Supplier<RegistryObject<Block>> block;
+    private final @NotNull Supplier<RegistryObject<BlockEntityType<MachineBlockEntity>>> blockEntity;
+    private final @NotNull Supplier<RegistryObject<MenuType<MachineMenu>>> menu;
 
-    public MachineTile(@NotNull RegistryObject<Block> block, @NotNull RegistryObject<BlockEntityType<MachineBlockEntity>> blockEntity, @NotNull RegistryObject<MenuType<MachineMenu>> menu) {
-        this.block = block;
-        this.blockEntity = blockEntity;
-        this.menu = menu;
+    public MachineTile(ResourceLocation location) {
+        this.block = MachineRegister.getBlock(location);
+        this.blockEntity = MachineRegister.getBlockEntity(location);
+        this.menu = MachineRegister.getMenu(location);
     }
 
     public abstract Component getDisplayName();
@@ -47,14 +50,14 @@ public abstract class MachineTile {
     }
 
     public @NotNull RegistryObject<Block> getBlock() {
-        return this.block;
+        return this.block.get();
     }
 
     public @NotNull RegistryObject<BlockEntityType<MachineBlockEntity>> getBlockEntity() {
-        return this.blockEntity;
+        return this.blockEntity.get();
     }
 
     public @NotNull RegistryObject<MenuType<MachineMenu>> getMenu() {
-        return this.menu;
+        return this.menu.get();
     }
 }
