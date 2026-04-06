@@ -1,4 +1,4 @@
-package net.mofusya.mechanical_ageing.machinetiles;
+package net.mofusya.mechanical_ageing.machinetiles.baseclass;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -10,21 +10,25 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
+import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
+import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MachineMenu extends AbstractContainerMenu {
     public final MachineBlockEntity blockEntity;
     private final Level level;
+    @Nullable
     private final ContainerData data;
     private final Block block;
 
     private final MachineTile machineTile;
 
     public MachineMenu(int containerId, Inventory inventory, FriendlyByteBuf extraData, MachineTile machineTile, Block block) {
-        this(containerId, inventory, inventory.player.level().getBlockEntity(extraData.readBlockPos()), new SimpleContainerData(2), machineTile, block);
+        this(containerId, inventory, inventory.player.level().getBlockEntity(extraData.readBlockPos()), machineTile.getDataSlotCount() > 1 ? new SimpleContainerData(machineTile.getDataSlotCount()) : null, machineTile, block);
     }
 
-    public MachineMenu(int containerId, Inventory inventory, BlockEntity blockEntity, ContainerData data, MachineTile machineTile, Block block) {
+    public MachineMenu(int containerId, Inventory inventory, BlockEntity blockEntity, @Nullable ContainerData data, MachineTile machineTile, Block block) {
         super(machineTile.getMenu().get(), containerId);
         checkContainerSize(inventory, machineTile.getSlots().size());
         this.blockEntity = (MachineBlockEntity) blockEntity;
@@ -44,7 +48,9 @@ public class MachineMenu extends AbstractContainerMenu {
             }
         });
 
-        this.addDataSlots(this.data);
+        if (this.data != null) {
+            this.addDataSlots(this.data);
+        }
     }
 
     @Override
