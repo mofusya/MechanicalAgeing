@@ -218,4 +218,12 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
     public void addData(int index, int add) {
         this.modifyData(index, value -> value + add);
     }
+
+    public List<IEnergyStorage> getEnergyStorages() {
+        return this.energyStorages;
+    }
+
+    public IEnergyStorage getEnergyStorage(int index){
+        return this.energyStorages.get(index);
+    }
 }

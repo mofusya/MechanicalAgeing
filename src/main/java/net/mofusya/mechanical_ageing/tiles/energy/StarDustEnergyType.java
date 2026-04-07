@@ -22,4 +22,14 @@ public class StarDustEnergyType extends EnergyType<StarDustEnergyStorage> {
     public Capability<? extends IEnergyStorage> getCapability() {
         return StarDustEnergyStorage.CAPABILITY;
     }
+
+    @Override
+    public String suffix() {
+        return "SdE";
+    }
+
+    @Override
+    public int getColor() {
+        return 0x0000FF;
+    }
 }

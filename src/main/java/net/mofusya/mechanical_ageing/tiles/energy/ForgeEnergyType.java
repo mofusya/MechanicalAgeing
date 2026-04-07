@@ -21,4 +21,19 @@ public class ForgeEnergyType extends EnergyType<ForgeEnergyStorage> {
     public Capability<? extends IEnergyStorage> getCapability() {
         return ForgeCapabilities.ENERGY;
     }
+
+    @Override
+    public String suffix() {
+        return "FE";
+    }
+
+    @Override
+    public int getColor() {
+        return 0x00E86C;
+    }
+
+    @Override
+    public int getGradientColor() {
+        return 0x164520;
+    }
 }

@@ -18,8 +18,8 @@ public class DestructorTile extends MachineTile {
     @Override
     public EnergySlotList getEnergySlots(EnergySlotList slots) {
         return super.getEnergySlots(slots)
-                .create(100, ForgeEnergyType::new, 1000)
-                .create(120, StarDustEnergyType::new, 1000);
+                .create(34, ForgeEnergyType::new, 1000)
+                .create(151, StarDustEnergyType::new, 1000);
     }
 
     @Override

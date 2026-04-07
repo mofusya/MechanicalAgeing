@@ -7,13 +7,11 @@ import net.minecraft.world.entity.player.Inventory;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 
 public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
-    private final MachineBlockEntity blockEntity;
     private final MachineTile tile;
 
     public MachineScreen(MachineMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
-        this.blockEntity = this.getMenu().blockEntity;
-        this.tile = this.blockEntity.getMachineTile();
+        this.tile = this.getMenu().blockEntity.getMachineTile();
     }
 
     @Override
@@ -46,5 +44,9 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
         this.renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, delta);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
+    }
+
+    public MachineBlockEntity getBlockEntity() {
+        return this.getMenu().blockEntity;
     }
 }

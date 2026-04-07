@@ -25,9 +25,13 @@ import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineMenu;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineScreen;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotList;
+import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotProperties;
+import net.mofusya.mechanical_ageing.machinetiles.render.EnergyDisplayTooltipArea;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotProperties;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -87,12 +91,23 @@ public abstract class MachineTile {
     private static final int BG_TILE_WIDTH = 144;
     private static final int BG_TILE_HEIGHT = 72;
 
-    public void screenInit(int x, int y, MachineMenu menu, MachineScreen screen) {
+    private List<EnergyDisplayTooltipArea> energyTooltips;
 
+    public void screenInit(int x, int y, MachineMenu menu, MachineScreen screen) {
+        ResourceLocation bgTile = this.getBgTileTypeFromLoc();
+
+        this.energyTooltips = new ArrayList<>();
+
+        for (EnergySlotProperties energy : this.getEnergySlots()) {
+            this.energyTooltips.add(new EnergyDisplayTooltipArea(x + energy.x(), y + 7, energy.energyType(), bgTile));
+        }
     }
 
     public void renderLabels(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY, MachineMenu menu, MachineScreen screen) {
-
+        for (int i = 0; i < this.getEnergySlots().size(); i++) {
+            EnergyDisplayTooltipArea tooltip = this.energyTooltips.get(i);
+            tooltip.renderTooltips(guiGraphics, mouseX, mouseY, x, y, screen.getBlockEntity().getEnergyStorage(i).getEnergyStored(), screen.getBlockEntity().getEnergyStorage(i).getMaxEnergyStored());
+        }
     }
 
     public void renderBg(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY, MachineMenu menu, MachineScreen screen) {
@@ -151,6 +166,12 @@ public abstract class MachineTile {
         //Write hotbar slots
         for (int i = 0; i < 9; ++i) {
             guiGraphics.blit(bgTile, x + (8 + i * 18) - 1, y + (142) - 1, 0, 54, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+        }
+
+        //Write energy slots
+        for (int i = 0; i < this.getEnergySlots().size(); i++) {
+            EnergyDisplayTooltipArea tooltip = this.energyTooltips.get(i);
+            tooltip.render(guiGraphics, screen.getBlockEntity().getEnergyStorage(i).getEnergyStored(), screen.getBlockEntity().getEnergyStorage(i).getMaxEnergyStored());
         }
 
         //Write machine name

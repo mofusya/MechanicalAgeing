@@ -4,7 +4,15 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public abstract class EnergyType<T extends IEnergyStorage> {
-    abstract public EnergyTypeFunction<T> getStorage();
+    public abstract EnergyTypeFunction<T> getStorage();
 
-    abstract public Capability<? extends IEnergyStorage> getCapability();
+    public abstract Capability<? extends IEnergyStorage> getCapability();
+
+    public abstract String suffix();
+
+    public abstract int getColor();
+
+    public int getGradientColor(){
+        return -404;
+    }
 }
