@@ -198,7 +198,7 @@ public abstract class MachineTile {
         if (toReturn.isEmpty()) return MachineTile.this.getSlots(new SlotList());
         for (EnergySlotProperties energy : this.getEnergySlots()) {
             if (energy.maxExtract() <= 0) {
-                toReturn.create(energy.x() + 1, 62, itemStack -> false, SlotType.NORMAL);
+                toReturn.create(energy.x() + 1, 62, itemStack -> true, SlotType.NORMAL);
             } else {
                 toReturn.create(energy.x() + 1, 62, itemStack -> true, SlotType.EXTRACT_ONLY);
             }

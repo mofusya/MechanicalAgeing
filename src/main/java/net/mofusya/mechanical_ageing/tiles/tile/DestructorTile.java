@@ -22,7 +22,7 @@ public class DestructorTile extends MachineTile {
     public EnergySlotList getEnergySlots(EnergySlotList slots) {
         return super.getEnergySlots(slots)
                 .create(34, ForgeEnergyType::new, 1000, 10, 0)
-                .create(151, StarDustEnergyType::new, 100000, 0, 10);
+                .create(151, StarDustEnergyType::new, 100, 0, 10);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class DestructorTile extends MachineTile {
         ForgeEnergyStorage forgeEnergyStorage = (ForgeEnergyStorage) blockEntity.getEnergyStorage(0);
         StarDustEnergyStorage starDustEnergyStorage = (StarDustEnergyStorage) blockEntity.getEnergyStorage(1);
 
-        if (forgeEnergyStorage.getEnergyStored() > 100){
+        if (forgeEnergyStorage.getEnergyStored() > 100 && starDustEnergyStorage.getSpace().isGreaterThan(new QuintLong(0))){
             forgeEnergyStorage.extractEnergyFromInside(100, false);
             starDustEnergyStorage.receiveEnergyFromInside(new QuintLong(1), false);
         }

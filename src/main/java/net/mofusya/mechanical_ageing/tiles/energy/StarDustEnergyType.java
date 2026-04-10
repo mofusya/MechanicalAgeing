@@ -30,6 +30,11 @@ public class StarDustEnergyType extends EnergyType<StarDustEnergyStorage> {
 
     @Override
     public int getColor() {
-        return 0x0000FF;
+        return 0xFF2A36B1;
+    }
+
+    @Override
+    public int getGradientColor() {
+        return 0xFF4A148C;
     }
 }

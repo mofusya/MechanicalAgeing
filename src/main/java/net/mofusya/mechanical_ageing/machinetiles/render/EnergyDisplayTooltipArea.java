@@ -27,7 +27,7 @@ import java.util.Optional;
  */
 public class EnergyDisplayTooltipArea {
 
-    private static final int[] BAR_SIZE = {6, 50};
+    private static final int[] BAR_SIZE = {7, 51};
 
     private final int x;
     private final int y;
@@ -69,13 +69,10 @@ public class EnergyDisplayTooltipArea {
         }
 
         //Write energy bar
-        guiGraphics.fillGradient(this.x + 1, this.y + 1, this.x + BAR_SIZE[0], this.y + BAR_SIZE[1], this.type.getColor(), this.type.getColor());
-
-        /*
+        //guiGraphics.fillGradient(this.x + 1, this.y + 1, this.x + BAR_SIZE[0], this.y + BAR_SIZE[1], this.type.getColor(), this.type.getColor());
         guiGraphics.fillGradient(x + 1, y + 1 + (BAR_SIZE[1] - stored), x + BAR_SIZE[0],
                 y + BAR_SIZE[1], this.type.getColor(), this.type.getGradientColor() == -404 ? this.type.getColor() : this.type.getGradientColor());
-        guiGraphics.fillGradient(x + 11, y + 1 + (BAR_SIZE[1] - stored), x + BAR_SIZE[0],
+        guiGraphics.fillGradient(x + 11, y + 1 + (BAR_SIZE[1] - stored), x + 10 + BAR_SIZE[0],
                 y + BAR_SIZE[1], this.type.getColor(), this.type.getGradientColor() == -404 ? this.type.getColor() : this.type.getGradientColor());
-         */
     }
 }
