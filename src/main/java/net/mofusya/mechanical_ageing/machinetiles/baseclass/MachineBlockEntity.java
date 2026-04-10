@@ -3,7 +3,11 @@ package net.mofusya.mechanical_ageing.machinetiles.baseclass;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -49,7 +53,7 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
     public MachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, MachineTile machineTile) {
         super(type, pos, state);
         this.machineTile = machineTile;
-        SlotList slotList = machineTile.getSlots(new SlotList());
+        SlotList slotList = machineTile.getSlots();
         this.itemHandler = new ItemStackHandler(slotList.size()) {
             @Override
             protected void onContentsChanged(int slot) {
@@ -189,6 +193,22 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         }
     }
 
+    @Nullable
+    @Override
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        return this.saveWithFullMetadata();
+    }
+
+    @Override
+    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+        super.onDataPacket(net, pkt);
+    }
+
 
     /*Getter setters*/
     public MachineTile getMachineTile() {
@@ -223,7 +243,7 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         return this.energyStorages;
     }
 
-    public IEnergyStorage getEnergyStorage(int index){
+    public IEnergyStorage getEnergyStorage(int index) {
         return this.energyStorages.get(index);
     }
 }

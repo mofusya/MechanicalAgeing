@@ -12,7 +12,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -29,10 +28,10 @@ import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.render.EnergyDisplayTooltipArea;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotProperties;
+import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 @FieldsAreNonnullByDefault
@@ -58,7 +57,7 @@ public abstract class MachineTile {
     }
 
     public SlotList getSlots(SlotList slots) {
-        return slots.create(7, 7, itemStack -> false, true);
+        return slots.create(7, 7, itemStack -> false, SlotType.SYSTEM);
     }
 
     public EnergySlotList getEnergySlots(EnergySlotList slots) {
@@ -88,8 +87,8 @@ public abstract class MachineTile {
 
     private static final int FRAME_WIDTH = 304;
     private static final int FRAME_HEIGHT = 182;
-    private static final int BG_TILE_WIDTH = 144;
-    private static final int BG_TILE_HEIGHT = 72;
+    public static final int BG_TILE_WIDTH = 144;
+    public static final int BG_TILE_HEIGHT = 72;
 
     private List<EnergyDisplayTooltipArea> energyTooltips;
 
@@ -99,14 +98,14 @@ public abstract class MachineTile {
         this.energyTooltips = new ArrayList<>();
 
         for (EnergySlotProperties energy : this.getEnergySlots()) {
-            this.energyTooltips.add(new EnergyDisplayTooltipArea(x + energy.x(), y + 7, energy.energyType(), bgTile));
+            this.energyTooltips.add(new EnergyDisplayTooltipArea(x + energy.x(), y + 6, energy.energyType(), bgTile));
         }
     }
 
     public void renderLabels(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY, MachineMenu menu, MachineScreen screen) {
         for (int i = 0; i < this.getEnergySlots().size(); i++) {
             EnergyDisplayTooltipArea tooltip = this.energyTooltips.get(i);
-            tooltip.renderTooltips(guiGraphics, mouseX, mouseY, x, y, screen.getBlockEntity().getEnergyStorage(i).getEnergyStored(), screen.getBlockEntity().getEnergyStorage(i).getMaxEnergyStored());
+            tooltip.renderTooltips(guiGraphics, mouseX, mouseY, x, y, menu.blockEntity.getEnergyStorage(i).getEnergyStored(), menu.blockEntity.getEnergyStorage(i).getMaxEnergyStored());
         }
     }
 
@@ -145,15 +144,14 @@ public abstract class MachineTile {
 
         //Write slots
         for (SlotProperties slotBuild : this.getSlots()) {
-            Function<ItemStack, Boolean> outputFunc = itemStack -> false;
 
-            if (slotBuild.system()) {
+            if (slotBuild.type().is(SlotType.SYSTEM)) {
                 guiGraphics.blit(bgTile, x + slotBuild.x() - 1, y + slotBuild.y() - 1, 0, 18, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
             } else {
-                if (slotBuild.itemValidFunc().equals(outputFunc)) {
-                    guiGraphics.blit(bgTile, x + slotBuild.x() - 1, y + slotBuild.y() - 1, 44, 54, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
-                } else {
+                if (slotBuild.type().is(SlotType.NORMAL)) {
                     guiGraphics.blit(bgTile, x + slotBuild.x() - 1, y + slotBuild.y() - 1, 0, 54, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                } else {
+                    guiGraphics.blit(bgTile, x + slotBuild.x() - 1, y + slotBuild.y() - 1, 44, 54, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
                 }
             }
         }
@@ -171,7 +169,7 @@ public abstract class MachineTile {
         //Write energy slots
         for (int i = 0; i < this.getEnergySlots().size(); i++) {
             EnergyDisplayTooltipArea tooltip = this.energyTooltips.get(i);
-            tooltip.render(guiGraphics, screen.getBlockEntity().getEnergyStorage(i).getEnergyStored(), screen.getBlockEntity().getEnergyStorage(i).getMaxEnergyStored());
+            tooltip.render(guiGraphics, menu.blockEntity.getEnergyStorage(i));
         }
 
         //Write machine name
@@ -198,6 +196,13 @@ public abstract class MachineTile {
     public final SlotList getSlots() {
         SlotList toReturn = this.getSlots(new SlotList());
         if (toReturn.isEmpty()) return MachineTile.this.getSlots(new SlotList());
+        for (EnergySlotProperties energy : this.getEnergySlots()) {
+            if (energy.maxExtract() <= 0) {
+                toReturn.create(energy.x() + 1, 62, itemStack -> false, SlotType.NORMAL);
+            } else {
+                toReturn.create(energy.x() + 1, 62, itemStack -> true, SlotType.EXTRACT_ONLY);
+            }
+        }
         return toReturn;
     }
 

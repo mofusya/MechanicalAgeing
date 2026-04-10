@@ -3,15 +3,21 @@ package net.mofusya.mechanical_ageing.machinetiles.baseclass;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
+import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotProperties;
+import net.mofusya.mechanical_ageing.machinetiles.render.EnergyDisplayTooltipArea;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
     private final MachineTile tile;
 
     public MachineScreen(MachineMenu menu, Inventory inventory, Component component) {
         super(menu, inventory, component);
-        this.tile = this.getMenu().blockEntity.getMachineTile();
+        this.tile = menu.blockEntity.getMachineTile();
     }
 
     @Override

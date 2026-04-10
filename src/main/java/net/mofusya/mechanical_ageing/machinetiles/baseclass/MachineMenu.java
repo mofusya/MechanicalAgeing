@@ -15,6 +15,8 @@ import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class MachineMenu extends AbstractContainerMenu {
     public final MachineBlockEntity blockEntity;
     private final Level level;
@@ -23,9 +25,10 @@ public class MachineMenu extends AbstractContainerMenu {
     private final Block block;
 
     private final MachineTile machineTile;
+    private final int ownSlotCount;
 
     public MachineMenu(int containerId, Inventory inventory, FriendlyByteBuf extraData, MachineTile machineTile, Block block) {
-        this(containerId, inventory, inventory.player.level().getBlockEntity(extraData.readBlockPos()), machineTile.getDataSlotCount() > 1 ? new SimpleContainerData(machineTile.getDataSlotCount()) : null, machineTile, block);
+        this(containerId, inventory, inventory.player.level().getBlockEntity(extraData.readBlockPos()), machineTile.getDataSlotCount() >= 1 ? new SimpleContainerData(machineTile.getDataSlotCount()) : null, machineTile, block);
     }
 
     public MachineMenu(int containerId, Inventory inventory, BlockEntity blockEntity, @Nullable ContainerData data, MachineTile machineTile, Block block) {
@@ -37,9 +40,7 @@ public class MachineMenu extends AbstractContainerMenu {
         this.block = block;
 
         this.machineTile = machineTile;
-
-        this.addPlayerInventory(inventory);
-        this.addPlayerHotbar(inventory);
+        this.ownSlotCount = machineTile.getSlots().size();
 
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(iItemHandler -> {
             SlotList slotList = machineTile.getSlots();
@@ -48,38 +49,68 @@ public class MachineMenu extends AbstractContainerMenu {
             }
         });
 
+        this.addPlayerInventory(inventory);
+        this.addPlayerHotbar(inventory);
+
         if (this.data != null) {
             this.addDataSlots(this.data);
         }
     }
 
+    /*
+     * BluSunrize
+     * Copyright (c) 2023
+     *
+     * These codes, quickMoveStack, moveItemStackToWithMayPlace, moveItemStackToWithMayPlace, MoveItemsFunc is licensed under "Blu's License of Common Sense"
+     * https://github.com/BluSunrize/ImmersiveEngineering/blob/1.20.1/LICENSE
+     */
     @Override
-    public @NotNull ItemStack quickMoveStack(Player player, int index) {
-        ItemStack fItemstack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(index);
-        if (slot.hasItem()) {
-            ItemStack itemstack = slot.getItem();
-            fItemstack = itemstack.copy();
-
-            int slotCount = this.machineTile.getSlots().size();
-
-            if (index < slotCount) {
-                if (!this.moveItemStackTo(itemstack, slotCount, this.slots.size(), true)) {
+    public @NotNull ItemStack quickMoveStack(Player player, int slot) {
+        ItemStack itemstack = ItemStack.EMPTY;
+        Slot slotObject = this.slots.get(slot);
+        if (slotObject.hasItem()) {
+            ItemStack itemstack1 = slotObject.getItem();
+            itemstack = itemstack1.copy();
+            if (slot < ownSlotCount) {
+                if (!this.moveItemStackTo(itemstack1, ownSlotCount, this.slots.size(), true))
                     return ItemStack.EMPTY;
-                }
-            } else if (!this.moveItemStackTo(itemstack, 0, slotCount, false)) {
+            } else if (!this.moveItemStackToWithMayPlace(itemstack1, 0, ownSlotCount))
                 return ItemStack.EMPTY;
-            }
 
-            if (itemstack.isEmpty()) {
-                slot.setByPlayer(ItemStack.EMPTY);
-            } else {
-                slot.setChanged();
-            }
+            if (itemstack1.isEmpty())
+                slotObject.set(ItemStack.EMPTY);
+            else
+                slotObject.setChanged();
         }
 
-        return fItemstack;
+        return itemstack;
     }
+
+    protected boolean moveItemStackToWithMayPlace(ItemStack pStack, int pStartIndex, int pEndIndex) {
+        return moveItemStackToWithMayPlace(slots, this::moveItemStackTo, pStack, pStartIndex, pEndIndex);
+    }
+
+    public static boolean moveItemStackToWithMayPlace(List<Slot> slots, MoveItemsFunc move, ItemStack pStack, int pStartIndex, int pEndIndex) {
+        boolean inAllowedRange = true;
+        int allowedStart = pStartIndex;
+        for (int i = pStartIndex; i < pEndIndex; i++) {
+            boolean mayplace = slots.get(i).mayPlace(pStack);
+            if (inAllowedRange && !mayplace) {
+                if (move.moveItemStackTo(pStack, allowedStart, i, false))
+                    return true;
+                inAllowedRange = false;
+            } else if (!inAllowedRange && mayplace) {
+                allowedStart = i;
+                inAllowedRange = true;
+            }
+        }
+        return inAllowedRange && move.moveItemStackTo(pStack, allowedStart, pEndIndex, false);
+    }
+
+    public interface MoveItemsFunc {
+        boolean moveItemStackTo(ItemStack var1, int var2, int var3, boolean var4);
+    }
+    /**----**/
 
     @Override
     public boolean stillValid(Player player) {
