@@ -183,7 +183,6 @@ public abstract class MatterHandler implements IMatterHandler {
         for (int i = 0; i < this.storage.length; i++) {
             this.storage[i] = new MatterStack(tag.getString("matterStorageType_" + i).equals("404") ? null : MatterManager.get().get(new ResourceLocation(tag.getString("matterStorageType_" + i))), SeptiLong.createFromList(tag.getLongArray("matterStorageAmount_" + i)));
         }
-        this.onChanged();
     }
 
     public SeptiLong getMaxReceive(int slot) {
