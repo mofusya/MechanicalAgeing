@@ -1,4 +1,4 @@
-package net.mofusya.mechanical_ageing.machinetiles;
+package net.mofusya.mechanical_ageing.machinetiles.baseclass;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -7,12 +7,14 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
+import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
@@ -28,6 +30,11 @@ public class MachineBlock extends BaseEntityBlock {
     }
 
     /*BLOCK ENTITY*/
+    @Override
+    public RenderShape getRenderShape(BlockState state) {
+        return RenderShape.MODEL;
+    }
+
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         if (state.getBlock() != newState.getBlock()) {

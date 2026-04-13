@@ -35,13 +35,16 @@ public final class MetalSet {
     private final TagKey<Block> mineableWith;
     private final int color;
     private final int oreColor;
+    private final String oreName;
 
     private final String modId;
     private final String id;
+    private final String name;
 
-    public MetalSet(String modId, String id, RegistryObject<Block> compressedBlock, RegistryObject<Block> block, RegistryObject<Block> ore, RegistryObject<Block> deepslateOre, RegistryObject<Item> ingot, RegistryObject<Item> chunk, RegistryObject<Item> pureDust, RegistryObject<Item> dust, RegistryObject<Item> dirtyDust, RegistryObject<Item> particle, RegistryObject<Item> raw, RegistryObject<Item> nugget, TagKey<Block> mineableWith, int color, int oreColor) {
+    public MetalSet(String modId, String id, String name, RegistryObject<Block> compressedBlock, RegistryObject<Block> block, RegistryObject<Block> ore, RegistryObject<Block> deepslateOre, RegistryObject<Item> ingot, RegistryObject<Item> chunk, RegistryObject<Item> pureDust, RegistryObject<Item> dust, RegistryObject<Item> dirtyDust, RegistryObject<Item> particle, RegistryObject<Item> raw, RegistryObject<Item> nugget, TagKey<Block> mineableWith, int color, int oreColor, String oreName) {
         this.modId = modId;
         this.id = id;
+        this.name = name;
         this.compressedBlock = compressedBlock;
         this.block = block;
         this.ore = ore;
@@ -57,6 +60,7 @@ public final class MetalSet {
         this.mineableWith = mineableWith;
         this.color = color;
         this.oreColor = oreColor;
+        this.oreName = oreName;
 
         this.oreKey = ModConfiguredFeatures.registerKey(id + "_ore");
         this.orePlacedKey = ModPlacedFeatures.registerKey(id + "_ore_placed");
@@ -123,12 +127,20 @@ public final class MetalSet {
         return this.oreColor;
     }
 
+    public String getOreName() {
+        return this.oreName;
+    }
+
     public String getModId() {
         return this.modId;
     }
 
     public String getId() {
         return this.id;
+    }
+
+    public String getName() {
+        return this.name;
     }
 
     public ResourceKey<ConfiguredFeature<?, ?>> getOreKey() {
@@ -143,7 +155,12 @@ public final class MetalSet {
         return this.oreBiomeKey;
     }
 
+    public static Builder builder(String name, double density, double hardness, int meltingPoint, int boilingPoint){
+        return new Builder(name, density, hardness, meltingPoint, boilingPoint);
+    }
+
     public static class Builder {
+        private final String name;
         private final double density;
         private final double hardness;
         private final int meltingPoint;
@@ -153,11 +170,13 @@ public final class MetalSet {
         private TagKey<Block> mineableWith = BlockTags.NEEDS_IRON_TOOL;
         private int color = 0xFFFFFF;
         private int oreColor = -404;
+        private String oreName = null;
 
         private Item.Properties itemBuild = new Item.Properties();
         private BlockBehaviour.Properties blockBuild = BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK);
 
-        public Builder(double density, double hardness, int meltingPoint, int boilingPoint) {
+        private Builder(String name, double density, double hardness, int meltingPoint, int boilingPoint) {
+            this.name = name;
             this.density = density;
             this.hardness = hardness;
             this.meltingPoint = meltingPoint;
@@ -197,6 +216,15 @@ public final class MetalSet {
         public Builder oreColor(int oreColor) {
             this.oreColor = oreColor;
             return this;
+        }
+
+        public Builder oreName(String oreName) {
+            this.oreName = oreName;
+            return this;
+        }
+
+        public String getName() {
+            return this.name;
         }
 
         public double getDensity() {
@@ -241,6 +269,10 @@ public final class MetalSet {
 
         public int getOreColor() {
             return this.oreColor;
+        }
+
+        public String getOreName() {
+            return this.oreName;
         }
     }
 }

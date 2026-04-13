@@ -17,7 +17,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mofusya.mechanical_ageing.blocks.ModBlocks;
 import net.mofusya.mechanical_ageing.items.ModItem;
 import net.mofusya.mechanical_ageing.items.ModTabs;
-import net.mofusya.mechanical_ageing.machinetiles.ModMachines;
+import net.mofusya.mechanical_ageing.tiles.ModMachines;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
 import net.mofusya.mechanical_ageing.metalset.ModMetalSet;
 import org.slf4j.Logger;
