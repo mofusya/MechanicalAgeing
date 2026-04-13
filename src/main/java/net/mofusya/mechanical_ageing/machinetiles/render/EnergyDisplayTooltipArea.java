@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergyType;
+import net.mofusya.mechanical_ageing.util.SeptiLongHelper;
 import net.mofusya.ornatelib.lang.SeptiLong;
 
 import java.util.List;
@@ -42,7 +43,10 @@ public class EnergyDisplayTooltipArea {
     }
 
     private List<Component> getTooltips(int energyStored, int maxEnergyStored) {
-        return List.of(Component.literal(SeptiLong.addComma(String.valueOf(energyStored)) + " /"), Component.literal(SeptiLong.addComma(String.valueOf(maxEnergyStored)) + " " + this.type.suffix()));
+        return List.of(
+                Component.literal(SeptiLongHelper.convertToStringAndAddPrefix(new SeptiLong(energyStored)) + this.type.suffix() + " /"),
+                Component.literal(SeptiLongHelper.convertToStringAndAddPrefix(new SeptiLong(maxEnergyStored)) + this.type.suffix())
+        );
     }
 
     public void renderTooltips(GuiGraphics guiGraphics, int mouseX, int mouseY, int x, int y, int energyStored, int maxEnergyStored) {

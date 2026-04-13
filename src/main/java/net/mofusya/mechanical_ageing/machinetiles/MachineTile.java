@@ -12,12 +12,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MechanicalAgeing;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
@@ -25,13 +27,21 @@ import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineMenu;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineScreen;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotList;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotProperties;
+import net.mofusya.mechanical_ageing.machinetiles.fluid.FluidSlotProperties;
+import net.mofusya.mechanical_ageing.machinetiles.matter.MatterSlotList;
+import net.mofusya.mechanical_ageing.machinetiles.matter.MatterSlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.render.EnergyDisplayTooltipArea;
+import net.mofusya.mechanical_ageing.machinetiles.render.FluidTankRenderer;
+import net.mofusya.mechanical_ageing.machinetiles.render.MatterDisplayTooltipArea;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
+import net.mofusya.mechanical_ageing.machinetiles.util.MouseUtil;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @FieldsAreNonnullByDefault
@@ -64,6 +74,15 @@ public abstract class MachineTile {
         return slots;
     }
 
+    public MatterSlotList getMatterSlots(MatterSlotList slots) {
+        return slots;
+    }
+
+    @Nullable
+    public FluidSlotProperties getFluidSlot() {
+        return null;
+    }
+
     public int getDataSlotCount() {
         return 0;
     }
@@ -91,14 +110,26 @@ public abstract class MachineTile {
     public static final int BG_TILE_HEIGHT = 72;
 
     private List<EnergyDisplayTooltipArea> energyTooltips;
+    private List<MatterDisplayTooltipArea> matterTooltips;
+    @Nullable
+    private FluidTankRenderer fluidTankRenderer = null;
 
     public void screenInit(int x, int y, MachineMenu menu, MachineScreen screen) {
         ResourceLocation bgTile = this.getBgTileTypeFromLoc();
 
         this.energyTooltips = new ArrayList<>();
-
         for (EnergySlotProperties energy : this.getEnergySlots()) {
             this.energyTooltips.add(new EnergyDisplayTooltipArea(x + energy.x(), y + 6, energy.energyType(), bgTile));
+        }
+
+        this.matterTooltips = new ArrayList<>();
+        for (MatterSlotProperties matter : this.getMatterSlots()) {
+            this.matterTooltips.add(new MatterDisplayTooltipArea(x + matter.x(), y + matter.y(), bgTile));
+        }
+
+        var fluidTankProperties = this.getFluidSlot();
+        if (fluidTankProperties != null) {
+            this.fluidTankRenderer = new FluidTankRenderer(fluidTankProperties.capacity(), true, 6, 50);
         }
     }
 
@@ -106,6 +137,20 @@ public abstract class MachineTile {
         for (int i = 0; i < this.getEnergySlots().size(); i++) {
             EnergyDisplayTooltipArea tooltip = this.energyTooltips.get(i);
             tooltip.renderTooltips(guiGraphics, mouseX, mouseY, x, y, menu.blockEntity.getEnergyStorage(i).getEnergyStored(), menu.blockEntity.getEnergyStorage(i).getMaxEnergyStored());
+        }
+
+        for (int i = 0; i < this.getMatterSlots().size(); i++) {
+            var tooltip = this.matterTooltips.get(i);
+            tooltip.renderTooltips(guiGraphics, mouseX, mouseY, x, y, menu.blockEntity.getMatterHandler(), i);
+        }
+
+        var fluidTankProperties = this.getFluidSlot();
+        FluidTank fluidTank = menu.blockEntity.getFluidTank();
+        if (fluidTank != null && fluidTankProperties != null && this.fluidTankRenderer != null &&
+                isMouseAboveArea(mouseX, mouseY, x, y, fluidTankProperties.x() + 1, fluidTankProperties.y() + 1, this.fluidTankRenderer)) {
+            guiGraphics.renderTooltip(screen.getMinecraft().font, this.fluidTankRenderer.getTooltip(
+                    fluidTank.getFluid(), TooltipFlag.Default.NORMAL), Optional.empty(), mouseX - x, mouseY - y
+            );
         }
     }
 
@@ -172,6 +217,23 @@ public abstract class MachineTile {
             tooltip.render(guiGraphics, menu.blockEntity.getEnergyStorage(i));
         }
 
+        //Write matter slots
+        if (menu.blockEntity.getMatterHandler() != null) {
+            for (int i = 0; i < this.getMatterSlots().size(); i++) {
+                var tooltip = this.matterTooltips.get(i);
+                tooltip.render(guiGraphics, menu.blockEntity.getMatterHandler(), i);
+            }
+        }
+
+        //Write fluid slot
+        var fluidTankProperties = this.getFluidSlot();
+        FluidTank fluidTank = menu.blockEntity.getFluidTank();
+        if (fluidTank != null && this.fluidTankRenderer != null && fluidTankProperties != null){
+            guiGraphics.blit(bgTile, x + fluidTankProperties.x(), y + fluidTankProperties.y(), 36, 20, 8, 52, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+
+            this.fluidTankRenderer.render(guiGraphics, x + fluidTankProperties.x() + 1, y + fluidTankProperties.y() + 1, fluidTank.getFluid());
+        }
+
         //Write machine name
         guiGraphics.drawCenteredString(Minecraft.getInstance().font, this.getDisplayName(), x + screen.getXSize() / 2, y - 9, 4210752);
     }
@@ -207,8 +269,15 @@ public abstract class MachineTile {
     }
 
     public final EnergySlotList getEnergySlots() {
-        EnergySlotList toReturn = this.getEnergySlots(new EnergySlotList());
-        if (toReturn.isEmpty()) return MachineTile.this.getEnergySlots(new EnergySlotList());
-        return toReturn;
+        return this.getEnergySlots(new EnergySlotList());
+    }
+
+    public final MatterSlotList getMatterSlots() {
+        return this.getMatterSlots(new MatterSlotList());
+    }
+
+    //Helper
+    private static boolean isMouseAboveArea(int pMouseX, int pMouseY, int x, int y, int offsetX, int offsetY, FluidTankRenderer renderer) {
+        return MouseUtil.isMouseOver(pMouseX, pMouseY, x + offsetX, y + offsetY, renderer.getWidth(), renderer.getHeight());
     }
 }

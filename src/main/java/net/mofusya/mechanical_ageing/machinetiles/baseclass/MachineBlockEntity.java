@@ -24,11 +24,16 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
+import net.mofusya.mechanical_ageing.machinetiles.ModCapabilities;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotList;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotProperties;
+import net.mofusya.mechanical_ageing.machinetiles.matter.IMatterHandler;
+import net.mofusya.mechanical_ageing.machinetiles.matter.MatterHandler;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -49,6 +54,12 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
 
     private final List<IEnergyStorage> energyStorages;
     private final List<LazyOptional<IEnergyStorage>> lazyEnergyHandler;
+
+    private final IMatterHandler matterHandler;
+    private LazyOptional<IMatterHandler> lazyMatterHandler;
+
+    private final FluidTank fluidTank;
+    private LazyOptional<FluidTank> lazyFluidHandler;
 
     public MachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, MachineTile machineTile) {
         super(type, pos, state);
@@ -97,6 +108,40 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
             }, energy.capacity(), energy.maxReceive(), energy.maxExtract(), energy.energy()));
             this.lazyEnergyHandler.add(LazyOptional.empty());
         }
+
+        if (!machineTile.getMatterSlots().isEmpty()) {
+            this.matterHandler = new MatterHandler(machineTile.getMatterSlots()) {
+                @Override
+                public void onChanged() {
+                    MachineBlockEntity.this.setChanged();
+                    MachineBlockEntity.this.getLevel().sendBlockUpdated(MachineBlockEntity.this.getBlockPos(), MachineBlockEntity.this.getBlockState(), MachineBlockEntity.this.getBlockState(), 3);
+                }
+            };
+            this.lazyMatterHandler = LazyOptional.empty();
+        } else {
+            this.matterHandler = null;
+            this.lazyMatterHandler = null;
+        }
+
+        var iFluid = machineTile.getFluidSlot();
+        if (iFluid != null) {
+            this.fluidTank = new FluidTank(iFluid.capacity()) {
+                @Override
+                protected void onContentsChanged() {
+                    MachineBlockEntity.this.setChanged();
+                    MachineBlockEntity.this.getLevel().sendBlockUpdated(MachineBlockEntity.this.getBlockPos(), MachineBlockEntity.this.getBlockState(), MachineBlockEntity.this.getBlockState(), 3);
+                }
+
+                @Override
+                public boolean isFluidValid(FluidStack stack) {
+                    return stack.getFluid().getFluidType().isAir() || iFluid.isValidFunc().apply(stack.getFluid());
+                }
+            };
+            this.lazyFluidHandler = LazyOptional.empty();
+        } else {
+            this.fluidTank = null;
+            this.lazyFluidHandler = null;
+        }
     }
 
     public void tick(Level level, BlockPos pos, BlockState state) {
@@ -133,6 +178,14 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
             }
         }
 
+        if (cap == ModCapabilities.MATTER && this.matterHandler != null) {
+            return this.lazyMatterHandler.cast();
+        }
+
+        if (cap == ForgeCapabilities.FLUID_HANDLER && this.fluidTank != null){
+            return this.lazyFluidHandler.cast();
+        }
+
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
             return this.lazyItemHandler.cast();
         }
@@ -150,6 +203,14 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
             int finalI = i;
             this.lazyEnergyHandler.set(i, LazyOptional.of(() -> this.energyStorages.get(finalI)));
         }
+
+        if (this.lazyMatterHandler != null){
+            this.lazyMatterHandler = LazyOptional.of(() -> this.matterHandler);
+        }
+
+        if (this.lazyFluidHandler != null){
+            this.lazyFluidHandler = LazyOptional.of(() -> this.fluidTank);
+        }
     }
 
     @Override
@@ -163,6 +224,14 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
             energyHandler.invalidate();
             this.lazyEnergyHandler.set(i, energyHandler);
         }
+
+        if (this.lazyMatterHandler != null) {
+            this.lazyMatterHandler.invalidate();
+        }
+
+        if (this.lazyFluidHandler != null){
+            this.lazyFluidHandler.invalidate();
+        }
     }
 
     @Override
@@ -172,6 +241,14 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         EnergySlotList energySlots = this.machineTile.getEnergySlots();
         for (int i = 0; i < energySlots.size(); i++) {
             tag.putInt("energy_storage_" + (i + 1), this.energyStorages.get(i).getEnergyStored());
+        }
+
+        if (this.matterHandler != null) {
+            tag = ((MatterHandler) this.matterHandler).serializeNBT(tag);
+        }
+
+        if (this.fluidTank != null){
+            tag = fluidTank.writeToNBT(tag);
         }
 
         super.saveAdditional(tag);
@@ -190,6 +267,14 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
                 MachineBlockEntity.this.getLevel().sendBlockUpdated(MachineBlockEntity.this.getBlockPos(), MachineBlockEntity.this.getBlockState(), MachineBlockEntity.this.getBlockState(), 3);
             }, energy.capacity(), energy.maxReceive(), energy.maxExtract(), tag.getInt("energy_storage_" + (i + 1)));
             this.energyStorages.set(i, energyStorage);
+        }
+
+        if (this.matterHandler != null) {
+            ((MatterHandler) this.matterHandler).deserializeNBT(tag);
+        }
+
+        if (this.fluidTank != null){
+            this.fluidTank.readFromNBT(tag);
         }
     }
 
@@ -245,5 +330,15 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
 
     public IEnergyStorage getEnergyStorage(int index) {
         return this.energyStorages.get(index);
+    }
+
+    @Nullable
+    public IMatterHandler getMatterHandler() {
+        return this.matterHandler;
+    }
+
+    @Nullable
+    public FluidTank getFluidTank() {
+        return this.fluidTank;
     }
 }

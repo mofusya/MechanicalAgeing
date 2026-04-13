@@ -1,8 +1,15 @@
 {
+  "config.jade.plugin_mechanical_ageing.machine_tile": "MachineTIle",
+
   "tab.mechanical_ageing.material": "MechanicalAgeing-Materials-",
   "tab.mechanical_ageing.machines": "MechanicalAgeing-Machines-",
 
+  "block.mechanical_ageing.tri_dimensional_crafting_table": "Tri-Dimensional Crafting Table",
+  "block.mechanical_ageing.tri_dimensional_crafting_table.machine_name": "Tri-D CT",
   "block.mechanical_ageing.destructor": "Destructor",
+
+  "matter.mechanical_ageing.water": "Water",
+  "matter.mechanical_ageing.anti_matter": "Anti Matter",
 
   "block.mechanical_ageing.compressed_iron_block": "Compressed Iron Block",
   "block.mechanical_ageing.iron_block": "Iron Block",
@@ -217,5 +224,8 @@
   "item.mechanical_ageing.attributed_item.melting_point": "§7Melting Point§8(K)",
   "item.mechanical_ageing.attributed_item.boiling_point": "§7Boiling Point§8(K)",
   "item.mechanical_ageing.attributed_item.radiation_multiplier": "§7Radiation Multiplier",
-  "item.mechanical_ageing.attributed_item.magnetic": "§7Magnetic"
+  "item.mechanical_ageing.attributed_item.magnetic": "§7Magnetic",
+
+  "mechanical_ageing.tooltip.liquid.amount.with.capacity": "%s / %s mB",
+  "mechanical_ageing.tooltip.liquid.amount": "%s mB"
 }
