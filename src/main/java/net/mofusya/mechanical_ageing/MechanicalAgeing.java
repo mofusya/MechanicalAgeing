@@ -17,6 +17,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mofusya.mechanical_ageing.blocks.ModBlocks;
 import net.mofusya.mechanical_ageing.items.ModItem;
 import net.mofusya.mechanical_ageing.items.ModTabs;
+import net.mofusya.mechanical_ageing.recipes.ModRecipes;
 import net.mofusya.mechanical_ageing.tiles.ModMachines;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
 import net.mofusya.mechanical_ageing.metalset.ModMetalSet;
@@ -37,6 +38,7 @@ public class MechanicalAgeing {
         ModTabs.TABS.register(modEventBus);
         ModBlocks.BLOCKS.register(modEventBus);
         ModMachines.MACHINES.register(modEventBus);
+        ModRecipes.SERIALIZERS.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);

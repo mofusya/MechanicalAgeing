@@ -11,6 +11,7 @@ import net.mofusya.mechanical_ageing.items.item.ToppedAttributedItem;
 import net.mofusya.ornatelib.item.AttributedItem;
 import net.mofusya.ornatelib.registries.OrnateBlockDeferredRegister;
 import net.mofusya.ornatelib.registries.OrnateItemDeferredRegister;
+import net.mofusya.ornatelib.registries.network.PacketRegister;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +21,13 @@ public class MetalSetRegister {
     private final OrnateItemDeferredRegister itemRegisters;
     private final OrnateBlockDeferredRegister blockRegisters;
     private final ArrayList<MetalSet> metalSets = new ArrayList<>();
+    private final PacketRegister packetRegister;
 
     private MetalSetRegister(String modId, int slot) {
         this.modId = modId;
         this.itemRegisters = OrnateItemDeferredRegister.create(modId, slot);
         this.blockRegisters = OrnateBlockDeferredRegister.create(modId, slot);
+        this.packetRegister = new PacketRegister(modId);
     }
 
     public MetalSet register(String id, MetalSet.Builder builder) {
@@ -44,6 +47,7 @@ public class MetalSetRegister {
         RegistryObject<Item> particle = this.itemRegisters.register(id + "_particle", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
         RegistryObject<Item> nugget = this.itemRegisters.register(id + "_nugget", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
         RegistryObject<Item> raw = this.itemRegisters.register("raw_" + id, () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
+
         MetalSet toReturn = new MetalSet(this.modId, id, builder.getName(), compressedBlock, block, ore, deepslateOre, ingot, chunk, pureDust, dust, dirtyDust, particle, raw, nugget, builder.getMineableWith(), builder.getColor(), builder.getOreColor(), builder.getOreName());
         this.metalSets.add(toReturn);
         return toReturn;
@@ -69,6 +73,7 @@ public class MetalSetRegister {
     public void register(IEventBus eventBus) {
         this.itemRegisters.register(eventBus);
         this.blockRegisters.register(eventBus);
+        this.packetRegister.register();
     }
 
     public DeferredRegister<Item> getItemRegister() {

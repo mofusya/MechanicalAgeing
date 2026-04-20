@@ -5,13 +5,17 @@ import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -25,6 +29,8 @@ import net.mofusya.mechanical_ageing.MechanicalAgeing;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineMenu;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineScreen;
+import net.mofusya.mechanical_ageing.machinetiles.button.ButtonList;
+import net.mofusya.mechanical_ageing.machinetiles.button.OnButtonPressPacket;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotList;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.fluid.FluidSlotProperties;
@@ -37,6 +43,8 @@ import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.machinetiles.util.MouseUtil;
+import net.mofusya.ornatelib.registries.network.packet.ServerPacket;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -51,6 +59,8 @@ public abstract class MachineTile {
     private final Supplier<RegistryObject<BlockEntityType<MachineBlockEntity>>> blockEntity;
     private final Supplier<RegistryObject<MenuType<MachineMenu>>> menu;
     private final ResourceLocation id;
+    @Nullable
+    private ServerPacket buttonPacket;
 
     public MachineTile(ResourceLocation id) {
         this.id = id;
@@ -81,6 +91,10 @@ public abstract class MachineTile {
     @Nullable
     public FluidSlotProperties getFluidSlot() {
         return null;
+    }
+
+    public ButtonList getButtons(ButtonList list) {
+        return list;
     }
 
     public int getDataSlotCount() {
@@ -130,6 +144,20 @@ public abstract class MachineTile {
         var fluidTankProperties = this.getFluidSlot();
         if (fluidTankProperties != null) {
             this.fluidTankRenderer = new FluidTankRenderer(fluidTankProperties.capacity(), true, 6, 50);
+        }
+
+        if (this.buttonPacket instanceof OnButtonPressPacket packet) {
+            for (int i = 0; i < this.getButtons().size(); i++) {
+                var button = this.getButtons().get(i);
+                int finalI = i;
+                if (button.type().is(SlotType.SYSTEM)) {
+                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 18, 18, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton ->  packet.send2Server(finalI, menu.blockEntity.getBlockPos())));
+                } else if (button.type().is(SlotType.NORMAL)) {
+                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 0, 36, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton ->  packet.send2Server(finalI, menu.blockEntity.getBlockPos())));
+                } else {
+                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 44, 36, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton ->  packet.send2Server(finalI, menu.blockEntity.getBlockPos())));
+                }
+            }
         }
     }
 
@@ -228,7 +256,7 @@ public abstract class MachineTile {
         //Write fluid slot
         var fluidTankProperties = this.getFluidSlot();
         FluidTank fluidTank = menu.blockEntity.getFluidTank();
-        if (fluidTank != null && this.fluidTankRenderer != null && fluidTankProperties != null){
+        if (fluidTank != null && this.fluidTankRenderer != null && fluidTankProperties != null) {
             guiGraphics.blit(bgTile, x + fluidTankProperties.x(), y + fluidTankProperties.y(), 36, 20, 8, 52, BG_TILE_WIDTH, BG_TILE_HEIGHT);
 
             this.fluidTankRenderer.render(guiGraphics, x + fluidTankProperties.x() + 1, y + fluidTankProperties.y() + 1, fluidTank.getFluid());
@@ -236,6 +264,10 @@ public abstract class MachineTile {
 
         //Write machine name
         guiGraphics.drawCenteredString(Minecraft.getInstance().font, this.getDisplayName(), x + screen.getXSize() / 2, y - 9, 4210752);
+    }
+
+    public void onButtonPress(int type, ServerPlayer player, MachineBlockEntity blockEntity){
+        player.playSound(SoundEvents.UI_BUTTON_CLICK.get());
     }
 
     /*Getter setters*/
@@ -276,8 +308,22 @@ public abstract class MachineTile {
         return this.getMatterSlots(new MatterSlotList());
     }
 
+    public final ButtonList getButtons() {
+        return this.getButtons(new ButtonList());
+    }
+
+    public void setButtonPacket(@NotNull ServerPacket buttonPacket) {
+        this.buttonPacket = buttonPacket;
+    }
+
     //Helper
     private static boolean isMouseAboveArea(int pMouseX, int pMouseY, int x, int y, int offsetX, int offsetY, FluidTankRenderer renderer) {
         return MouseUtil.isMouseOver(pMouseX, pMouseY, x + offsetX, y + offsetY, renderer.getWidth(), renderer.getHeight());
+    }
+
+    protected boolean canItemInsertToSlot(MachineBlockEntity blockEntity, int slot, ItemStack pItemStack){
+        var itemHandler = blockEntity.getItemHandler();
+        ItemStack itemStack = itemHandler.getStackInSlot(slot);
+        return itemHandler.isItemValid(slot, pItemStack) && ((itemStack.is(pItemStack.getItem()) && itemStack.getItem().getMaxStackSize() - itemStack.getCount() >= pItemStack.getCount()) || itemStack.isEmpty());
     }
 }
