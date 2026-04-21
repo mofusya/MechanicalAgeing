@@ -39,6 +39,7 @@ public class MechanicalAgeing {
         ModBlocks.BLOCKS.register(modEventBus);
         ModMachines.MACHINES.register(modEventBus);
         ModRecipes.SERIALIZERS.register(modEventBus);
+        ModRecipes.TYPES.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);

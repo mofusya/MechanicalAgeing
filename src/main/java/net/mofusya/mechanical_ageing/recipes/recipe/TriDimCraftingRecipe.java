@@ -7,10 +7,12 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.mofusya.mechanical_ageing.recipes.ModRecipes;
 import org.jetbrains.annotations.Nullable;
 
 public class TriDimCraftingRecipe implements Recipe<SimpleContainer> {
@@ -29,6 +31,8 @@ public class TriDimCraftingRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public boolean matches(SimpleContainer container, Level level) {
+        if (level.isClientSide) return false;
+
         boolean matches = true;
         for (int i = 0; i < this.ingredients.size(); i++) {
             if (!this.ingredients.get(i).test(container.getItem(i))) {
@@ -39,18 +43,18 @@ public class TriDimCraftingRecipe implements Recipe<SimpleContainer> {
     }
 
     @Override
-    public ItemStack assemble(SimpleContainer p_44001_, RegistryAccess p_267165_) {
+    public ItemStack assemble(SimpleContainer container, RegistryAccess access) {
         return result.copy();
     }
 
     @Override
-    public boolean canCraftInDimensions(int p_43999_, int p_44000_) {
+    public boolean canCraftInDimensions(int width, int height) {
         return true;
     }
 
     @Override
     public ItemStack getResultItem(RegistryAccess access) {
-        return this.result;
+        return this.result.copy();
     }
 
     @Override
@@ -65,37 +69,26 @@ public class TriDimCraftingRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return Serializer.INSTANCE;
+        return ModRecipes.TRI_DIM_CRAFTING_TABLE.getSerializer();
     }
 
     @Override
     public RecipeType<?> getType() {
-        return Type.INSTANCE;
-    }
-
-    public static class Type implements RecipeType<TriDimCraftingRecipe> {
-        private Type() {
-        }
-
-        public static final Type INSTANCE = new Type();
+        return ModRecipes.TRI_DIM_CRAFTING_TABLE.getType();
     }
 
     public static class Serializer implements RecipeSerializer<TriDimCraftingRecipe> {
-        public static final Serializer INSTANCE = new Serializer();
-
-        private Serializer() {
-        }
 
         @Override
         public TriDimCraftingRecipe fromJson(ResourceLocation id, JsonObject json) {
             NonNullList<Ingredient> ingredients = NonNullList.create();
 
-            JsonArray ingredientList = json.getAsJsonArray("ingredients");
+            JsonArray ingredientList = GsonHelper.getAsJsonArray(json, "ingredients");
             for (JsonElement element : ingredientList) {
                 ingredients.add(Ingredient.fromJson(element));
             }
 
-            ItemStack result = ShapedRecipe.itemStackFromJson(json.getAsJsonObject("result"));
+            ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
 
             return new TriDimCraftingRecipe(id, ingredients, result);
         }
@@ -118,11 +111,11 @@ public class TriDimCraftingRecipe implements Recipe<SimpleContainer> {
         public void toNetwork(FriendlyByteBuf buf, TriDimCraftingRecipe recipe) {
             buf.writeInt(recipe.ingredients.size());
 
-            for (Ingredient ingredient : recipe.getIngredients()){
+            for (Ingredient ingredient : recipe.getIngredients()) {
                 ingredient.toNetwork(buf);
             }
 
-            buf.writeItem(recipe.getResultItem(null));
+            buf.writeItemStack(recipe.getResultItem(null), false);
         }
     }
 }
