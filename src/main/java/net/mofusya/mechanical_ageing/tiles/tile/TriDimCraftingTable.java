@@ -25,11 +25,13 @@ public class TriDimCraftingTable extends MachineTile {
 
     @Override
     public SlotList getSlots(SlotList slots) {
-        return new SlotList()
-                .createCube(6, 25, itemStack -> true, SlotType.NORMAL, 3)
-                .createCube(61, 16, itemStack -> true, SlotType.NORMAL, 3)
-                .createCube(116, 7, itemStack -> true, SlotType.NORMAL, 3)
-                .create(133, 63, itemStack -> false, SlotType.EXTRACT_ONLY);
+        var toReturn = new SlotList();
+        for (int i = 0; i < 3; i++) {
+            toReturn.createVerLine(6, 25 + (18 * i), itemStack -> true, SlotType.NORMAL, 3)
+                    .createVerLine(61, 16 + (18 * i), itemStack -> true, SlotType.NORMAL, 3)
+                    .createVerLine(116, 7 + (18 * i), itemStack -> true, SlotType.NORMAL, 3);
+        }
+        return toReturn.create(133, 63, itemStack -> false, SlotType.EXTRACT_ONLY);
     }
 
     @Override

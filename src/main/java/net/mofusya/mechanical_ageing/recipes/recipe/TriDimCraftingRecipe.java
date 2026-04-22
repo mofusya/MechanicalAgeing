@@ -59,7 +59,7 @@ public class TriDimCraftingRecipe implements Recipe<Container> {
                         ingredient = this.ingredients.get(subX + subY * this.width);
                     }
 
-                    if (!ingredient.test(inventory.getItem(x + y * 3))) {
+                    if (!ingredient.test(inventory.getItem(x + y * MAX_WIDTH))) {
                         return false;
                     }
                 }

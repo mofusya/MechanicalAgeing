@@ -1,0 +1,16 @@
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "pattern": [
+    "   ###   ",
+    "   ###   ",
+    "   ###   "
+  ],
+  "key": {
+    "#": {
+      "item": "mechanical_ageing:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:iron_block"
+  }
+}
