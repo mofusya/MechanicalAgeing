@@ -14,7 +14,7 @@ modの基礎：
 - [ ] 楽に合金を追加するビルダー
 
 ステージとマルチブロック：  
-- [ ] St.1-Brick Age/仮設精錬炉  
+- [ ] St.1-[[Brick Age]]/仮設精錬炉  
 - [ ] St.2-Mechanic Age/電気精錬炉  
 - [ ] St.3-Semi Nuclear Age/核分裂炉  
 - [ ] St.4-Nuclear Age/核融合炉  
