@@ -3,7 +3,6 @@ package net.mofusya.mechanical_ageing.tiles.tile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.SimpleContainer;
@@ -15,7 +14,6 @@ import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.button.ButtonList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
-import net.mofusya.mechanical_ageing.recipes.ModRecipes;
 import net.mofusya.mechanical_ageing.recipes.recipe.TriDimCraftingRecipe;
 
 import java.util.Optional;
@@ -62,17 +60,16 @@ public class TriDimCraftingTable extends MachineTile {
                     inventory.setItem(i, itemHandler.getStackInSlot(i));
                 }
 
-                Optional<TriDimCraftingRecipe> recipe = level.getRecipeManager().getRecipeFor(ModRecipes.TRI_DIM_CRAFTING_TABLE.getType(), inventory, level);
-                if (recipe.isEmpty()) break;
+                Optional<TriDimCraftingRecipe> recipe = level.getRecipeManager().getRecipeFor(TriDimCraftingRecipe.Type.INSTANCE, inventory, level);
+                if (recipe.isPresent()) {
 
-                ItemStack result = recipe.get().assemble(inventory, null);
-                if (this.canItemInsertToSlot(blockEntity, OUTPUT_SLOT, result)) {
-                    for (int i = 0; i < 27; i++) {
-                        var itemStack = itemHandler.getStackInSlot(i);
-                        itemStack.shrink(1);
-                        itemHandler.setStackInSlot(i, itemStack);
+                    ItemStack result = recipe.get().assemble(inventory, null);
+                    if (this.canItemInsertToSlot(blockEntity, OUTPUT_SLOT, result)) {
+                        for (int i = 0; i < 27; i++) {
+                            itemHandler.extractItem(i, 1, false);
+                        }
+                        this.insertItemToSlot(blockEntity, OUTPUT_SLOT, result);
                     }
-                    itemHandler.setStackInSlot(OUTPUT_SLOT, result);
                 }
             }
         }

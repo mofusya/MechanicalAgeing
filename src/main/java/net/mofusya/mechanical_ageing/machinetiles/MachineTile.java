@@ -118,10 +118,10 @@ public abstract class MachineTile {
         return new ResourceLocation(id.getNamespace(), "textures/gui/bg_" + id.getPath() + ".png");
     }
 
-    private static final int FRAME_WIDTH = 304;
-    private static final int FRAME_HEIGHT = 182;
-    public static final int BG_TILE_WIDTH = 144;
-    public static final int BG_TILE_HEIGHT = 72;
+    public static final int FRAME_WIDTH = 304;
+    public static final int FRAME_HEIGHT = 182;
+    public static final int BG_TILE_WIDTH = 256;
+    public static final int BG_TILE_HEIGHT = 256;
 
     private List<EnergyDisplayTooltipArea> energyTooltips;
     private List<MatterDisplayTooltipArea> matterTooltips;
@@ -151,11 +151,11 @@ public abstract class MachineTile {
                 var button = this.getButtons().get(i);
                 int finalI = i;
                 if (button.type().is(SlotType.SYSTEM)) {
-                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 18, 18, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton ->  packet.send2Server(finalI, menu.blockEntity.getBlockPos())));
+                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 18, 18, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> packet.send2Server(finalI, menu.blockEntity.getBlockPos())));
                 } else if (button.type().is(SlotType.NORMAL)) {
-                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 0, 36, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton ->  packet.send2Server(finalI, menu.blockEntity.getBlockPos())));
+                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 0, 36, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> packet.send2Server(finalI, menu.blockEntity.getBlockPos())));
                 } else {
-                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 44, 36, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton ->  packet.send2Server(finalI, menu.blockEntity.getBlockPos())));
+                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 44, 36, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> packet.send2Server(finalI, menu.blockEntity.getBlockPos())));
                 }
             }
         }
@@ -266,7 +266,7 @@ public abstract class MachineTile {
         guiGraphics.drawCenteredString(Minecraft.getInstance().font, this.getDisplayName(), x + screen.getXSize() / 2, y - 9, 4210752);
     }
 
-    public void onButtonPress(int type, ServerPlayer player, MachineBlockEntity blockEntity){
+    public void onButtonPress(int type, ServerPlayer player, MachineBlockEntity blockEntity) {
         player.playSound(SoundEvents.UI_BUTTON_CLICK.get());
     }
 
@@ -321,9 +321,20 @@ public abstract class MachineTile {
         return MouseUtil.isMouseOver(pMouseX, pMouseY, x + offsetX, y + offsetY, renderer.getWidth(), renderer.getHeight());
     }
 
-    protected boolean canItemInsertToSlot(MachineBlockEntity blockEntity, int slot, ItemStack pItemStack){
+    protected boolean canItemInsertToSlot(MachineBlockEntity blockEntity, int slot, ItemStack pItemStack) {
         var itemHandler = blockEntity.getItemHandler();
         ItemStack itemStack = itemHandler.getStackInSlot(slot);
-        return itemHandler.isItemValid(slot, pItemStack) && ((itemStack.is(pItemStack.getItem()) && itemStack.getItem().getMaxStackSize() - itemStack.getCount() >= pItemStack.getCount()) || itemStack.isEmpty());
+        return (itemStack.is(pItemStack.getItem()) && itemStack.getCount() + pItemStack.getCount() <= itemStack.getItem().getMaxStackSize()) || itemStack.isEmpty();
+    }
+
+    protected void insertItemToSlot(MachineBlockEntity blockEntity, int slot, ItemStack pItemStack){
+        var itemHandler = blockEntity.getItemHandler();
+        ItemStack itemStack = itemHandler.getStackInSlot(slot).copy();
+        if (itemStack.isEmpty()){
+            itemHandler.setStackInSlot(slot, pItemStack);
+        } else {
+            itemStack.grow(pItemStack.getCount());
+            itemHandler.setStackInSlot(slot, itemStack);
+        }
     }
 }

@@ -1,17 +1,20 @@
 {
   "type": "mechanical_ageing:tri_dimensional_crafting",
-  "ingredients": [
-    {
-      "item": "mechanical_ageing:iron_ingot"
-    },
-    {
-      "item": "mechanical_ageing:iron_ingot"
-    },
-    {
-      "item": "mechanical_ageing:iron_ingot"
-    }
+  "pattern": [
+    "#########",
+    "#########",
+    "#########"
   ],
+  "key": {
+    "#": {
+      "item": "mechanical_ageing:iron_ingot"
+    },
+    "%": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
   "result": {
-    "item": "mechanical_ageing:iron_block"
+    "item": "mechanical_ageing:iron_block",
+    "count": 3
   }
 }
