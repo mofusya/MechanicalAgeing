@@ -4,12 +4,17 @@
   "tab.mechanical_ageing.material": "MechanicalAgeing-Materials-",
   "tab.mechanical_ageing.machines": "MechanicalAgeing-Machines-",
 
+  "block.mechanical_ageing.reinforced_bricks": "Reinforced Bricks",
+
   "block.mechanical_ageing.tri_dimensional_crafting_table": "Tri-Dimensional Crafting Table",
   "block.mechanical_ageing.tri_dimensional_crafting_table.machine_name": "Tri-D CT",
   "block.mechanical_ageing.destructor": "Destructor",
+  "block.mechanical_ageing.brick_burning_chamber": "Brick Burning Chamber",
+  "block.mechanical_ageing.brick_burning_chamber.machine_name": "Brick BC",
 
   "matter.mechanical_ageing.water": "Water",
-  "matter.mechanical_ageing.anti_matter": "Anti Matter",
+  "matter.mechanical_ageing.fuel": "Fuel",
+  "matter.mechanical_ageing.heat": "Heat",
 
   "block.mechanical_ageing.compressed_iron_block": "Compressed Iron Block",
   "block.mechanical_ageing.iron_block": "Iron Block",

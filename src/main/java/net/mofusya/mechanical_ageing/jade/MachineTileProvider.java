@@ -29,7 +29,7 @@ public enum MachineTileProvider implements IBlockComponentProvider, IServerDataP
                     String matterStorageAmount = tag.getString("matterStorageAmount_" + i);
                     String matterStorageCapacity = tag.getString("matterStorageCapacity_" + i);
 
-                    tooltip.add(Component.translatable(matterStorageName).append(": " + matterStorageAmount + "mB / " + matterStorageCapacity + "mB"));
+                    tooltip.add(Component.translatable(matterStorageName).append(": " + matterStorageAmount + " / " + matterStorageCapacity));
                 }
             }
         }
@@ -49,11 +49,11 @@ public enum MachineTileProvider implements IBlockComponentProvider, IServerDataP
                 tag.putString("matterStorageName_" + i, type == null ? "block.minecraft.air" : type.getTranslationId());
 
                 if (accessor.getPlayer().isShiftKeyDown()) {
-                    tag.putString("matterStorageAmount_" + i, matterHandler.getStored(i).getAmount().toString());
-                    tag.putString("matterStorageCapacity_" + i, matterHandler.getMaxStored(i).toString());
+                    tag.putString("matterStorageAmount_" + i, matterHandler.getStored(i).getAmount() + (type == null ? "mB" : type.getSuffix()));
+                    tag.putString("matterStorageCapacity_" + i, matterHandler.getMaxStored(i).toString() + (type == null ? "mB" : type.getSuffix()));
                 } else {
-                    tag.putString("matterStorageAmount_" + i, SeptiLongHelper.convertToStringAndAddPrefix(matterHandler.getStored(i).getAmount()));
-                    tag.putString("matterStorageCapacity_" + i, SeptiLongHelper.convertToStringAndAddPrefix(matterHandler.getMaxStored(i)));
+                    tag.putString("matterStorageAmount_" + i, SeptiLongHelper.convertToStringAndAddPrefix(matterHandler.getStored(i).getAmount()) + (type == null ? "mB" : type.getSuffix()));
+                    tag.putString("matterStorageCapacity_" + i, SeptiLongHelper.convertToStringAndAddPrefix(matterHandler.getMaxStored(i)) + (type == null ? "mB" : type.getSuffix()));
                 }
             }
         }

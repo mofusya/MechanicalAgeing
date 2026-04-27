@@ -42,7 +42,7 @@ public class DestructorTile extends MachineTile {
     public MatterSlotList getMatterSlots(MatterSlotList slots) {
         return super.getMatterSlots(slots)
                 .create(97, 23, matterType -> matterType.is(MatterTypes.WATER), SeptiLongValue.THOUSAND.get().multiply(100), SeptiLongValue.ZERO.get(), SeptiLongValue.TEN.get())
-                .create(124, 23, matterType -> matterType.is(MatterTypes.ANTI_MATTER), SeptiLongValue.HUNDRED.get(), SeptiLongValue.ZERO.get(), SeptiLongValue.TEN.get());
+                .create(124, 23, matterType -> matterType.is(MatterTypes.FUEL), SeptiLongValue.HUNDRED.get(), SeptiLongValue.ZERO.get(), SeptiLongValue.TEN.get());
     }
 
     @Override
@@ -62,13 +62,13 @@ public class DestructorTile extends MachineTile {
         if (forgeEnergyStorage.getEnergyStored() > 100 && fluidTank.drain(500, IFluidHandler.FluidAction.SIMULATE).getAmount() >= 500 &&
                 starDustEnergyStorage.receiveEnergyFromInside(new QuintLong(1), true).isGreaterOrSameThan(new QuintLong(1)) &&
                 matterHandler.canReceiveFromInside(new MatterStack(MatterTypes.WATER, SeptiLongValue.THOUSAND.get()), 0) &&
-                matterHandler.canReceiveFromInside(new MatterStack(MatterTypes.ANTI_MATTER, new SeptiLong(1)), 1)
+                matterHandler.canReceiveFromInside(new MatterStack(MatterTypes.FUEL, new SeptiLong(1)), 1)
         ) {
             forgeEnergyStorage.extractEnergyFromInside(100, false);
             fluidTank.drain(500, IFluidHandler.FluidAction.EXECUTE);
             starDustEnergyStorage.receiveEnergyFromInside(new QuintLong(1), false);
             matterHandler.receiveFromInside(new MatterStack(MatterTypes.WATER, SeptiLongValue.THOUSAND.get()), 0);
-            matterHandler.receiveFromInside(new MatterStack(MatterTypes.ANTI_MATTER, new SeptiLong(1)), 1);
+            matterHandler.receiveFromInside(new MatterStack(MatterTypes.FUEL, new SeptiLong(1)), 1);
         }
     }
 }

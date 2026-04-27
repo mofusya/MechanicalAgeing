@@ -77,7 +77,7 @@ public abstract class MatterHandler implements IMatterHandler {
         MatterSlotProperties matterSlot = this.slots.get(slot);
         SeptiLong extractAmount = amount.getAmount();
 
-        if (amount.getType() != null && matterSlot.isValidFunc().apply(amount.getType()))
+        if (amount.getType() != null && !matterSlot.isValidFunc().apply(amount.getType()))
             return SeptiLongValue.ZERO.get();
 
         if (extractAmount.isGreaterThan(this.getStored(slot).getAmount()))

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "CIC",
+    "$#$",
+    "#I#"
+  ],
+  "key": {
+    "C": {
+      "item": "mechanical_ageing:copper_chunk"
+    },
+    "I": {
+      "item": "mechanical_ageing:iron_ingot"
+    },
+    "$": {
+      "item": "minecraft:chain"
+    },
+    "#": {
+      "item": "minecraft:crafting_table"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:tri_dimensional_crafting_table"
+  }
+}

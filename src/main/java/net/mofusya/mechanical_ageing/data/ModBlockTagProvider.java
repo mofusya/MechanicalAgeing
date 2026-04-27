@@ -8,6 +8,7 @@ import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MechanicalAgeing;
+import net.mofusya.mechanical_ageing.blocks.ModBlocks;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
 import net.mofusya.mechanical_ageing.metalset.ModMetalSet;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +27,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
             ArrayList<RegistryObject<Block>> registries = new ArrayList<>();
 
             registries.addAll(ModMetalSet.METAL_SET.getBlocks());
+            registries.add(ModBlocks.REINFORCED_BRICKS);
 
             var tags = this.tag(BlockTags.MINEABLE_WITH_PICKAXE);
             for (RegistryObject<Block> block : registries) {

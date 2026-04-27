@@ -1,4 +1,4 @@
-// 1.20.1	2026-03-21T14:41:25.7619041	Block States: mechanical_ageing
+// 1.20.1	2026-04-22T19:10:32.9513274	Block States: mechanical_ageing
 89fb3ffac881ef081aad83e8cec9c6c7b8bd1719 assets/mechanical_ageing/blockstates/aluminum_block.json
 daff799ed41f06d8b79dde3765aaebcffb5a0343 assets/mechanical_ageing/blockstates/aluminum_ore.json
 4fdae0571f2ee7fe804b90ad4ab8b540dbcfde9b assets/mechanical_ageing/blockstates/chromium_block.json
@@ -53,6 +53,7 @@ bcd7a3f89a9c2c4a87a59ca004100f47ad3b199f assets/mechanical_ageing/blockstates/ni
 bfee52badacae77fca008abe6e95343f6b9e7fab assets/mechanical_ageing/blockstates/osmium_ore.json
 d9d6740223bf6946be0f57827a6324c017dc321d assets/mechanical_ageing/blockstates/platinum_block.json
 da609d23439da7a9f26bdde7f408e78700d44de6 assets/mechanical_ageing/blockstates/platinum_ore.json
+e43191a6926b5a1b8c7e86ec2ed461843df02f7f assets/mechanical_ageing/blockstates/reinforced_bricks.json
 3959adff5610724c442ddae5c94306cf15d34dd1 assets/mechanical_ageing/blockstates/silver_block.json
 babebdae774c887bea59a7093174b83ec79647e0 assets/mechanical_ageing/blockstates/silver_ore.json
 669cf40254f50d97e5050d7c213e1ca8dd13522b assets/mechanical_ageing/blockstates/tin_block.json
@@ -117,6 +118,7 @@ b5e04a7477a6098d4d1c8434c6a5fd55ef9db16a assets/mechanical_ageing/models/block/n
 b5e04a7477a6098d4d1c8434c6a5fd55ef9db16a assets/mechanical_ageing/models/block/osmium_ore.json
 8bc1a62d766cc4766d7df4b7ca8c2d9771e66285 assets/mechanical_ageing/models/block/platinum_block.json
 b5e04a7477a6098d4d1c8434c6a5fd55ef9db16a assets/mechanical_ageing/models/block/platinum_ore.json
+62175b2134d6343b70b1bf4bda7ba9737719d2fb assets/mechanical_ageing/models/block/reinforced_bricks.json
 8bc1a62d766cc4766d7df4b7ca8c2d9771e66285 assets/mechanical_ageing/models/block/silver_block.json
 b5e04a7477a6098d4d1c8434c6a5fd55ef9db16a assets/mechanical_ageing/models/block/silver_ore.json
 8bc1a62d766cc4766d7df4b7ca8c2d9771e66285 assets/mechanical_ageing/models/block/tin_block.json
@@ -181,6 +183,7 @@ f3c468c5bac985823d243aff69fdb8706f58e2dc assets/mechanical_ageing/models/item/mi
 cdcedb49b2a7fb0577a4e9072c3da666f7de3058 assets/mechanical_ageing/models/item/osmium_ore.json
 47709a94347e26c585eae975bd588cf55689488d assets/mechanical_ageing/models/item/platinum_block.json
 62066564bb0c3a681fdb59059681b79c537338c0 assets/mechanical_ageing/models/item/platinum_ore.json
+aa6f5d1147c5f623f9852eb2f6ad7b5c58fd5c6f assets/mechanical_ageing/models/item/reinforced_bricks.json
 5f7b011032c67afbb40f19dcda88c218d82718eb assets/mechanical_ageing/models/item/silver_block.json
 c75a9548a3fe16aa1d8cbe0f61ecf49a48223939 assets/mechanical_ageing/models/item/silver_ore.json
 c633770d29f459646e0653239ef37c4a59c93d89 assets/mechanical_ageing/models/item/tin_block.json

@@ -63,6 +63,7 @@
     "mechanical_ageing:titanium_ore",
     "mechanical_ageing:deepslate_titanium_ore",
     "mechanical_ageing:titanium_block",
-    "mechanical_ageing:compressed_titanium_block"
+    "mechanical_ageing:compressed_titanium_block",
+    "mechanical_ageing:reinforced_bricks"
   ]
 }

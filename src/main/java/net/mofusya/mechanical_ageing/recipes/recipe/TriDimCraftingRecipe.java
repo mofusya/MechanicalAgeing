@@ -49,7 +49,7 @@ public class TriDimCraftingRecipe implements Recipe<Container> {
         for (int x = 0; x < MAX_WIDTH; x++) {
             for (int y = 0; y < MAX_HEIGHT; y++) {
                 int subX = x - xOffset;
-                int subY = x - yOffset;
+                int subY = y - yOffset;
                 Ingredient ingredient;
 
                 if (subX >= 0 && subY >= 0 && subX < this.width && subY < this.height) {
@@ -69,7 +69,7 @@ public class TriDimCraftingRecipe implements Recipe<Container> {
     }
 
     @Override
-    public ItemStack assemble(Container container, RegistryAccess access) {
+    public ItemStack assemble(Container container, @Nullable RegistryAccess access) {
         return result.copy();
     }
 

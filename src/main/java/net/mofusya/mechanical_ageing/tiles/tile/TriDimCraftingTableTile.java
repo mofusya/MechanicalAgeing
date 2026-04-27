@@ -18,8 +18,8 @@ import net.mofusya.mechanical_ageing.recipes.recipe.TriDimCraftingRecipe;
 
 import java.util.Optional;
 
-public class TriDimCraftingTable extends MachineTile {
-    public TriDimCraftingTable(ResourceLocation id) {
+public class TriDimCraftingTableTile extends MachineTile {
+    public TriDimCraftingTableTile(ResourceLocation id) {
         super(id);
     }
 

@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MechanicalAgeing;
+import net.mofusya.mechanical_ageing.blocks.ModBlocks;
 import net.mofusya.mechanical_ageing.tiles.ModMachines;
 import net.mofusya.mechanical_ageing.metalset.ModMetalSet;
 
@@ -23,6 +24,7 @@ public class ModTabs {
             .icon(() -> new ItemStack(ModMetalSet.IRON.ingot()))
             .displayItems((parameters, output) -> {
                 List<ItemLike> items = new ArrayList<>();
+                items.addAll(ModBlocks.BLOCKS.getItems(0).stream().map(RegistryObject::get).toList());
                 items.addAll(ModMetalSet.METAL_SET.getAllItemLikes());
 
                 for (ItemLike item : items) {

@@ -1,0 +1,22 @@
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "pattern": [
+    "N#N#B#N#N",
+    "#B#BNB#B#",
+    "N#N#B#N#N"
+  ],
+  "key": {
+    "N": {
+      "item": "minecraft:nether_brick"
+    },
+    "#": {
+      "item": "minecraft:clay_ball"
+    },
+    "B": {
+      "item": "minecraft:brick"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:reinforced_bricks"
+  }
+}

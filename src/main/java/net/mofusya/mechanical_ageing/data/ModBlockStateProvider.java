@@ -11,6 +11,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MechanicalAgeing;
+import net.mofusya.mechanical_ageing.blocks.ModBlocks;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
 import net.mofusya.mechanical_ageing.metalset.ModMetalSet;
 
@@ -24,6 +25,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         ArrayList<RegistryObject<Block>> registries = new ArrayList<>();
+
+        registries.addAll(ModBlocks.BLOCKS.getBlocks());
 
         for (RegistryObject<Block> block : registries) {
             this.blockWithItem(block);

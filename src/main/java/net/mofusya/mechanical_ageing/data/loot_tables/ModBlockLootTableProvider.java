@@ -4,6 +4,7 @@ import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.RegistryObject;
+import net.mofusya.mechanical_ageing.blocks.ModBlocks;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
 import net.mofusya.mechanical_ageing.metalset.ModMetalSet;
 
@@ -18,6 +19,14 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
+        ArrayList<RegistryObject<Block>> registries = new ArrayList<>();
+
+        registries.addAll(ModBlocks.BLOCKS.getBlocks());
+
+        for (RegistryObject<Block> block : registries) {
+            this.dropSelf(block.get());
+        }
+
         for (MetalSet metalSet : ModMetalSet.METAL_SET.getEntries()) {
             this.dropSelf(metalSet.compressedBlock());
             this.dropSelf(metalSet.block());
@@ -30,6 +39,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
     protected Iterable<Block> getKnownBlocks() {
         ArrayList<Block> blocks = new ArrayList<>();
         blocks.addAll(ModMetalSet.METAL_SET.getBlocks().stream().map(RegistryObject::get).toList());
+        blocks.addAll(ModBlocks.BLOCKS.getBlocks().stream().map(RegistryObject::get).toList());
         return blocks;
     }
 }

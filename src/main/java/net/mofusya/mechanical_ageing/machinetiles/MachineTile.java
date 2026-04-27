@@ -26,6 +26,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MechanicalAgeing;
+import net.mofusya.mechanical_ageing.machinetiles.arrow.ArrowList;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineMenu;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineScreen;
@@ -94,6 +95,10 @@ public abstract class MachineTile {
     }
 
     public ButtonList getButtons(ButtonList list) {
+        return list;
+    }
+
+    public ArrowList getArrows(ArrowList list){
         return list;
     }
 
@@ -312,6 +317,10 @@ public abstract class MachineTile {
         return this.getButtons(new ButtonList());
     }
 
+    public final ArrowList getArrows(){
+        return this.getArrows(new ArrowList());
+    }
+
     public void setButtonPacket(@NotNull ServerPacket buttonPacket) {
         this.buttonPacket = buttonPacket;
     }
@@ -319,6 +328,14 @@ public abstract class MachineTile {
     //Helper
     private static boolean isMouseAboveArea(int pMouseX, int pMouseY, int x, int y, int offsetX, int offsetY, FluidTankRenderer renderer) {
         return MouseUtil.isMouseOver(pMouseX, pMouseY, x + offsetX, y + offsetY, renderer.getWidth(), renderer.getHeight());
+    }
+
+    protected static int next(int pos){
+        return pos + 18;
+    }
+
+    protected static int next(int pos, int count){
+        return pos + (18 * count);
     }
 
     protected boolean canItemInsertToSlot(MachineBlockEntity blockEntity, int slot, ItemStack pItemStack) {
