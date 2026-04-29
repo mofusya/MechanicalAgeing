@@ -1,0 +1,10 @@
+{
+  "type": "mechanical_ageing:fuel",
+  "fuel": {
+    "item": "minecraft:coal"
+  },
+  "resultAmount": {
+    "digit": "HUNDRED",
+    "multiplier": 2
+  }
+}

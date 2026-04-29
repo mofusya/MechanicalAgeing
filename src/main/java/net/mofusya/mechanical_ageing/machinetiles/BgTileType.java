@@ -3,7 +3,7 @@ package net.mofusya.mechanical_ageing.machinetiles;
 import net.minecraft.resources.ResourceLocation;
 import net.mofusya.mechanical_ageing.MechanicalAgeing;
 
-public enum BgTileType {
+public enum BgTileType implements IBgTileType{
     VANILLA("vanilla_like")
     ;
 
@@ -17,6 +17,7 @@ public enum BgTileType {
         this.id = id;
     }
 
+    @Override
     public ResourceLocation getId() {
         return id;
     }

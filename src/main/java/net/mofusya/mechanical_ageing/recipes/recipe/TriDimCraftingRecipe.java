@@ -7,27 +7,29 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.mofusya.mechanical_ageing.recipes.MAgContainer;
+import net.mofusya.mechanical_ageing.recipes.MAgRecipe;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class TriDimCraftingRecipe implements Recipe<Container> {
+public class TriDimCraftingRecipe extends MAgRecipe {
     private static final int MAX_WIDTH = 9;
     private static final int MAX_HEIGHT = 3;
 
-    private final ResourceLocation id;
     private final int width;
     private final int height;
     private final NonNullList<Ingredient> ingredients;
     private final ItemStack result;
 
     public TriDimCraftingRecipe(ResourceLocation id, int width, int height, NonNullList<Ingredient> ingredients, ItemStack result) {
-        this.id = id;
+        super(id, Serializer.INSTANCE, Type.INSTANCE);
         this.width = width;
         this.height = height;
         this.ingredients = ingredients;
@@ -35,7 +37,7 @@ public class TriDimCraftingRecipe implements Recipe<Container> {
     }
 
     @Override
-    public boolean matches(Container container, Level level) {
+    public boolean matches(MAgContainer container, Level level) {
         for (int i = 0; i <= MAX_WIDTH - this.width; i++) {
             for (int j = 0; j <= MAX_HEIGHT - this.height; j++) {
                 if (this.test(container, i, j, false)) return true;
@@ -45,7 +47,7 @@ public class TriDimCraftingRecipe implements Recipe<Container> {
         return false;
     }
 
-    private boolean test(Container inventory, int xOffset, int yOffset, boolean mirrored) {
+    private boolean test(MAgContainer inventory, int xOffset, int yOffset, boolean mirrored) {
         for (int x = 0; x < MAX_WIDTH; x++) {
             for (int y = 0; y < MAX_HEIGHT; y++) {
                 int subX = x - xOffset;
@@ -69,17 +71,12 @@ public class TriDimCraftingRecipe implements Recipe<Container> {
     }
 
     @Override
-    public ItemStack assemble(Container container, @Nullable RegistryAccess access) {
-        return result.copy();
-    }
-
-    @Override
     public boolean canCraftInDimensions(int width, int height) {
         return width >= this.width && height >= this.height;
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess access) {
+    public ItemStack getResultItem() {
         return this.result.copy();
     }
 
@@ -88,33 +85,10 @@ public class TriDimCraftingRecipe implements Recipe<Container> {
         return this.ingredients;
     }
 
-    @Override
-    public ResourceLocation getId() {
-        return this.id;
-    }
+    public enum Type implements RecipeType<TriDimCraftingRecipe> {INSTANCE}
 
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return Serializer.INSTANCE;
-    }
-
-    @Override
-    public RecipeType<?> getType() {
-        return Type.INSTANCE;
-    }
-
-    public static class Type implements RecipeType<TriDimCraftingRecipe> {
-        public static final Type INSTANCE = new Type();
-
-        private Type() {
-        }
-    }
-
-    public static class Serializer implements RecipeSerializer<TriDimCraftingRecipe> {
-        public static final Serializer INSTANCE = new Serializer();
-
-        private Serializer() {
-        }
+    public enum Serializer implements RecipeSerializer<TriDimCraftingRecipe> {
+        INSTANCE;
 
         @Override
         public TriDimCraftingRecipe fromJson(ResourceLocation id, JsonObject json) {
@@ -157,38 +131,24 @@ public class TriDimCraftingRecipe implements Recipe<Container> {
                 }
             }
 
-            ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
-
-            return new TriDimCraftingRecipe(id, width, height, ingredients, result);
+            return new TriDimCraftingRecipe(id, width, height, ingredients, readItem(json, "result"));
         }
 
         @Override
-        public @Nullable TriDimCraftingRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
+        public TriDimCraftingRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
             int width = buf.readInt();
             int height = buf.readInt();
-            int size = buf.readInt();
-            NonNullList<Ingredient> ingredients = NonNullList.withSize(size, Ingredient.EMPTY);
 
-            for (int i = 0; i < size; i++) {
-                ingredients.set(i, Ingredient.fromNetwork(buf));
-            }
-
-            ItemStack result = buf.readItem();
-
-            return new TriDimCraftingRecipe(id, width, height, ingredients, result);
+            return new TriDimCraftingRecipe(id, width, height, readIngredients(buf), readItem(buf));
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buf, TriDimCraftingRecipe recipe) {
             buf.writeInt(recipe.width);
             buf.writeInt(recipe.height);
-            buf.writeInt(recipe.ingredients.size());
 
-            for (Ingredient ingredient : recipe.getIngredients()) {
-                ingredient.toNetwork(buf);
-            }
-
-            buf.writeItemStack(recipe.getResultItem(null), false);
+            writeToBuf(buf, recipe.getIngredients());
+            writeToBuf(buf, recipe.getResultItem(null));
         }
     }
 }

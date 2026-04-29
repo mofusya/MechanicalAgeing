@@ -12,7 +12,7 @@ public class ModBlocks {
     public static final OrnateBlockDeferredRegister BLOCKS = OrnateBlockDeferredRegister.create(MechanicalAgeing.MOD_ID, 2);
 
     public static final RegistryObject<Block> REINFORCED_BRICKS = BLOCKS.register("reinforced_bricks", new OrnateBlockDeferredRegister.Builder()
-            .attribute(new AttributedItem.Builder().attribute("melting_point", 691, true))
+            .attribute(new AttributedItem.Builder().attribute("melting_point", 2800, true))
             .blockBuild(BlockBehaviour.Properties.copy(Blocks.BRICKS))
     );
 }

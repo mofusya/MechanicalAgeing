@@ -76,12 +76,11 @@ public class MatterDisplayTooltipArea {
             final float red = (color >> 16 & 0xFF) / 255.0F;
             final float green = (color >> 8 & 0xFF) / 255.0F;
             final float blue = (color & 0xFF) / 255.0F;
-            final float alpha = ((color >> 24) & 0xFF) / 255F;
 
             //Get water texture
             ResourceLocation waterTexture = new ResourceLocation("textures/block/water_still.png");
             RenderSystem.setShaderTexture(0, waterTexture);
-            RenderSystem.setShaderColor(red, green, blue, alpha);
+            RenderSystem.setShaderColor(red, green, blue, 0.75f);
 
             //Get matter texture values
             final int posX = this.x + 1;
