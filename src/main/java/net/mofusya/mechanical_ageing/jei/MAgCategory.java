@@ -3,6 +3,7 @@ package net.mofusya.mechanical_ageing.jei;
 import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
@@ -16,11 +17,12 @@ import net.mofusya.mechanical_ageing.MechanicalAgeing;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import net.mofusya.mechanical_ageing.machinetiles.button.ButtonProperties;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotProperties;
+import net.mofusya.mechanical_ageing.machinetiles.fluid.FluidSlotProperties;
+import net.mofusya.mechanical_ageing.machinetiles.matter.MatterSlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.recipes.MAgRecipe;
-import net.mofusya.mechanical_ageing.tiles.ModMachines;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,9 @@ import static net.mofusya.mechanical_ageing.machinetiles.MachineTile.*;
 
 public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategory<T> {
     protected static final ResourceLocation JEI_FRAME = new ResourceLocation(MechanicalAgeing.MOD_ID, "textures/gui/frame_jei.png");
+
+    public MAgCategory(IGuiHelper helper) {
+    }
 
     public void getElements(T recipe, ElementList elements) {
     }
@@ -47,7 +52,7 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
         //Get frame texture
-        MachineTile machineTile = ModMachines.TRI_DIM_CRAFTING_TABLE.tile();
+        MachineTile machineTile = this.getMachineTile();
         ResourceLocation bgTile = machineTile.getBgTileTypeFromLoc();
         RenderSystem.setShaderTexture(0, bgTile);
 
@@ -80,12 +85,27 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
         //Write energy slot
         for (EnergySlotProperties slotBuild : machineTile.getEnergySlots()) {
             if (slotBuild.maxReceive() > 0) {
-                guiGraphics.blit(bgTile, 0, 0, 36, 20, 8, 52, MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
-                guiGraphics.blit(bgTile, 10, 0, 36, 20, 8, 52, MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
+                guiGraphics.blit(bgTile, slotBuild.x(), 6, 36, 20, 8, 52, MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
+                guiGraphics.blit(bgTile, slotBuild.x() + 10, 6, 36, 20, 8, 52, MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
             } else {
-                guiGraphics.blit(bgTile, 0, 0, 62, 20, 8, 52, MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
-                guiGraphics.blit(bgTile, 10, 0, 62, 20, 8, 52, MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
+                guiGraphics.blit(bgTile, slotBuild.x(), 6, 62, 20, 8, 52, MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
+                guiGraphics.blit(bgTile, slotBuild.x() + 10, 6, 62, 20, 8, 52, MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
             }
+        }
+
+        //Write matter slots
+        for (MatterSlotProperties slotBuild : machineTile.getMatterSlots()) {
+            if (slotBuild.maxReceive().isGreaterThan(0)) {
+                guiGraphics.blit(bgTile, slotBuild.x(), slotBuild.y(), 18, 36, 18, 36, MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
+            } else {
+                guiGraphics.blit(bgTile, slotBuild.x(), slotBuild.y(), 44, 0, 18, 36, MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
+            }
+        }
+
+        //Write fluid slot
+        FluidSlotProperties fluidSlotProperties = machineTile.getFluidSlot();
+        if (fluidSlotProperties != null) {
+            guiGraphics.blit(bgTile, fluidSlotProperties.x(), fluidSlotProperties.y(), 36, 20, 8, 52, BG_TILE_WIDTH, BG_TILE_HEIGHT);
         }
 
         //Write buttons
@@ -106,6 +126,7 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
         var elements = this.getElements(recipe);
         var ingredients = elements.ingredients;
         var itemStacks = elements.itemStacks;
+        var matterStacks = elements.matterStacks;
 
         for (int i = 0; i < ingredients.size(); i++) {
             if (ingredients.get(i).isEmpty()) continue;
@@ -121,6 +142,14 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
             var slot = this.getMachineTile().getSlots().get(i);
             builder.addSlot(slot.type().is(SlotType.NORMAL) ? RecipeIngredientRole.INPUT : RecipeIngredientRole.OUTPUT,
                     slot.x(), slot.y()).addItemStack(itemStacks.get(i));
+        }
+
+        for (int i = 0; i < matterStacks.size(); i++) {
+            var slot = this.getMachineTile().getMatterSlots().get(i);
+            builder.addSlot(slot.maxExtract().isGreaterThan(0) ? RecipeIngredientRole.INPUT : RecipeIngredientRole.OUTPUT,
+                    slot.x() + 1, slot.y() + 1).addIngredient(MAgIngredient.MATTER_TYPE, matterStacks.get(i));
+            builder.addSlot(slot.maxExtract().isGreaterThan(0) ? RecipeIngredientRole.INPUT : RecipeIngredientRole.OUTPUT,
+                    slot.x() + 1, slot.y() + 17).addIngredient(MAgIngredient.MATTER_TYPE, matterStacks.get(i));
         }
     }
 
