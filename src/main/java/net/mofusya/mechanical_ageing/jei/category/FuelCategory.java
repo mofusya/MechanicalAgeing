@@ -12,8 +12,7 @@ import net.mofusya.mechanical_ageing.MechanicalAgeing;
 import net.mofusya.mechanical_ageing.jei.MAgCategory;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import net.mofusya.mechanical_ageing.recipes.recipe.FuelRecipe;
-import net.mofusya.mechanical_ageing.recipes.recipe.TriDimCraftingRecipe;
-import net.mofusya.mechanical_ageing.tiles.ModMachines;
+import net.mofusya.mechanical_ageing.tiles.MAgMachines;
 import org.jetbrains.annotations.Nullable;
 
 public class FuelCategory extends MAgCategory<FuelRecipe> {
@@ -27,7 +26,7 @@ public class FuelCategory extends MAgCategory<FuelRecipe> {
     public FuelCategory(IGuiHelper helper) {
         super(helper);
         this.backGround = helper.createDrawable(JEI_FRAME, 0, 0, 176, 85);
-        this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(ModMachines.BRICK_BURNING_CHAMBER.block()));
+        this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MAgMachines.BRICK_BURNING_CHAMBER.block()));
     }
 
     @Override
@@ -38,7 +37,7 @@ public class FuelCategory extends MAgCategory<FuelRecipe> {
 
     @Override
     protected MachineTile getMachineTile() {
-        return ModMachines.BRICK_BURNING_CHAMBER.tile();
+        return MAgMachines.BRICK_BURNING_CHAMBER.tile();
     }
 
     @Override

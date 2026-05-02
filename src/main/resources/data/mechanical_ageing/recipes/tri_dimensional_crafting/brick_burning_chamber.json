@@ -1,0 +1,25 @@
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "pattern": [
+    "#I#I%I#I#",
+    "I%I%F%I%I",
+    "#I#I%I#I#"
+  ],
+  "key": {
+    "#": {
+      "item": "mechanical_ageing:reinforced_bricks"
+    },
+    "I": {
+      "item": "mechanical_ageing:osmium_ingot"
+    },
+    "%": {
+      "item": "minecraft:nether_bricks"
+    },
+    "F": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:brick_burning_chamber"
+  }
+}

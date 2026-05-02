@@ -6,23 +6,24 @@ import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
+import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.mofusya.mechanical_ageing.MechanicalAgeing;
 import net.mofusya.mechanical_ageing.jei.category.FuelCategory;
+import net.mofusya.mechanical_ageing.jei.category.MatterBurningCategory;
 import net.mofusya.mechanical_ageing.jei.category.TriDimCraftingCategory;
 import net.mofusya.mechanical_ageing.jei.ingredient.MatterHelper;
 import net.mofusya.mechanical_ageing.jei.ingredient.MatterRenderer;
 import net.mofusya.mechanical_ageing.matter.MatterManager;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
-import net.mofusya.mechanical_ageing.matter.MatterType;
 import net.mofusya.mechanical_ageing.recipes.recipe.FuelRecipe;
+import net.mofusya.mechanical_ageing.recipes.recipe.MatterBurningRecipe;
 import net.mofusya.mechanical_ageing.recipes.recipe.TriDimCraftingRecipe;
-import net.mofusya.mechanical_ageing.tiles.ModMachines;
+import net.mofusya.mechanical_ageing.tiles.MAgMachines;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @JeiPlugin
 public class JeiMAgPlugin implements IModPlugin {
@@ -35,6 +36,7 @@ public class JeiMAgPlugin implements IModPlugin {
     public void registerCategories(IRecipeCategoryRegistration registration) {
         registration.addRecipeCategories(new TriDimCraftingCategory(registration.getJeiHelpers().getGuiHelper()));
         registration.addRecipeCategories(new FuelCategory(registration.getJeiHelpers().getGuiHelper()));
+        registration.addRecipeCategories(new MatterBurningCategory(registration.getJeiHelpers().getGuiHelper()));
     }
 
     @Override
@@ -45,12 +47,15 @@ public class JeiMAgPlugin implements IModPlugin {
                 recipeManager.getAllRecipesFor(TriDimCraftingRecipe.Type.INSTANCE));
         registration.addRecipes(FuelCategory.TYPE,
                 recipeManager.getAllRecipesFor(FuelRecipe.Type.INSTANCE));
+        registration.addRecipes(MatterBurningCategory.TYPE,
+                recipeManager.getAllRecipesFor(MatterBurningRecipe.Type.INSTANCE));
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalysts(TriDimCraftingCategory.TYPE, ModMachines.TRI_DIM_CRAFTING_TABLE.block());
-        registration.addRecipeCatalysts(FuelCategory.TYPE, ModMachines.BRICK_BURNING_CHAMBER.block());
+        registration.addRecipeCatalysts(TriDimCraftingCategory.TYPE, MAgMachines.TRI_DIM_CRAFTING_TABLE.block());
+        registration.addRecipeCatalysts(FuelCategory.TYPE, MAgMachines.BRICK_BURNING_CHAMBER.block());
+        registration.addRecipeCatalysts(MatterBurningCategory.TYPE, MAgMachines.BRICK_BURNING_CHAMBER.block());
     }
 
     @Override
@@ -61,5 +66,12 @@ public class JeiMAgPlugin implements IModPlugin {
         }
 
         registration.register(MAgIngredient.MATTER_TYPE, matterStackList, new MatterHelper(), new MatterRenderer());
+    }
+
+    protected static IJeiRuntime jeiRuntime;
+
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+        JeiMAgPlugin.jeiRuntime = jeiRuntime;
     }
 }

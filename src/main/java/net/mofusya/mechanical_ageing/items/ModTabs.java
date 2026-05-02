@@ -10,7 +10,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MechanicalAgeing;
 import net.mofusya.mechanical_ageing.blocks.ModBlocks;
-import net.mofusya.mechanical_ageing.tiles.ModMachines;
+import net.mofusya.mechanical_ageing.tiles.MAgMachines;
 import net.mofusya.mechanical_ageing.metalset.ModMetalSet;
 
 import java.util.ArrayList;
@@ -35,10 +35,10 @@ public class ModTabs {
 
     public static final RegistryObject<CreativeModeTab> MACHINES = TABS.register("machines", () -> CreativeModeTab.builder()
             .title(Component.translatable("tab." + MechanicalAgeing.MOD_ID + ".machines"))
-            .icon(() -> new ItemStack(ModMachines.DESTRUCTOR.block()))
+            .icon(() -> new ItemStack(MAgMachines.DESTRUCTOR.block()))
             .displayItems((parameters, output) -> {
                 List<RegistryObject<Block>> blocks = new ArrayList<>();
-                blocks.addAll(ModMachines.MACHINES.getBlockEntries());
+                blocks.addAll(MAgMachines.MACHINES.getBlockEntries());
 
                 for (RegistryObject<Block> block : blocks) {
                     output.accept(block.get());

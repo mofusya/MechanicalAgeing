@@ -47,4 +47,9 @@ public class MatterHelper implements IIngredientHelper<MatterStack> {
         }
         return "A error happened is getErrorInfo() with: " + matterStack;
     }
+
+    @Override
+    public long getAmount(MatterStack ingredient) {
+        return IIngredientHelper.super.getAmount(ingredient);
+    }
 }

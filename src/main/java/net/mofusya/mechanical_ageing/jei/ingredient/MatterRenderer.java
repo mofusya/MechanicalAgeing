@@ -1,7 +1,6 @@
 package net.mofusya.mechanical_ageing.jei.ingredient;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;

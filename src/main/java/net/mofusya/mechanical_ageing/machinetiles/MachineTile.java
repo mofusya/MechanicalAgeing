@@ -1,6 +1,7 @@
 package net.mofusya.mechanical_ageing.machinetiles;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.ChatFormatting;
 import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
@@ -9,6 +10,7 @@ import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -27,6 +29,7 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MechanicalAgeing;
 import net.mofusya.mechanical_ageing.machinetiles.arrow.ArrowList;
+import net.mofusya.mechanical_ageing.machinetiles.arrow.ArrowProperties;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineMenu;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineScreen;
@@ -44,6 +47,7 @@ import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.machinetiles.util.MouseUtil;
+import net.mofusya.mechanical_ageing.tiles.BgTileType;
 import net.mofusya.ornatelib.registries.network.packet.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -73,7 +77,7 @@ public abstract class MachineTile {
     /*Overrides*/
     public abstract void tick(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity);
 
-    public Component getDisplayName() {
+    public MutableComponent getDisplayName() {
         return Component.translatable("block." + this.id.getNamespace() + "." + this.id.getPath());
     }
 
@@ -98,7 +102,7 @@ public abstract class MachineTile {
         return list;
     }
 
-    public ArrowList getArrows(ArrowList list){
+    public ArrowList getArrows(ArrowList list) {
         return list;
     }
 
@@ -118,7 +122,7 @@ public abstract class MachineTile {
         return BgTileType.VANILLA;
     }
 
-    public ResourceLocation getBgTileTypeFromLoc() {
+    public final ResourceLocation getBgTileTypeLoc() {
         ResourceLocation id = this.getBgTileType().getId();
         return new ResourceLocation(id.getNamespace(), "textures/gui/bg_" + id.getPath() + ".png");
     }
@@ -134,7 +138,7 @@ public abstract class MachineTile {
     private FluidTankRenderer fluidTankRenderer = null;
 
     public void screenInit(int x, int y, MachineMenu menu, MachineScreen screen) {
-        ResourceLocation bgTile = this.getBgTileTypeFromLoc();
+        ResourceLocation bgTile = this.getBgTileTypeLoc();
 
         this.energyTooltips = new ArrayList<>();
         for (EnergySlotProperties energy : this.getEnergySlots()) {
@@ -192,7 +196,7 @@ public abstract class MachineTile {
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
         //Get tile texture
-        ResourceLocation bgTile = this.getBgTileTypeFromLoc();
+        ResourceLocation bgTile = this.getBgTileTypeLoc();
         RenderSystem.setShaderTexture(0, bgTile);
 
         //Write main bg
@@ -267,8 +271,62 @@ public abstract class MachineTile {
             this.fluidTankRenderer.render(guiGraphics, x + fluidTankProperties.x() + 1, y + fluidTankProperties.y() + 1, fluidTank.getFluid());
         }
 
-        //Write machine name
-        guiGraphics.drawCenteredString(Minecraft.getInstance().font, this.getDisplayName(), x + screen.getXSize() / 2, y - 9, 4210752);
+        //Write Arrow
+        for (ArrowProperties arrow : this.getArrows()) {
+            var type = arrow.type();
+            float func = arrow.showPercentageFunc().apply(menu.blockEntity);
+            int aX = x + arrow.x();
+            int aY = y + arrow.y();
+            int size = arrow.size();
+            int midSize = size - 6;
+            int coverSize = (int) (size * func);
+            int midCoverSize = coverSize - 6;
+            switch (type) {
+                case HORIZONTAL -> {
+                    //Write base
+                    guiGraphics.blit(bgTile, aX, aY, 18, 0, 1, 7, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    guiGraphics.blit(bgTile, aX + 1, aY, midSize, 7, 19, 0, 1, 7, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    guiGraphics.blit(bgTile, aX + midSize + 1, aY, 20, 0, 5, 7, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+
+                    //Write cover
+                    if (coverSize >= 1) {
+                        guiGraphics.blit(bgTile, aX, aY, 18, 7, 1, 7, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    }
+                    if (coverSize >= 2) {
+                        guiGraphics.blit(bgTile, aX + 1, aY, midCoverSize, 7, 19, 7, 1, 7, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    }
+                    if (coverSize >= midCoverSize + 1 && func > 0) {
+                        guiGraphics.blit(bgTile, aX + Math.max(midCoverSize + 1, 0), aY, 20, 7, 5, 7, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    }
+                }
+                case VERTICAL -> {
+                    //Write base
+                    guiGraphics.blit(bgTile, aX, aY, 25, 0, 7, 1, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    guiGraphics.blit(bgTile, aX, aY + 1, 7, midSize, 25, 1, 7, 1, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    guiGraphics.blit(bgTile, aX, aY + midSize + 1, 25, 2, 7, 5, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+
+                    //Write cover
+                    if (coverSize >= 1) {
+                        guiGraphics.blit(bgTile, aX, aY, 25, 7, 7, 1, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    }
+                    if (coverSize >= 2) {
+                        guiGraphics.blit(bgTile, aX, aY + 1, 7, midCoverSize, 25, 8, 7, 1, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    }
+                    if (coverSize >= midCoverSize + 1 && func > 0) {
+                        guiGraphics.blit(bgTile, aX, aY + Math.max(midCoverSize + 1, 0), 25, 9, 7, 5, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    }
+                }
+
+            }
+
+            //Write machine name
+            var displayName = this.getDisplayName();
+            ChatFormatting format =this.getBgTileType().getFormat();
+            if (format != null){
+                displayName.withStyle(format);
+            }
+            guiGraphics.drawCenteredString(Minecraft.getInstance().font, displayName, x + screen.getXSize() / 2, y - 9, 4210752);
+        }
     }
 
     public void onButtonPress(int type, ServerPlayer player, MachineBlockEntity blockEntity) {
@@ -317,7 +375,7 @@ public abstract class MachineTile {
         return this.getButtons(new ButtonList());
     }
 
-    public final ArrowList getArrows(){
+    public final ArrowList getArrows() {
         return this.getArrows(new ArrowList());
     }
 
@@ -326,15 +384,16 @@ public abstract class MachineTile {
     }
 
     //Helper
-    private static boolean isMouseAboveArea(int pMouseX, int pMouseY, int x, int y, int offsetX, int offsetY, FluidTankRenderer renderer) {
+    private static boolean isMouseAboveArea(int pMouseX, int pMouseY, int x, int y, int offsetX,
+                                            int offsetY, FluidTankRenderer renderer) {
         return MouseUtil.isMouseOver(pMouseX, pMouseY, x + offsetX, y + offsetY, renderer.getWidth(), renderer.getHeight());
     }
 
-    protected static int next(int pos){
+    protected static int next(int pos) {
         return pos + 18;
     }
 
-    protected static int next(int pos, int count){
+    protected static int next(int pos, int count) {
         return pos + (18 * count);
     }
 
@@ -344,10 +403,10 @@ public abstract class MachineTile {
         return (itemStack.is(pItemStack.getItem()) && itemStack.getCount() + pItemStack.getCount() <= itemStack.getItem().getMaxStackSize()) || itemStack.isEmpty();
     }
 
-    protected void insertItemToSlot(MachineBlockEntity blockEntity, int slot, ItemStack pItemStack){
+    protected void insertItemToSlot(MachineBlockEntity blockEntity, int slot, ItemStack pItemStack) {
         var itemHandler = blockEntity.getItemHandler();
         ItemStack itemStack = itemHandler.getStackInSlot(slot).copy();
-        if (itemStack.isEmpty()){
+        if (itemStack.isEmpty()) {
             itemHandler.setStackInSlot(slot, pItemStack);
         } else {
             itemStack.grow(pItemStack.getCount());

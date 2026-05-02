@@ -85,10 +85,10 @@ public class MAgContainer extends SimpleContainer {
             for (int i = 0; i < slots.size(); i++) {
                 slotList[i] = slots.get(i);
             }
-            return this.energySlots(slotList);
+            return this.energySlotList(slotList);
         }
 
-        public Builder energySlots(int @Nullable ... energySlots) {
+        public Builder energySlotList(int @Nullable ... energySlots) {
             if (energySlots == null || energySlots.length == 0) {
                 this.energySlots = null;
             } else {
@@ -110,10 +110,10 @@ public class MAgContainer extends SimpleContainer {
             for (int i = 0; i < slots.size(); i++) {
                 slotList[i] = slots.get(i);
             }
-            return this.matterSlots(slotList);
+            return this.matterSlotList(slotList);
         }
 
-        public Builder matterSlots(int @Nullable ... matterSlots) {
+        public Builder matterSlotList(int @Nullable ... matterSlots) {
             if (matterSlots == null || matterSlots.length == 0) {
                 this.matterSlots = null;
             } else {

@@ -10,6 +10,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
+import net.mofusya.mechanical_ageing.matter.LazyMatterStack;
+import net.mofusya.mechanical_ageing.matter.MatterManager;
+import net.mofusya.mechanical_ageing.matter.MatterStack;
+import net.mofusya.mechanical_ageing.matter.MatterType;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
 
@@ -105,6 +109,21 @@ public abstract class MAgRecipe implements Recipe<MAgContainer> {
         return ingredients;
     }
 
+    protected static LazyMatterStack readMatter(JsonObject json, String id) {
+        JsonObject ingredient = GsonHelper.getAsJsonObject(json, id);
+        ResourceLocation type = new ResourceLocation(GsonHelper.getAsString(ingredient, "type"));
+        SeptiLong amount = readSeptiLong(ingredient, "amount");
+
+        return new LazyMatterStack(type, amount);
+    }
+
+    protected static LazyMatterStack readMatter(FriendlyByteBuf buf) {
+        ResourceLocation type = buf.readResourceLocation();
+        SeptiLong amount = readSeptiLong(buf);
+
+        return new LazyMatterStack(type, amount);
+    }
+
     protected static int readInt(JsonObject json, String id) {
         return GsonHelper.getAsInt(json, id);
     }
@@ -128,8 +147,19 @@ public abstract class MAgRecipe implements Recipe<MAgContainer> {
         buf.writeLongArray(septiLong.getLayer());
     }
 
+    protected static void writeToBuf(FriendlyByteBuf buf, LazyMatterStack matterStack) {
+        buf.writeResourceLocation(matterStack.type());
+        writeToBuf(buf, matterStack.amount());
+    }
+
     //Match helper
     public static boolean test(Ingredient ingredient, ItemStack itemStack) {
         return ingredient.test(itemStack);
+    }
+
+    public static boolean test(MatterStack ingredient, MatterStack matterStack) {
+        if (matterStack.getType() == null) return false;
+
+        return ingredient.getType() == null || (matterStack.getType().is(ingredient.getType())) && matterStack.getAmount().isGreaterOrSameThan(ingredient.getAmount());
     }
 }

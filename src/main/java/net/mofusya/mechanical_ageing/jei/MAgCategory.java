@@ -53,7 +53,7 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
 
         //Get frame texture
         MachineTile machineTile = this.getMachineTile();
-        ResourceLocation bgTile = machineTile.getBgTileTypeFromLoc();
+        ResourceLocation bgTile = machineTile.getBgTileTypeLoc();
         RenderSystem.setShaderTexture(0, bgTile);
 
         //Write main bg
@@ -145,11 +145,11 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
         }
 
         for (int i = 0; i < matterStacks.size(); i++) {
+            if (matterStacks.get(i).getType() == null) continue;
+
             var slot = this.getMachineTile().getMatterSlots().get(i);
-            builder.addSlot(slot.maxExtract().isGreaterThan(0) ? RecipeIngredientRole.INPUT : RecipeIngredientRole.OUTPUT,
-                    slot.x() + 1, slot.y() + 1).addIngredient(MAgIngredient.MATTER_TYPE, matterStacks.get(i));
-            builder.addSlot(slot.maxExtract().isGreaterThan(0) ? RecipeIngredientRole.INPUT : RecipeIngredientRole.OUTPUT,
-                    slot.x() + 1, slot.y() + 17).addIngredient(MAgIngredient.MATTER_TYPE, matterStacks.get(i));
+            builder.addSlot(slot.maxReceive().isGreaterThan(0) ? RecipeIngredientRole.INPUT : RecipeIngredientRole.OUTPUT,
+                    slot.x() + 1, slot.y() + 19).addIngredient(MAgIngredient.MATTER_TYPE, matterStacks.get(i));
         }
     }
 

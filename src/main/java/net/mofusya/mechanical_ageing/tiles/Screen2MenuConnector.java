@@ -16,7 +16,7 @@ public class Screen2MenuConnector {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-            for (RegistryObject<MenuType<MachineMenu>> menu : ModMachines.MACHINES.getMenuEntries()) {
+            for (RegistryObject<MenuType<MachineMenu>> menu : MAgMachines.MACHINES.getMenuEntries()) {
                 MenuScreens.register(menu.get(), MachineScreen::new);
             }
         });

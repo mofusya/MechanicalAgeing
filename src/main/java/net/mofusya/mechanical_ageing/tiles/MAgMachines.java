@@ -7,7 +7,7 @@ import net.mofusya.mechanical_ageing.tiles.tile.BurningChamberTile;
 import net.mofusya.mechanical_ageing.tiles.tile.DestructorTile;
 import net.mofusya.mechanical_ageing.tiles.tile.TriDimCraftingTableTile;
 
-public class ModMachines {
+public class MAgMachines {
     public static final MachineRegister MACHINES = new MachineRegister(MechanicalAgeing.MOD_ID);
 
     public static final MachineObject TRI_DIM_CRAFTING_TABLE = MACHINES.register("tri_dimensional_crafting_table", TriDimCraftingTableTile::new);

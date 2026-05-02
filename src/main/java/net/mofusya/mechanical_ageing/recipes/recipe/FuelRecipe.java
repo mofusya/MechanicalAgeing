@@ -1,21 +1,17 @@
 package net.mofusya.mechanical_ageing.recipes.recipe;
 
 import com.google.gson.JsonObject;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
-import net.mofusya.mechanical_ageing.matter.MatterTypes;
+import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.MAgRecipe;
 import net.mofusya.ornatelib.lang.SeptiLong;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class FuelRecipe extends MAgRecipe {
     private final Ingredient ingredient;
@@ -40,13 +36,13 @@ public class FuelRecipe extends MAgRecipe {
         return this.resultAmount;
     }
 
-    public MatterStack getResult(){
-        return new MatterStack(MatterTypes.FUEL, this.getResultAmount());
+    public MatterStack getResult() {
+        return new MatterStack(MAgMatterTypes.FUEL, this.getResultAmount());
     }
 
-    public enum Type implements RecipeType<FuelRecipe>{INSTANCE}
+    public enum Type implements RecipeType<FuelRecipe> {INSTANCE}
 
-    public enum Serializer implements RecipeSerializer<FuelRecipe>{
+    public enum Serializer implements RecipeSerializer<FuelRecipe> {
         INSTANCE;
 
         @Override

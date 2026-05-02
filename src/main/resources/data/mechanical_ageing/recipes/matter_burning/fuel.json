@@ -1,0 +1,17 @@
+{
+  "type": "mechanical_ageing:matter_burning",
+  "ingredient": {
+    "type": "mechanical_ageing:fuel",
+    "amount": {
+      "digit": "ONE",
+      "multiplier": 2
+    }
+  },
+  "result": {
+    "type": "mechanical_ageing:heat",
+    "amount": {
+      "digit": "ONE",
+      "multiplier": 1
+    }
+  }
+}

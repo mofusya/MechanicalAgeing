@@ -2,6 +2,7 @@ package net.mofusya.mechanical_ageing.tiles.tile;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -41,7 +42,7 @@ public class TriDimCraftingTableTile extends MachineTile {
     }
 
     @Override
-    public Component getDisplayName() {
+    public MutableComponent getDisplayName() {
         return Component.translatable("block.mechanical_ageing.tri_dimensional_crafting_table.machine_name");
     }
 
