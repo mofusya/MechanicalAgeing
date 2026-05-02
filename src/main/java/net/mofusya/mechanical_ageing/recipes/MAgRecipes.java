@@ -7,6 +7,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MechanicalAgeing;
 import net.mofusya.mechanical_ageing.recipes.recipe.FuelRecipe;
 import net.mofusya.mechanical_ageing.recipes.recipe.MatterBurningRecipe;
+import net.mofusya.mechanical_ageing.recipes.recipe.SmeltingRecipe;
 import net.mofusya.mechanical_ageing.recipes.recipe.TriDimCraftingRecipe;
 
 public class MAgRecipes {
@@ -21,4 +22,7 @@ public class MAgRecipes {
 
     public static final RegistryObject<RecipeSerializer<MatterBurningRecipe>> MATTER_BURNING =
             SERIALIZERS.register("matter_burning", () -> MatterBurningRecipe.Serializer.INSTANCE);
+
+    public static final RegistryObject<RecipeSerializer<SmeltingRecipe>> SMELTING =
+            SERIALIZERS.register("smelting", () -> SmeltingRecipe.Serializer.INSTANCE);
 }

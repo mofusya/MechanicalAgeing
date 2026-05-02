@@ -44,8 +44,8 @@ public class EnergyDisplayTooltipArea {
 
     private List<Component> getTooltips(int energyStored, int maxEnergyStored) {
         return List.of(
-                Component.literal(SeptiLongHelper.convertToStringAndAddPrefix(new SeptiLong(energyStored)) + this.type.suffix() + " /"),
-                Component.literal(SeptiLongHelper.convertToStringAndAddPrefix(new SeptiLong(maxEnergyStored)) + this.type.suffix())
+                Component.literal(SeptiLongHelper.convertToStringAndAddSuffix(new SeptiLong(energyStored)) + this.type.suffix() + " /"),
+                Component.literal(SeptiLongHelper.convertToStringAndAddSuffix(new SeptiLong(maxEnergyStored)) + this.type.suffix())
         );
     }
 

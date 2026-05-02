@@ -1,7 +1,5 @@
 package net.mofusya.mechanical_ageing.tiles.tile;
 
-import mekanism.common.integration.computer.computercraft.CCMethodCaller;
-import net.minecraft.ChatFormatting;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -31,8 +29,8 @@ import net.mofusya.ornatelib.lang.SeptiLongValue;
 import java.util.Optional;
 
 @MethodsReturnNonnullByDefault
-public class BurningChamberTile extends MachineTile {
-    public BurningChamberTile(ResourceLocation id) {
+public class BrickBurningChamberTile extends MachineTile {
+    public BrickBurningChamberTile(ResourceLocation id) {
         super(id);
     }
 
@@ -51,7 +49,7 @@ public class BurningChamberTile extends MachineTile {
     public MatterSlotList getMatterSlots(MatterSlotList slots) {
         return super.getMatterSlots(slots)
                 .create(next(16, 2), 25, matterType -> matterType.is(MAgMatterTypes.FUEL), SeptiLongValue.MILLION.get(), SeptiLongValue.THOUSAND.get(), SeptiLongValue.ZERO.get())
-                .create(next(16, 6) + 9, 25, matterType -> matterType.is(MAgMatterTypes.HEAT), new SeptiLong(2400), SeptiLongValue.ZERO.get(), new SeptiLong(2600));
+                .create(next(16, 6) + 9, 25, matterType -> matterType.is(MAgMatterTypes.HEAT), new SeptiLong(2400), SeptiLongValue.ZERO.get(), new SeptiLong(300));
     }
 
     @Override

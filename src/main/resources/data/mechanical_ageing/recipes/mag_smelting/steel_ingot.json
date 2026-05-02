@@ -1,0 +1,13 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "ingredient": {
+    "item": "mechanical_ageing:iron_ingot"
+  },
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 1600
+  },
+  "result": {
+    "item": "mechanical_ageing:iron_block"
+  }
+}

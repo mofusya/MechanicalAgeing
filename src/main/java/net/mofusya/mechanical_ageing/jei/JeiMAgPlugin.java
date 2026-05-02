@@ -2,6 +2,7 @@ package net.mofusya.mechanical_ageing.jei;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
@@ -34,28 +35,26 @@ public class JeiMAgPlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new TriDimCraftingCategory(registration.getJeiHelpers().getGuiHelper()));
-        registration.addRecipeCategories(new FuelCategory(registration.getJeiHelpers().getGuiHelper()));
-        registration.addRecipeCategories(new MatterBurningCategory(registration.getJeiHelpers().getGuiHelper()));
+        for (var category : MAgCategories.CATEGORIES){
+            registration.addRecipeCategories((IRecipeCategory<?>) category.instance().apply(registration.getJeiHelpers().getGuiHelper()));
+        }
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
         var recipeManager = Minecraft.getInstance().level.getRecipeManager();
 
-        registration.addRecipes(TriDimCraftingCategory.TYPE,
-                recipeManager.getAllRecipesFor(TriDimCraftingRecipe.Type.INSTANCE));
-        registration.addRecipes(FuelCategory.TYPE,
-                recipeManager.getAllRecipesFor(FuelRecipe.Type.INSTANCE));
-        registration.addRecipes(MatterBurningCategory.TYPE,
-                recipeManager.getAllRecipesFor(MatterBurningRecipe.Type.INSTANCE));
+        for (var category : MAgCategories.CATEGORIES){
+            registration.addRecipes(category.jeiType(),
+                    recipeManager.getAllRecipesFor(category.mcType()));
+        }
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalysts(TriDimCraftingCategory.TYPE, MAgMachines.TRI_DIM_CRAFTING_TABLE.block());
-        registration.addRecipeCatalysts(FuelCategory.TYPE, MAgMachines.BRICK_BURNING_CHAMBER.block());
-        registration.addRecipeCatalysts(MatterBurningCategory.TYPE, MAgMachines.BRICK_BURNING_CHAMBER.block());
+        for (var category : MAgCategories.CATEGORIES){
+            registration.addRecipeCatalysts(category.jeiType(), category.catalysts());
+        }
     }
 
     @Override

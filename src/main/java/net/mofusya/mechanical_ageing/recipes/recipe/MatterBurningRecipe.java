@@ -10,7 +10,6 @@ import net.mofusya.mechanical_ageing.matter.LazyMatterStack;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.MAgRecipe;
-import org.jetbrains.annotations.Nullable;
 
 public class MatterBurningRecipe extends MAgRecipe {
     private final LazyMatterStack ingredient;
@@ -38,11 +37,11 @@ public class MatterBurningRecipe extends MAgRecipe {
         return this.result.get();
     }
 
-    public enum Type implements RecipeType<MatterBurningRecipe>{
+    public enum Type implements RecipeType<MatterBurningRecipe> {
         INSTANCE;
     }
 
-    public enum Serializer implements RecipeSerializer<MatterBurningRecipe>{
+    public enum Serializer implements RecipeSerializer<MatterBurningRecipe> {
         INSTANCE;
 
         @Override

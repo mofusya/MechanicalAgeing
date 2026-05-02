@@ -11,6 +11,8 @@
   "block.mechanical_ageing.destructor": "Destructor",
   "block.mechanical_ageing.brick_burning_chamber": "Brick Burning Chamber",
   "block.mechanical_ageing.brick_burning_chamber.machine_name": "Brick BC",
+  "block.mechanical_ageing.brick_smelting_chamber": "Brick Smelting Chamber",
+  "block.mechanical_ageing.brick_smelting_chamber.machine_name": "Brick SC",
 
   "matter.mechanical_ageing.water": "Water",
   "matter.mechanical_ageing.fuel": "Fuel",

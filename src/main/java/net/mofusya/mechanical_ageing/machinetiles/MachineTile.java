@@ -316,7 +316,6 @@ public abstract class MachineTile {
                         guiGraphics.blit(bgTile, aX, aY + Math.max(midCoverSize + 1, 0), 25, 9, 7, 5, BG_TILE_WIDTH, BG_TILE_HEIGHT);
                     }
                 }
-
             }
 
             //Write machine name

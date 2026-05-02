@@ -7,18 +7,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SeptiLongHelper {
-    private static final Map<SeptiLongValue, String> PREFIX = prefix();
-    public static String convertToStringAndAddPrefix(SeptiLong septiLong){
-        for (SeptiLongValue divide : PREFIX.keySet()){
+    private static final Map<SeptiLongValue, String> SUFFIX = suffix();
+    public static String convertToStringAndAddSuffix(SeptiLong septiLong){
+        for (SeptiLongValue divide : SUFFIX.keySet()){
             if (septiLong.copy().divideAndGetFloat(divide.get()) >= 1){
                 var value = septiLong.copy().divide(divide.get());
-                return value + PREFIX.get(divide);
+                return value + SUFFIX.get(divide);
             }
         }
         return septiLong.toString();
     }
 
-    private static Map<SeptiLongValue, String> prefix(){
+    private static Map<SeptiLongValue, String> suffix(){
         Map<SeptiLongValue, String> suffix = new HashMap<>();
         suffix.put(SeptiLongValue.QUINTRIGINTILLION,"QiTg");
         suffix.put(SeptiLongValue.QUATTUORTRIGINTILLION,"QaTg");

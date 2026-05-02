@@ -7,6 +7,7 @@ import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.mofusya.mechanical_ageing.MechanicalAgeing;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import net.mofusya.mechanical_ageing.jei.MAgCategory;
@@ -19,18 +20,18 @@ public class TriDimCraftingCategory extends MAgCategory<TriDimCraftingRecipe> {
 
     public static final RecipeType<TriDimCraftingRecipe> TYPE = new RecipeType<>(UID, TriDimCraftingRecipe.class);
 
-    private final IDrawable backGround;
-    private final IDrawable icon;
-
     public TriDimCraftingCategory(IGuiHelper helper) {
         super(helper);
-        this.backGround = helper.createDrawable(JEI_FRAME, 0, 0, 176, 85);
-        this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(MAgMachines.TRI_DIM_CRAFTING_TABLE.block()));
     }
 
     @Override
     protected MachineTile getMachineTile() {
         return MAgMachines.TRI_DIM_CRAFTING_TABLE.tile();
+    }
+
+    @Override
+    protected ItemLike getIconItem() {
+        return MAgMachines.TRI_DIM_CRAFTING_TABLE.block();
     }
 
     @Override
@@ -42,21 +43,5 @@ public class TriDimCraftingCategory extends MAgCategory<TriDimCraftingRecipe> {
     @Override
     public RecipeType<TriDimCraftingRecipe> getRecipeType() {
         return TYPE;
-    }
-
-    @Override
-    public Component getTitle() {
-        return Component.translatable("block.mechanical_ageing.tri_dimensional_crafting_table.machine_name");
-    }
-
-    @Override
-    public @Nullable IDrawable getIcon() {
-        return this.icon;
-    }
-
-    @SuppressWarnings("removal")
-    @Override
-    public @Nullable IDrawable getBackground() {
-        return this.backGround;
     }
 }

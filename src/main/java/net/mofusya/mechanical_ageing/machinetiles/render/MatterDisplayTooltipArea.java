@@ -46,8 +46,8 @@ public class MatterDisplayTooltipArea {
                 var type = matterHandler.getStored(slot).getType();
                 guiGraphics.renderTooltip(Minecraft.getInstance().font,
                         List.of(Component.translatable(type == null ? "block.minecraft.air" : type.getTranslationId()),
-                                Component.literal(" §8- " + SeptiLongHelper.convertToStringAndAddPrefix(matterHandler.getStored(slot).getAmount()) + (type == null ? "mB" : type.getSuffix()) + " /"),
-                                Component.literal(" §8- " + SeptiLongHelper.convertToStringAndAddPrefix(matterHandler.getMaxStored(slot)) + (type == null ? "mB" : type.getSuffix()))
+                                Component.literal(" §8- " + SeptiLongHelper.convertToStringAndAddSuffix(matterHandler.getStored(slot).getAmount()) + (type == null ? "mB" : type.getSuffix()) + " /"),
+                                Component.literal(" §8- " + SeptiLongHelper.convertToStringAndAddSuffix(matterHandler.getMaxStored(slot)) + (type == null ? "mB" : type.getSuffix()))
                         ), Optional.empty(), mouseX - x, mouseY - y);
             }
         }

@@ -1,7 +1,9 @@
 package net.mofusya.mechanical_ageing.jei;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
@@ -9,12 +11,15 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fluids.FluidStack;
 import net.mofusya.mechanical_ageing.MechanicalAgeing;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
+import net.mofusya.mechanical_ageing.machinetiles.arrow.ArrowProperties;
 import net.mofusya.mechanical_ageing.machinetiles.button.ButtonProperties;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.fluid.FluidSlotProperties;
@@ -23,6 +28,7 @@ import net.mofusya.mechanical_ageing.machinetiles.slot.SlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.recipes.MAgRecipe;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +38,12 @@ import static net.mofusya.mechanical_ageing.machinetiles.MachineTile.*;
 public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategory<T> {
     protected static final ResourceLocation JEI_FRAME = new ResourceLocation(MechanicalAgeing.MOD_ID, "textures/gui/frame_jei.png");
 
+    private final IDrawable backGround;
+    private final IDrawable icon;
+
     public MAgCategory(IGuiHelper helper) {
+        this.backGround = helper.createDrawable(JEI_FRAME, 0, 0, 176, 85);
+        this.icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(this.getIconItem()));
     }
 
     public void getElements(T recipe, ElementList elements) {
@@ -45,6 +56,24 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
     }
 
     protected abstract MachineTile getMachineTile();
+
+    protected abstract ItemLike getIconItem();
+
+    @SuppressWarnings("removal")
+    @Override
+    public @Nullable IDrawable getBackground() {
+        return this.backGround;
+    }
+
+    @Override
+    public @Nullable IDrawable getIcon() {
+        return this.icon;
+    }
+
+    @Override
+    public Component getTitle() {
+        return this.getMachineTile().getDisplayName();
+    }
 
     @Override
     public void draw(T recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
@@ -117,6 +146,54 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
                         guiGraphics.blit(bgTile, buttonBuild.x(), buttonBuild.y(), 44, 36, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
                 case NORMAL ->
                         guiGraphics.blit(bgTile, buttonBuild.x(), buttonBuild.y(), 0, 36, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+            }
+        }
+
+        //Write Arrow
+        for (ArrowProperties arrow : machineTile.getArrows()) {
+            var type = arrow.type();
+            float func = 1f;
+            int aX = arrow.x();
+            int aY = arrow.y();
+            int size = arrow.size();
+            int midSize = size - 6;
+            int coverSize = (int) (size * func);
+            int midCoverSize = coverSize - 6;
+            switch (type) {
+                case HORIZONTAL -> {
+                    //Write base
+                    guiGraphics.blit(bgTile, aX, aY, 18, 0, 1, 7, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    guiGraphics.blit(bgTile, aX + 1, aY, midSize, 7, 19, 0, 1, 7, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    guiGraphics.blit(bgTile, aX + midSize + 1, aY, 20, 0, 5, 7, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+
+                    //Write cover
+                    if (coverSize >= 1) {
+                        guiGraphics.blit(bgTile, aX, aY, 18, 7, 1, 7, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    }
+                    if (coverSize >= 2) {
+                        guiGraphics.blit(bgTile, aX + 1, aY, midCoverSize, 7, 19, 7, 1, 7, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    }
+                    if (coverSize >= midCoverSize + 1) {
+                        guiGraphics.blit(bgTile, aX + Math.max(midCoverSize + 1, 0), aY, 20, 7, 5, 7, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    }
+                }
+                case VERTICAL -> {
+                    //Write base
+                    guiGraphics.blit(bgTile, aX, aY, 25, 0, 7, 1, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    guiGraphics.blit(bgTile, aX, aY + 1, 7, midSize, 25, 1, 7, 1, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    guiGraphics.blit(bgTile, aX, aY + midSize + 1, 25, 2, 7, 5, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+
+                    //Write cover
+                    if (coverSize >= 1) {
+                        guiGraphics.blit(bgTile, aX, aY, 25, 7, 7, 1, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    }
+                    if (coverSize >= 2) {
+                        guiGraphics.blit(bgTile, aX, aY + 1, 7, midCoverSize, 25, 8, 7, 1, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    }
+                    if (coverSize >= midCoverSize + 1) {
+                        guiGraphics.blit(bgTile, aX, aY + Math.max(midCoverSize + 1, 0), 25, 9, 7, 5, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    }
+                }
             }
         }
     }

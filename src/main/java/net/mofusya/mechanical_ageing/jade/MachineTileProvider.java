@@ -52,8 +52,8 @@ public enum MachineTileProvider implements IBlockComponentProvider, IServerDataP
                     tag.putString("matterStorageAmount_" + i, matterHandler.getStored(i).getAmount() + (type == null ? "mB" : type.getSuffix()));
                     tag.putString("matterStorageCapacity_" + i, matterHandler.getMaxStored(i).toString() + (type == null ? "mB" : type.getSuffix()));
                 } else {
-                    tag.putString("matterStorageAmount_" + i, SeptiLongHelper.convertToStringAndAddPrefix(matterHandler.getStored(i).getAmount()) + (type == null ? "mB" : type.getSuffix()));
-                    tag.putString("matterStorageCapacity_" + i, SeptiLongHelper.convertToStringAndAddPrefix(matterHandler.getMaxStored(i)) + (type == null ? "mB" : type.getSuffix()));
+                    tag.putString("matterStorageAmount_" + i, SeptiLongHelper.convertToStringAndAddSuffix(matterHandler.getStored(i).getAmount()) + (type == null ? "mB" : type.getSuffix()));
+                    tag.putString("matterStorageCapacity_" + i, SeptiLongHelper.convertToStringAndAddSuffix(matterHandler.getMaxStored(i)) + (type == null ? "mB" : type.getSuffix()));
                 }
             }
         }

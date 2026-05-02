@@ -2,12 +2,14 @@ package net.mofusya.mechanical_ageing.jei.ingredient;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import mezz.jei.api.ingredients.IIngredientRenderer;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.TooltipFlag;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.matter.MatterType;
+import net.mofusya.mechanical_ageing.util.SeptiLongHelper;
 
 import java.util.List;
 
@@ -38,7 +40,11 @@ public class MatterRenderer implements IIngredientRenderer<MatterStack> {
     @SuppressWarnings("removel")
     @Override
     public List<Component> getTooltip(MatterStack matterStack, TooltipFlag tooltipFlag) {
-        if (matterStack.getType() == null) return List.of();
-        return List.of(Component.translatable(matterStack.getType().getTranslationId()));
+        MatterType type = matterStack.getType();
+        if (type == null) return List.of();
+        return List.of(
+                Component.translatable(type.getTranslationId()),
+                Component.literal(SeptiLongHelper.convertToStringAndAddSuffix(matterStack.getAmount()) + type.getSuffix()).withStyle(ChatFormatting.DARK_GRAY)
+        );
     }
 }
