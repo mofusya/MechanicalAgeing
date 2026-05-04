@@ -17,13 +17,14 @@ import net.mofusya.ornatelib.lang.SeptiLong;
 public class SmeltingRecipe extends MAgRecipe {
     private final Ingredient ingredient;
     private final SeptiLong heatAmount;
+    private final int smeltTime;
     private final ItemStack result;
 
-
-    public SmeltingRecipe(ResourceLocation id, Ingredient ingredient, SeptiLong heatAmount, ItemStack result) {
+    public SmeltingRecipe(ResourceLocation id, Ingredient ingredient, SeptiLong heatAmount, int smeltTime, ItemStack result) {
         super(id, Serializer.INSTANCE, Type.INSTANCE);
         this.ingredient = ingredient;
         this.heatAmount = heatAmount;
+        this.smeltTime = smeltTime;
         this.result = result;
     }
 
@@ -43,8 +44,12 @@ public class SmeltingRecipe extends MAgRecipe {
         return new MatterStack(MAgMatterTypes.HEAT, this.heatAmount);
     }
 
+    public int getSmeltTime() {
+        return this.smeltTime;
+    }
+
     public ItemStack getResult() {
-        return this.result;
+        return this.result.copy();
     }
 
     public enum Type implements RecipeType<SmeltingRecipe> {
@@ -59,6 +64,7 @@ public class SmeltingRecipe extends MAgRecipe {
             return new SmeltingRecipe(id,
                     readIngredient(json, "ingredient"),
                     readSeptiLong(json, "heatAmount"),
+                    readInt(json, "smeltTime"),
                     readItem(json, "result")
             );
         }
@@ -68,6 +74,7 @@ public class SmeltingRecipe extends MAgRecipe {
             return new SmeltingRecipe(id,
                     readIngredient(buf),
                     readSeptiLong(buf),
+                    buf.readInt(),
                     readItem(buf)
             );
         }
@@ -76,6 +83,7 @@ public class SmeltingRecipe extends MAgRecipe {
         public void toNetwork(FriendlyByteBuf buf, SmeltingRecipe recipe) {
             writeToBuf(buf, recipe.getIngredient());
             writeToBuf(buf, recipe.heatAmount);
+            buf.writeInt(recipe.getSmeltTime());
             writeToBuf(buf, recipe.getResult());
         }
     }

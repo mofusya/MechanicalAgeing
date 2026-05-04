@@ -10,29 +10,29 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import net.mofusya.mechanical_ageing.MechanicalAgeing;
-import net.mofusya.mechanical_ageing.blocks.ModBlocks;
+import net.mofusya.mechanical_ageing.MAg;
+import net.mofusya.mechanical_ageing.blocks.MAgBlocks;
+import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
-import net.mofusya.mechanical_ageing.metalset.ModMetalSet;
 
 import java.util.ArrayList;
 
 public class ModBlockStateProvider extends BlockStateProvider {
     public ModBlockStateProvider(PackOutput output, ExistingFileHelper exFileHelper) {
-        super(output, MechanicalAgeing.MOD_ID, exFileHelper);
+        super(output, MAg.MOD_ID, exFileHelper);
     }
 
     @Override
     protected void registerStatesAndModels() {
         ArrayList<RegistryObject<Block>> registries = new ArrayList<>();
 
-        registries.addAll(ModBlocks.BLOCKS.getBlocks());
+        registries.addAll(MAgBlocks.BLOCKS.getBlocks());
 
         for (RegistryObject<Block> block : registries) {
             this.blockWithItem(block);
         }
 
-        for (MetalSet metalSet : ModMetalSet.METAL_SET.getEntries()) {
+        for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
             this.metalSetBlock(metalSet);
         }
     }

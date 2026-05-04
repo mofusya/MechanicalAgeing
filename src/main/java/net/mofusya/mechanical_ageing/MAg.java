@@ -14,31 +14,34 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.mofusya.mechanical_ageing.blocks.ModBlocks;
-import net.mofusya.mechanical_ageing.items.ModItem;
-import net.mofusya.mechanical_ageing.items.ModTabs;
+import net.mofusya.mechanical_ageing.alloyset.AlloySet;
+import net.mofusya.mechanical_ageing.alloyset.MAgAlloySets;
+import net.mofusya.mechanical_ageing.blocks.MAgBlocks;
+import net.mofusya.mechanical_ageing.items.MAgItem;
+import net.mofusya.mechanical_ageing.items.MAgTabs;
+import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
+import net.mofusya.mechanical_ageing.metalset.MetalSet;
 import net.mofusya.mechanical_ageing.recipes.MAgRecipes;
 import net.mofusya.mechanical_ageing.tiles.MAgMachines;
-import net.mofusya.mechanical_ageing.metalset.MetalSet;
-import net.mofusya.mechanical_ageing.metalset.ModMetalSet;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
 
-@Mod(MechanicalAgeing.MOD_ID)
-public class MechanicalAgeing {
+@Mod(MAg.MOD_ID)
+public class MAg {
     public static final String MOD_ID = "mechanical_ageing";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public MechanicalAgeing() {
+    public MAg() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        ModItem.ITEMS.register(modEventBus);
-        ModMetalSet.METAL_SET.register(modEventBus);
-        ModTabs.TABS.register(modEventBus);
-        ModBlocks.BLOCKS.register(modEventBus);
+        MAgItem.ITEMS.register(modEventBus);
+        MAgMetalSets.METAL_SET.register(modEventBus);
+        MAgTabs.TABS.register(modEventBus);
+        MAgBlocks.BLOCKS.register(modEventBus);
         MAgMachines.MACHINES.register(modEventBus);
         MAgRecipes.SERIALIZERS.register(modEventBus);
+        MAgAlloySets.ALLOYS.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
@@ -48,7 +51,7 @@ public class MechanicalAgeing {
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
-        for (MetalSet metalSet : ModMetalSet.METAL_SET.getEntries()) {
+        for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
             ItemBlockRenderTypes.setRenderLayer(metalSet.ore(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(metalSet.deepslateOre(), RenderType.cutout());
         }
@@ -66,7 +69,7 @@ public class MechanicalAgeing {
 
         @SubscribeEvent
         public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
-            for (MetalSet metalSet : ModMetalSet.METAL_SET.getEntries()) {
+            for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
 
                 event.register((state, level, pos, tintIndex) -> {
                     if (tintIndex == 0) {
@@ -106,7 +109,17 @@ public class MechanicalAgeing {
 
         @SubscribeEvent
         public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-            for (MetalSet metalSet : ModMetalSet.METAL_SET.getEntries()) {
+            for (AlloySet alloySet : MAgAlloySets.ALLOYS.getEntries()) {
+                event.register((itemStack, tintIndex) -> tintIndex == 0 ? alloySet.color() : 0xFFFFFF,
+                        alloySet.alloy(),
+                        alloySet.compressed(),
+                        alloySet.duoCompressed(),
+                        alloySet.triCompressed(),
+                        alloySet.quadCompressed()
+                );
+            }
+
+            for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
                 ArrayList<Item> items = new ArrayList<>();
                 items.add(metalSet.ingot());
                 items.add(metalSet.chunk());

@@ -10,7 +10,6 @@ import net.mofusya.ornatelib.item.AttributedBlockItem;
 import net.mofusya.ornatelib.item.AttributedItem;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class ToppedAttributedBlockItem extends AttributedBlockItem {

@@ -6,12 +6,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-import net.mofusya.mechanical_ageing.items.item.ToppedAttributedBlockItem;
-import net.mofusya.mechanical_ageing.items.item.ToppedAttributedItem;
+import net.mofusya.mechanical_ageing.items.item.ToppedMetalAttributedBlockItem;
+import net.mofusya.mechanical_ageing.items.item.ToppedMetalAttributedItem;
 import net.mofusya.ornatelib.item.AttributedItem;
 import net.mofusya.ornatelib.registries.OrnateBlockDeferredRegister;
 import net.mofusya.ornatelib.registries.OrnateItemDeferredRegister;
-import net.mofusya.ornatelib.registries.network.PacketRegister;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +20,11 @@ public class MetalSetRegister {
     private final OrnateItemDeferredRegister itemRegisters;
     private final OrnateBlockDeferredRegister blockRegisters;
     private final ArrayList<MetalSet> metalSets = new ArrayList<>();
-    private final PacketRegister packetRegister;
 
     private MetalSetRegister(String modId, int slot) {
         this.modId = modId;
         this.itemRegisters = OrnateItemDeferredRegister.create(modId, slot);
         this.blockRegisters = OrnateBlockDeferredRegister.create(modId, slot);
-        this.packetRegister = new PacketRegister(modId);
     }
 
     public MetalSet register(String id, MetalSet.Builder builder) {
@@ -39,23 +36,23 @@ public class MetalSetRegister {
         RegistryObject<Block> deepslateOre = this.blockRegisters.register("deepslate_" + id + "_ore", createDefferBlockBuilder(builder), slot);
         RegistryObject<Block> block = this.blockRegisters.register(id + "_block", createDefferBlockBuilder(builder), slot);
         RegistryObject<Block> compressedBlock = this.blockRegisters.register("compressed_" + id + "_block", createDefferBlockBuilder(builder), slot);
-        RegistryObject<Item> ingot = this.itemRegisters.register(id + "_ingot", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        RegistryObject<Item> chunk = this.itemRegisters.register(id + "_chunk", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        RegistryObject<Item> pureDust = this.itemRegisters.register("pure_" + id + "_dust", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        RegistryObject<Item> dust = this.itemRegisters.register(id + "_dust", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        RegistryObject<Item> dirtyDust = this.itemRegisters.register("dirty_" + id + "_dust", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        RegistryObject<Item> particle = this.itemRegisters.register(id + "_particle", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        RegistryObject<Item> nugget = this.itemRegisters.register(id + "_nugget", () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
-        RegistryObject<Item> raw = this.itemRegisters.register("raw_" + id, () -> new ToppedAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)));
+        RegistryObject<Item> ingot = this.itemRegisters.register(id + "_ingot", () -> new ToppedMetalAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)), slot);
+        RegistryObject<Item> chunk = this.itemRegisters.register(id + "_chunk", () -> new ToppedMetalAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)), slot);
+        RegistryObject<Item> pureDust = this.itemRegisters.register("pure_" + id + "_dust", () -> new ToppedMetalAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)), slot);
+        RegistryObject<Item> dust = this.itemRegisters.register(id + "_dust", () -> new ToppedMetalAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)), slot);
+        RegistryObject<Item> dirtyDust = this.itemRegisters.register("dirty_" + id + "_dust", () -> new ToppedMetalAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)), slot);
+        RegistryObject<Item> particle = this.itemRegisters.register(id + "_particle", () -> new ToppedMetalAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)), slot);
+        RegistryObject<Item> nugget = this.itemRegisters.register(id + "_nugget", () -> new ToppedMetalAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)), slot);
+        RegistryObject<Item> raw = this.itemRegisters.register("raw_" + id, () -> new ToppedMetalAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)), slot);
 
-        MetalSet toReturn = new MetalSet(this.modId, id, builder.getName(), compressedBlock, block, ore, deepslateOre, ingot, chunk, pureDust, dust, dirtyDust, particle, raw, nugget, builder.getMineableWith(), builder.getColor(), builder.getOreColor(), builder.getOreName());
+        MetalSet toReturn = new MetalSet(this.modId, id, compressedBlock, block, ore, deepslateOre, ingot, chunk, pureDust, dust, dirtyDust, particle, raw, nugget, builder.getMineableWith(), builder.getColor(), builder.getOreColor());
         this.metalSets.add(toReturn);
         return toReturn;
     }
 
     private static OrnateBlockDeferredRegister.Builder createDefferBlockBuilder(MetalSet.Builder builder) {
         return new OrnateBlockDeferredRegister.Builder()
-                .itemFunc((block, properties) -> new ToppedAttributedBlockItem(block, properties, createMetalAttribute(builder)))
+                .itemFunc((block, properties) -> new ToppedMetalAttributedBlockItem(block, properties, createMetalAttribute(builder)))
                 .itemBuild(builder.getItemBuild())
                 .blockBuild(builder.getBlockBuild());
     }
@@ -73,7 +70,6 @@ public class MetalSetRegister {
     public void register(IEventBus eventBus) {
         this.itemRegisters.register(eventBus);
         this.blockRegisters.register(eventBus);
-        this.packetRegister.register();
     }
 
     public DeferredRegister<Item> getItemRegister() {

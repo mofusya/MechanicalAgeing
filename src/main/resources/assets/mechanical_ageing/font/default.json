@@ -2,7 +2,7 @@
   "providers": [
     {
       "type": "bitmap",
-      "file": "mechanical_ageing:font/aleph_font.png",
+      "file": "mechanical_ageing:textures/font/aleph_font.png",
       "ascent": 8,
       "height": 8,
       "chars": [

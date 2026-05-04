@@ -78,6 +78,11 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         };
         if (machineTile.getDataSlotCount() > 0) {
             this.data = new int[machineTile.getDataSlotCount()];
+            /*
+            for (int i = 0; i < machineTile.getDataSlotCount(); i++) {
+                this.data[i] = machineTile.getDefaultDataSlotAmount(i);
+            }
+             */
             this.containerData = new ContainerData() {
                 @Override
                 public int get(int index) {
@@ -170,7 +175,6 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-
         EnergySlotList energySlots = this.machineTile.getEnergySlots();
         for (int i = 0; i < energySlots.size(); i++) {
             if (cap == energySlots.get(i).energyType().getCapability()) {

@@ -8,9 +8,9 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
-import net.mofusya.mechanical_ageing.MechanicalAgeing;
+import net.mofusya.mechanical_ageing.MAg;
+import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
-import net.mofusya.mechanical_ageing.metalset.ModMetalSet;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -22,7 +22,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
     @Override
     protected void buildRecipes(Consumer<FinishedRecipe> writer) {
-        for (MetalSet metalSet : ModMetalSet.METAL_SET.getEntries()) {
+        for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
             metalSetRecipes(metalSet, writer);
         }
     }
@@ -35,13 +35,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('A', metalSet.block())
                 .unlockedBy(getHasName(metalSet.block()), inventoryTrigger(ItemPredicate.Builder.item().
                         of(metalSet.block()).build()))
-                .save(writer, MechanicalAgeing.MOD_ID + ":" + getItemName(metalSet.compressedBlock()) + "_from_compressing");
+                .save(writer, MAg.MOD_ID + ":" + getItemName(metalSet.compressedBlock()) + "_from_compressing");
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, metalSet.block(), 9)
                 .requires(metalSet.compressedBlock())
                 .unlockedBy(getHasName(metalSet.compressedBlock()), inventoryTrigger(ItemPredicate.Builder.item().
                         of(metalSet.compressedBlock()).build()))
-                .save(writer, MechanicalAgeing.MOD_ID + ":" + getItemName(metalSet.block()) + "_from_separating");
+                .save(writer, MAg.MOD_ID + ":" + getItemName(metalSet.block()) + "_from_separating");
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, metalSet.block())
                 .pattern("AAA")
@@ -50,26 +50,26 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('A', metalSet.ingot())
                 .unlockedBy(getHasName(metalSet.ingot()), inventoryTrigger(ItemPredicate.Builder.item().
                         of(metalSet.ingot()).build()))
-                .save(writer, MechanicalAgeing.MOD_ID + ":" + getItemName(metalSet.block()) + "_from_compressing");
+                .save(writer, MAg.MOD_ID + ":" + getItemName(metalSet.block()) + "_from_compressing");
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, metalSet.ingot(), 9)
                 .requires(metalSet.block())
                 .unlockedBy(getHasName(metalSet.block()), inventoryTrigger(ItemPredicate.Builder.item().
                         of(metalSet.block()).build()))
-                .save(writer, MechanicalAgeing.MOD_ID + ":" + getItemName(metalSet.ingot()) + "_from_separating");
+                .save(writer, MAg.MOD_ID + ":" + getItemName(metalSet.ingot()) + "_from_separating");
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, metalSet.ingot())
                 .pattern("AA")
                 .define('A', metalSet.chunk())
                 .unlockedBy(getHasName(metalSet.chunk()), inventoryTrigger(ItemPredicate.Builder.item().
                         of(metalSet.chunk()).build()))
-                .save(writer, MechanicalAgeing.MOD_ID + ":" + getItemName(metalSet.ingot()) + "_from_compressing");
+                .save(writer, MAg.MOD_ID + ":" + getItemName(metalSet.ingot()) + "_from_compressing");
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, metalSet.chunk(), 2)
                 .requires(metalSet.ingot())
                 .unlockedBy(getHasName(metalSet.ingot()), inventoryTrigger(ItemPredicate.Builder.item().
                         of(metalSet.ingot()).build()))
-                .save(writer, MechanicalAgeing.MOD_ID + ":" + getItemName(metalSet.chunk()) + "_from_separating");
+                .save(writer, MAg.MOD_ID + ":" + getItemName(metalSet.chunk()) + "_from_separating");
 
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, metalSet.chunk())
                 .pattern("AAA")
@@ -78,13 +78,13 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .define('A', metalSet.nugget())
                 .unlockedBy(getHasName(metalSet.nugget()), inventoryTrigger(ItemPredicate.Builder.item().
                         of(metalSet.nugget()).build()))
-                .save(writer, MechanicalAgeing.MOD_ID + ":" + getItemName(metalSet.chunk()) + "_from_compressing");
+                .save(writer, MAg.MOD_ID + ":" + getItemName(metalSet.chunk()) + "_from_compressing");
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, metalSet.nugget(), 9)
                 .requires(metalSet.chunk())
                 .unlockedBy(getHasName(metalSet.chunk()), inventoryTrigger(ItemPredicate.Builder.item().
                         of(metalSet.chunk()).build()))
-                .save(writer, MechanicalAgeing.MOD_ID + ":" + getItemName(metalSet.nugget()) + "_from_separating");
+                .save(writer, MAg.MOD_ID + ":" + getItemName(metalSet.nugget()) + "_from_separating");
 
         final List<ItemLike> rawMaterial = List.of(metalSet.ore(), metalSet.deepslateOre(), metalSet.raw());
 
@@ -102,7 +102,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
 
     protected static void oreCooking(Consumer<FinishedRecipe> writer, RecipeSerializer<? extends AbstractCookingRecipe> cookingSerializer, List<ItemLike> ingredients, RecipeCategory category, ItemLike result, float experience, int cookingTime, String group, String recipeName) {
         for (ItemLike itemlike : ingredients) {
-            SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), category, result, experience, cookingTime, cookingSerializer).group(group).unlockedBy(getHasName(itemlike), has(itemlike)).save(writer, MechanicalAgeing.MOD_ID + ":" + getItemName(result) + recipeName + "_" + getItemName(itemlike));
+            SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), category, result, experience, cookingTime, cookingSerializer).group(group).unlockedBy(getHasName(itemlike), has(itemlike)).save(writer, MAg.MOD_ID + ":" + getItemName(result) + recipeName + "_" + getItemName(itemlike));
         }
     }
 }

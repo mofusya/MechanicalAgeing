@@ -22,7 +22,6 @@ import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
-import net.mofusya.mechanical_ageing.MechanicalAgeing;
 import org.joml.Matrix4f;
 
 import java.text.NumberFormat;

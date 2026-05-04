@@ -5,3 +5,6 @@ Distributed under Blu's License of Common Sense: https://github.com/BluSunrize/I
 quickMoveStack, moveItemStackToWithMayPlace, moveItemStackToWithMayPlace, MoveItemsFunc in MachineMenu from ImmersiveEngineering
 https://github.com/BluSunrize/ImmersiveEngineering/blob/1.20.1/src/main/java/blusunrize/immersiveengineering/common/gui/IEContainerMenu.java
 Distributed under Blu's License of Common Sense: https://github.com/BluSunrize/ImmersiveEngineering/blob/1.20.1/LICENSE
+
+WrappedHandler by noeppi_noeppi
+Distributed under Apache License 2.0: https://github.com/ModdingX/LibX/blob/1.19/LICENSE

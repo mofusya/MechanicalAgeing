@@ -6,6 +6,7 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
@@ -17,7 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.fluids.FluidStack;
-import net.mofusya.mechanical_ageing.MechanicalAgeing;
+import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import net.mofusya.mechanical_ageing.machinetiles.arrow.ArrowProperties;
 import net.mofusya.mechanical_ageing.machinetiles.button.ButtonProperties;
@@ -28,6 +29,7 @@ import net.mofusya.mechanical_ageing.machinetiles.slot.SlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.recipes.MAgRecipe;
+import net.mofusya.mechanical_ageing.tag.MAgTags;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ import java.util.List;
 import static net.mofusya.mechanical_ageing.machinetiles.MachineTile.*;
 
 public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategory<T> {
-    protected static final ResourceLocation JEI_FRAME = new ResourceLocation(MechanicalAgeing.MOD_ID, "textures/gui/frame_jei.png");
+    protected static final ResourceLocation JEI_FRAME = new ResourceLocation(MAg.MOD_ID, "textures/gui/frame_jei.png");
 
     private final IDrawable backGround;
     private final IDrawable icon;
@@ -89,7 +91,7 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
         guiGraphics.blit(bgTile, 0, 0, 176, 85, 0, 0, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
 
         //Get frame texture
-        ResourceLocation frame = new ResourceLocation(MechanicalAgeing.MOD_ID, "textures/gui/frame.png");
+        ResourceLocation frame = new ResourceLocation(MAg.MOD_ID, "textures/gui/frame.png");
         RenderSystem.setShaderTexture(0, frame);
 
         //Write main screen
@@ -227,6 +229,12 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
             var slot = this.getMachineTile().getMatterSlots().get(i);
             builder.addSlot(slot.maxReceive().isGreaterThan(0) ? RecipeIngredientRole.INPUT : RecipeIngredientRole.OUTPUT,
                     slot.x() + 1, slot.y() + 19).addIngredient(MAgIngredient.MATTER_TYPE, matterStacks.get(i));
+        }
+
+        int upgradeSlot = this.getMachineTile().getUpgradeArchiveSlot();
+        var upgradeSlotBuild = this.getMachineTile().getSlots().get(upgradeSlot);
+        if (upgradeSlot >= 0 && upgradeSlot < this.getMachineTile().getSlots().size()){
+            builder.addSlot(RecipeIngredientRole.RENDER_ONLY, upgradeSlotBuild.x(), upgradeSlotBuild.y()).addIngredients(Ingredient.of(MAgTags.Items.MACHINE_UPGRADE_ARCHIVE));
         }
     }
 

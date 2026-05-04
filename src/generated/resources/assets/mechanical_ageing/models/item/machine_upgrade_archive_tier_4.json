@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mechanical_ageing:item/machine_upgrade_archive_quad",
+    "layer1": "mechanical_ageing:item/machine_upgrade_archive_gen1"
+  }
+}

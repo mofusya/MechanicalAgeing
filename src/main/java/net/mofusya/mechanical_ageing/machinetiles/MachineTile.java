@@ -27,7 +27,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.registries.RegistryObject;
-import net.mofusya.mechanical_ageing.MechanicalAgeing;
+import net.mofusya.mechanical_ageing.MAg;
+import net.mofusya.mechanical_ageing.items.implemts.IMachineUpgradeArchive;
 import net.mofusya.mechanical_ageing.machinetiles.arrow.ArrowList;
 import net.mofusya.mechanical_ageing.machinetiles.arrow.ArrowProperties;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
@@ -47,6 +48,7 @@ import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.machinetiles.util.MouseUtil;
+import net.mofusya.mechanical_ageing.tag.MAgTags;
 import net.mofusya.mechanical_ageing.tiles.BgTileType;
 import net.mofusya.ornatelib.registries.network.packet.ServerPacket;
 import org.jetbrains.annotations.NotNull;
@@ -82,7 +84,11 @@ public abstract class MachineTile {
     }
 
     public SlotList getSlots(SlotList slots) {
-        return slots.create(7, 7, itemStack -> false, SlotType.SYSTEM);
+        return slots.create(7, 7, itemStack -> itemStack.is(MAgTags.Items.MACHINE_UPGRADE_ARCHIVE), SlotType.SYSTEM);
+    }
+
+    public int getUpgradeArchiveSlot() {
+        return 0;
     }
 
     public EnergySlotList getEnergySlots(EnergySlotList slots) {
@@ -107,6 +113,10 @@ public abstract class MachineTile {
     }
 
     public int getDataSlotCount() {
+        return 0;
+    }
+
+    public int getDefaultDataSlotAmount(int index) {
         return 0;
     }
 
@@ -209,7 +219,7 @@ public abstract class MachineTile {
         guiGraphics.blit(bgTile, x + 50, y - 10, 76, 10, 0, 0, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
 
         //Get frame texture
-        ResourceLocation frame = new ResourceLocation(MechanicalAgeing.MOD_ID, "textures/gui/frame.png");
+        ResourceLocation frame = new ResourceLocation(MAg.MOD_ID, "textures/gui/frame.png");
         RenderSystem.setShaderTexture(0, frame);
 
         //Write main screen
@@ -274,7 +284,7 @@ public abstract class MachineTile {
         //Write Arrow
         for (ArrowProperties arrow : this.getArrows()) {
             var type = arrow.type();
-            float func = arrow.showPercentageFunc().apply(menu.blockEntity);
+            float func = arrow.showPercentageFunc().apply(menu);
             int aX = x + arrow.x();
             int aY = y + arrow.y();
             int size = arrow.size();
@@ -320,8 +330,8 @@ public abstract class MachineTile {
 
             //Write machine name
             var displayName = this.getDisplayName();
-            ChatFormatting format =this.getBgTileType().getFormat();
-            if (format != null){
+            ChatFormatting format = this.getBgTileType().getFormat();
+            if (format != null) {
                 displayName.withStyle(format);
             }
             guiGraphics.drawCenteredString(Minecraft.getInstance().font, displayName, x + screen.getXSize() / 2, y - 9, 4210752);
@@ -378,6 +388,14 @@ public abstract class MachineTile {
         return this.getArrows(new ArrowList());
     }
 
+    public final int getUpgradeAmount(MachineBlockEntity blockEntity) {
+        ItemStack itemStack = blockEntity.getItemHandler().getStackInSlot(this.getUpgradeArchiveSlot());
+        if (itemStack.getItem() instanceof IMachineUpgradeArchive archive) {
+            return archive.getUpgradeValue();
+        }
+        return 1;
+    }
+
     public void setButtonPacket(@NotNull ServerPacket buttonPacket) {
         this.buttonPacket = buttonPacket;
     }
@@ -411,5 +429,9 @@ public abstract class MachineTile {
             itemStack.grow(pItemStack.getCount());
             itemHandler.setStackInSlot(slot, itemStack);
         }
+    }
+
+    protected int modifyIntByMultiplier(MachineBlockEntity blockEntity, int base, float multiplier) {
+        return (int) (base * (1f + multiplier * this.getUpgradeAmount(blockEntity)));
     }
 }

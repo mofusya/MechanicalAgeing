@@ -1,0 +1,24 @@
+{
+  "values": [
+    "mechanical_ageing:machine_upgrade_archive_tier_1",
+    "mechanical_ageing:machine_upgrade_archive_tier_2",
+    "mechanical_ageing:machine_upgrade_archive_tier_3",
+    "mechanical_ageing:machine_upgrade_archive_tier_4",
+    "mechanical_ageing:machine_upgrade_archive_tier_5",
+    "mechanical_ageing:machine_upgrade_archive_tier_6",
+    "mechanical_ageing:machine_upgrade_archive_tier_7",
+    "mechanical_ageing:machine_upgrade_archive_tier_8",
+    "mechanical_ageing:machine_upgrade_archive_tier_9",
+    "mechanical_ageing:machine_upgrade_archive_tier_10",
+    "mechanical_ageing:machine_upgrade_archive_tier_11",
+    "mechanical_ageing:machine_upgrade_archive_tier_12",
+    "mechanical_ageing:machine_upgrade_archive_tier_13",
+    "mechanical_ageing:machine_upgrade_archive_tier_14",
+    "mechanical_ageing:machine_upgrade_archive_tier_15",
+    "mechanical_ageing:machine_upgrade_archive_tier_16",
+    "mechanical_ageing:machine_upgrade_archive_tier_17",
+    "mechanical_ageing:machine_upgrade_archive_tier_18",
+    "mechanical_ageing:machine_upgrade_archive_tier_19",
+    "mechanical_ageing:machine_upgrade_archive_tier_20"
+  ]
+}

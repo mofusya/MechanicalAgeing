@@ -2,7 +2,7 @@ package net.mofusya.mechanical_ageing.tiles;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
-import net.mofusya.mechanical_ageing.MechanicalAgeing;
+import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.machinetiles.IBgTileType;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +23,7 @@ public enum BgTileType implements IBgTileType {
     }
 
     BgTileType(String id, @Nullable ChatFormatting format) {
-        this(new ResourceLocation(MechanicalAgeing.MOD_ID, id), format);
+        this(new ResourceLocation(MAg.MOD_ID, id), format);
     }
 
     BgTileType(ResourceLocation id, @Nullable ChatFormatting format) {

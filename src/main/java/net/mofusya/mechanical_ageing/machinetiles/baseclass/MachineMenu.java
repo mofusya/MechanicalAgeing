@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class MachineMenu extends AbstractContainerMenu {
     public final MachineBlockEntity blockEntity;
@@ -110,13 +111,24 @@ public class MachineMenu extends AbstractContainerMenu {
     public interface MoveItemsFunc {
         boolean moveItemStackTo(ItemStack var1, int var2, int var3, boolean var4);
     }
-    /**----**/
+
+    /**
+     * ----
+     **/
 
     @Override
     public boolean stillValid(Player player) {
         return stillValid(ContainerLevelAccess.create(level, blockEntity.getBlockPos()), player, this.block);
     }
 
+    //Getters
+    public int getData(int index) {
+        if (this.data == null) return 0;
+
+        return this.data.get(index);
+    }
+
+    //Helpers
     private void addPlayerInventory(Inventory playerInventory) {
         for (int i = 0; i < 3; ++i) {
             for (int l = 0; l < 9; ++l) {

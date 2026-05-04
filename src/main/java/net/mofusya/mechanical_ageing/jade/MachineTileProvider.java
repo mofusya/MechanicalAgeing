@@ -3,7 +3,7 @@ package net.mofusya.mechanical_ageing.jade;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.mofusya.mechanical_ageing.MechanicalAgeing;
+import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterHandler;
 import net.mofusya.mechanical_ageing.matter.MatterType;
@@ -61,6 +61,6 @@ public enum MachineTileProvider implements IBlockComponentProvider, IServerDataP
 
     @Override
     public ResourceLocation getUid() {
-        return new ResourceLocation(MechanicalAgeing.MOD_ID, "machine_tile");
+        return new ResourceLocation(MAg.MOD_ID, "machine_tile");
     }
 }
