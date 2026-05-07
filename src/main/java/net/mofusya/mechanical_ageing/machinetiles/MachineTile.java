@@ -2,13 +2,13 @@ package net.mofusya.mechanical_ageing.machinetiles;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
-import net.minecraft.FieldsAreNonnullByDefault;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -22,6 +22,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -31,14 +32,18 @@ import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.items.implemts.IMachineUpgradeArchive;
 import net.mofusya.mechanical_ageing.machinetiles.arrow.ArrowList;
 import net.mofusya.mechanical_ageing.machinetiles.arrow.ArrowProperties;
+import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlock;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineMenu;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineScreen;
 import net.mofusya.mechanical_ageing.machinetiles.button.ButtonList;
 import net.mofusya.mechanical_ageing.machinetiles.button.OnButtonPressPacket;
+import net.mofusya.mechanical_ageing.machinetiles.direction.DirectionType;
+import net.mofusya.mechanical_ageing.machinetiles.direction.MachineDirectionHandler;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotList;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.fluid.FluidSlotProperties;
+import net.mofusya.mechanical_ageing.machinetiles.matter.MatterHandler;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterSlotList;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterSlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.render.EnergyDisplayTooltipArea;
@@ -48,9 +53,11 @@ import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.machinetiles.util.MouseUtil;
+import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.tag.MAgTags;
 import net.mofusya.mechanical_ageing.tiles.BgTileType;
-import net.mofusya.ornatelib.registries.network.packet.ServerPacket;
+import net.mofusya.mechanical_ageing.util.annotations.FieldsAreNonNullByDefault;
+import net.mofusya.ornatelib.lang.SeptiLong;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,7 +66,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-@FieldsAreNonnullByDefault
+@FieldsAreNonNullByDefault
 @MethodsReturnNonnullByDefault
 public abstract class MachineTile {
     private final Supplier<RegistryObject<Block>> block;
@@ -67,7 +74,8 @@ public abstract class MachineTile {
     private final Supplier<RegistryObject<MenuType<MachineMenu>>> menu;
     private final ResourceLocation id;
     @Nullable
-    private ServerPacket buttonPacket;
+    private OnButtonPressPacket buttonPacket;
+    private OnButtonPressPacket ioButtonPacket;
 
     public MachineTile(ResourceLocation id) {
         this.id = id;
@@ -77,7 +85,43 @@ public abstract class MachineTile {
     }
 
     /*Overrides*/
-    public abstract void tick(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity);
+    public void tick(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity) {
+        MatterHandler matterHandler = (MatterHandler) blockEntity.getMatterHandler();
+        MachineDirectionHandler directionHandler = blockEntity.getDirectionHandler();
+
+        if (matterHandler != null) {
+            for (int i = 0; i < matterHandler.size(); i++) {
+                if (matterHandler.canReceive(i)) {
+                    Direction direction = getCombinedDirection(state.getValue(MachineBlock.FACING), directionHandler.getMatterDirection(i));
+                    if (direction == null) continue;
+
+                    BlockPos pPos = pos.relative(direction, 1);
+                    BlockEntity pBlockEntity = level.getBlockEntity(pPos);
+
+                    if (pBlockEntity instanceof MachineBlockEntity pMachine) {
+                        MatterHandler pMatterHandler = (MatterHandler) pMachine.getMatterHandler();
+                        if (pMatterHandler == null) continue;
+
+                        for (int j = 0; j < pMatterHandler.size(); j++) {
+                            int finalI = i;
+                            int finalJ = j;
+                            pMachine.getCapability(MAgCapabilities.MATTER, direction.getOpposite()).ifPresent(handler -> {
+                                SeptiLong space = matterHandler.getSpace(finalI);
+
+                                if (space.isSmallerOrSameThan(0)) return;
+
+                                MatterStack maxExtract = handler.extract(new MatterStack(null, space), finalJ, true);
+                                if (maxExtract.getAmount().isGreaterThan(0)) {
+                                    MatterStack receive = matterHandler.receive(maxExtract, finalI).copy();
+                                    handler.extract(receive, finalJ);
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     public MutableComponent getDisplayName() {
         return Component.translatable("block." + this.id.getNamespace() + "." + this.id.getPath());
@@ -165,18 +209,29 @@ public abstract class MachineTile {
             this.fluidTankRenderer = new FluidTankRenderer(fluidTankProperties.capacity(), true, 6, 50);
         }
 
-        if (this.buttonPacket instanceof OnButtonPressPacket packet) {
+        if (this.buttonPacket != null) {
             for (int i = 0; i < this.getButtons().size(); i++) {
                 var button = this.getButtons().get(i);
                 int finalI = i;
                 if (button.type().is(SlotType.SYSTEM)) {
-                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 18, 18, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> packet.send2Server(finalI, menu.blockEntity.getBlockPos())));
+                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 18, 18, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> buttonPacket.send2Server(finalI, menu.blockEntity.getBlockPos())));
                 } else if (button.type().is(SlotType.NORMAL)) {
-                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 0, 36, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> packet.send2Server(finalI, menu.blockEntity.getBlockPos())));
+                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 0, 36, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> buttonPacket.send2Server(finalI, menu.blockEntity.getBlockPos())));
                 } else {
-                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 44, 36, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> packet.send2Server(finalI, menu.blockEntity.getBlockPos())));
+                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 44, 36, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> buttonPacket.send2Server(finalI, menu.blockEntity.getBlockPos())));
                 }
             }
+        }
+
+        ResourceLocation ioButton = new ResourceLocation(MAg.MOD_ID, "textures/gui/io_buttons.png");
+
+        for (int i = 0; i < this.getMatterSlots().size(); i++) {
+            var matter = this.getMatterSlots().get(i);
+            int modX = x - 64;
+            int modY = y + 16;
+
+            int finalI = i;
+            screen.addRenderableWidget(new ImageButton(modX + 6, modY + 7 + (i * 14), 12, 12, 36, 0, 0, ioButton, pButton -> ioButtonPacket.send2Server(finalI + this.getSlots().size(), menu.blockEntity.getBlockPos())));
         }
     }
 
@@ -342,6 +397,20 @@ public abstract class MachineTile {
         player.playSound(SoundEvents.UI_BUTTON_CLICK.get());
     }
 
+    public void onIOButtonPress(int type, ServerPlayer player, MachineBlockEntity blockEntity) {
+        MachineDirectionHandler directionHandler = blockEntity.getDirectionHandler();
+        if (type >= this.getSlots().size()) {
+            int modType = type - this.getSlots().size();
+            int direction = directionHandler.getMatterDirection(modType).ordinal();
+            if (direction >= DirectionType.values().length - 1) {
+                direction = 0;
+            } else {
+                direction++;
+            }
+            directionHandler.setMatterDirection(modType, DirectionType.values()[direction]);
+        }
+    }
+
     /*Getter setters*/
     public final RegistryObject<Block> getBlock() {
         return this.block.get();
@@ -389,15 +458,19 @@ public abstract class MachineTile {
     }
 
     public final int getUpgradeAmount(MachineBlockEntity blockEntity) {
-        ItemStack itemStack = blockEntity.getItemHandler().getStackInSlot(this.getUpgradeArchiveSlot());
-        if (itemStack.getItem() instanceof IMachineUpgradeArchive archive) {
-            return archive.getUpgradeValue();
+        int upgradeSlot = this.getUpgradeArchiveSlot();
+        if (upgradeSlot >= 0 && upgradeSlot < this.getSlots().size()) {
+            ItemStack itemStack = blockEntity.getItemHandler().getStackInSlot(upgradeSlot);
+            if (itemStack.getItem() instanceof IMachineUpgradeArchive archive) {
+                return archive.getUpgradeValue();
+            }
         }
-        return 1;
+        return 0;
     }
 
-    public void setButtonPacket(@NotNull ServerPacket buttonPacket) {
+    public final void setButtonPacket(@NotNull OnButtonPressPacket buttonPacket, @NotNull OnButtonPressPacket ioButtonPacket) {
         this.buttonPacket = buttonPacket;
+        this.ioButtonPacket = ioButtonPacket;
     }
 
     //Helper
@@ -431,7 +504,54 @@ public abstract class MachineTile {
         }
     }
 
-    protected int modifyIntByMultiplier(MachineBlockEntity blockEntity, int base, float multiplier) {
+    protected int modifyIntByUpgradeMultiplier(MachineBlockEntity blockEntity, int base, float multiplier) {
         return (int) (base * (1f + multiplier * this.getUpgradeAmount(blockEntity)));
+    }
+
+    protected int getUpgradeMultiplier(MachineBlockEntity blockEntity, float multiplier) {
+        return (int) (this.getUpgradeAmount(blockEntity) * multiplier + 1);
+    }
+
+    @Nullable
+    protected static Direction getCombinedDirection(Direction baseDirection, DirectionType direction) {
+        return switch (baseDirection) {
+            case NORTH -> switch (direction) {
+                case NONE -> null;
+                case UP -> Direction.UP;
+                case DOWN -> Direction.DOWN;
+                case RIGHT -> Direction.WEST;
+                case LEFT -> Direction.EAST;
+                case FRONT -> Direction.SOUTH;
+                case BACK -> Direction.NORTH;
+            };
+            case SOUTH -> switch (direction) {
+                case NONE -> null;
+                case UP -> Direction.UP;
+                case DOWN -> Direction.DOWN;
+                case RIGHT -> Direction.EAST;
+                case LEFT -> Direction.WEST;
+                case FRONT -> Direction.NORTH;
+                case BACK -> Direction.SOUTH;
+            };
+            case WEST -> switch (direction) {
+                case NONE -> null;
+                case UP -> Direction.UP;
+                case DOWN -> Direction.DOWN;
+                case RIGHT -> Direction.SOUTH;
+                case LEFT -> Direction.NORTH;
+                case FRONT -> Direction.EAST;
+                case BACK -> Direction.WEST;
+            };
+            case EAST -> switch (direction) {
+                case NONE -> null;
+                case UP -> Direction.UP;
+                case DOWN -> Direction.DOWN;
+                case RIGHT -> Direction.NORTH;
+                case LEFT -> Direction.SOUTH;
+                case FRONT -> Direction.WEST;
+                case BACK -> Direction.EAST;
+            };
+            default -> throw new IllegalStateException("Unexpected value: " + baseDirection);
+        };
     }
 }

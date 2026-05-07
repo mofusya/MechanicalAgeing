@@ -6,9 +6,17 @@ import net.mofusya.ornatelib.lang.SeptiLong;
 
 @AutoRegisterCapability
 public interface IMatterHandler {
-    SeptiLong receive(MatterStack amount, int slot);
+    MatterStack receive(MatterStack amount, int slot, boolean simulate);
 
-    SeptiLong extract(MatterStack amount, int slot);
+    MatterStack extract(MatterStack amount, int slot, boolean simulate);
+
+    default MatterStack receive(MatterStack amount, int slot){
+        return this.receive(amount, slot, false);
+    }
+
+    default MatterStack extract(MatterStack amount, int slot){
+        return this.extract(amount, slot, false);
+    }
 
     MatterStack getStored(int slot);
 

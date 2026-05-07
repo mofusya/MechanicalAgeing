@@ -89,6 +89,8 @@ public class BrickSmeltingChamber extends MachineTile {
 
     @Override
     public void tick(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity) {
+        super.tick(level, pos, state, blockEntity);
+
         MatterHandler matterHandler = (MatterHandler) blockEntity.getMatterHandler();
         var itemHandler = blockEntity.getItemHandler();
 
@@ -115,7 +117,7 @@ public class BrickSmeltingChamber extends MachineTile {
                 if (blockEntity.getData(maxProgressDataSlot) != smeltTime * 10)
                     blockEntity.setData(maxProgressDataSlot, smeltTime * 10);
 
-                blockEntity.addData(progressDataSlot, modifyIntByMultiplier(blockEntity, 10, 0.2f));
+                blockEntity.addData(progressDataSlot, modifyIntByUpgradeMultiplier(blockEntity, 10, 0.6f));
 
                 if (blockEntity.getData(progressDataSlot) >= blockEntity.getData(maxProgressDataSlot)) {
                     itemHandler.extractItem(ingredientItemSlot, 1, false);

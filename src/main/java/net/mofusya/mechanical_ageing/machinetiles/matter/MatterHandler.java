@@ -1,12 +1,10 @@
 package net.mofusya.mechanical_ageing.machinetiles.matter;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.mofusya.mechanical_ageing.matter.MatterManager;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.ornatelib.lang.SeptiLong;
-import net.mofusya.ornatelib.lang.SeptiLongValue;
 
 public abstract class MatterHandler implements IMatterHandler {
     private final MatterStack[] storage;
@@ -21,73 +19,85 @@ public abstract class MatterHandler implements IMatterHandler {
     }
 
     @Override
-    public SeptiLong receive(MatterStack amount, int slot) {
+    public MatterStack receive(MatterStack amount, int slot, boolean simulate) {
         MatterSlotProperties matterSlot = this.slots.get(slot);
-        SeptiLong receiveAmount = amount.getAmount();
+
+        if (amount.getType() == null && this.getStored(slot).getType() == null) return MatterStack.empty();
 
         if (amount.getType() != null && !matterSlot.isValidFunc().apply(amount.getType()))
-            return SeptiLongValue.ZERO.get();
+            return MatterStack.empty();
 
-        if (receiveAmount.isGreaterThan(this.getMaxReceive(slot))) receiveAmount.set(this.getMaxReceive(slot));
-        if (receiveAmount.isGreaterThan(this.getSpace(slot))) receiveAmount.set(this.getSpace(slot));
+        if (amount.getNoneTypeAmount().isGreaterThan(this.getMaxReceive(slot)))
+            amount.setAmount(this.getMaxReceive(slot));
+        if (amount.getNoneTypeAmount().isGreaterThan(this.getSpace(slot))) amount.setAmount(this.getSpace(slot));
+        if (amount.getType() == null) amount.setType(this.getStored(slot).getType());
 
-        if (this.storage[slot].receive(new MatterStack(amount.getType(), receiveAmount), false)) {
+        if (simulate) return amount.copy();
+
+        if (this.storage[slot].receive(amount, false)) {
             this.onChanged();
-            return receiveAmount;
+            return amount.copy();
         }
-        return SeptiLongValue.ZERO.get();
+        return MatterStack.empty();
     }
 
     @Override
-    public SeptiLong extract(MatterStack amount, int slot) {
+    public MatterStack extract(MatterStack amount, int slot, boolean simulate) {
         MatterSlotProperties matterSlot = this.slots.get(slot);
-        SeptiLong extractAmount = amount.getAmount();
 
-        if (amount.getType() != null && matterSlot.isValidFunc().apply(amount.getType()))
-            return SeptiLongValue.ZERO.get();
+        if (amount.getType() == null && this.getStored(slot).getType() == null) return MatterStack.empty();
 
-        if (extractAmount.isGreaterThan(this.getMaxExtract(slot))) extractAmount.set(this.getMaxExtract(slot));
-        if (extractAmount.isGreaterThan(this.getStored(slot).getAmount()))
-            extractAmount.set(this.getStored(slot).getAmount());
+        if (amount.getNoneTypeAmount().isGreaterThan(this.getMaxExtract(slot)))
+            amount.setAmount(this.getMaxExtract(slot));
+        if (amount.getNoneTypeAmount().isGreaterThan(this.getStored(slot).getAmount()))
+            amount.setAmount(this.getStored(slot).getAmount());
+        if (amount.getType() == null) amount.setType(this.getStored(slot).getType());
 
-        if (this.storage[slot].extract(new MatterStack(amount.getType(), extractAmount), false)) {
+        if (simulate) return amount.copy();
+
+        if (this.storage[slot].extract(amount, false)) {
             this.onChanged();
-            return extractAmount;
+            return amount.copy();
         }
-        return SeptiLongValue.ZERO.get();
+        return MatterStack.empty();
     }
 
-    public SeptiLong receiveFromInside(MatterStack amount, int slot) {
-        MatterSlotProperties matterSlot = this.slots.get(slot);
-        SeptiLong receiveAmount = amount.getAmount();
-
-        if (amount.getType() != null && !matterSlot.isValidFunc().apply(amount.getType()))
-            return SeptiLongValue.ZERO.get();
-
-        if (receiveAmount.isGreaterThan(this.getSpace(slot))) receiveAmount.set(this.getSpace(slot));
-
-        if (this.storage[slot].receive(new MatterStack(amount.getType(), receiveAmount), false)) {
-            this.onChanged();
-            return receiveAmount;
-        }
-        return SeptiLongValue.ZERO.get();
+    public MatterStack receiveFromInside(MatterStack amount, int slot) {
+        return this.receiveFromInside(amount, slot, false);
     }
 
-    public SeptiLong extractFromInside(MatterStack amount, int slot) {
+    public MatterStack receiveFromInside(MatterStack amount, int slot, boolean simulate) {
         MatterSlotProperties matterSlot = this.slots.get(slot);
-        SeptiLong extractAmount = amount.getAmount();
 
         if (amount.getType() != null && !matterSlot.isValidFunc().apply(amount.getType()))
-            return SeptiLongValue.ZERO.get();
+            return MatterStack.empty();
 
-        if (extractAmount.isGreaterThan(this.getStored(slot).getAmount()))
-            extractAmount.set(this.getStored(slot).getAmount());
+        if (amount.getNoneTypeAmount().isGreaterThan(this.getSpace(slot))) amount.setAmount(this.getSpace(slot));
 
-        if (this.storage[slot].extract(new MatterStack(amount.getType(), extractAmount), false)) {
+        if (simulate) return amount.copy();
+
+        if (this.storage[slot].receive(amount, false)) {
             this.onChanged();
-            return extractAmount;
+            return amount.copy();
         }
-        return SeptiLongValue.ZERO.get();
+        return MatterStack.empty();
+    }
+
+    public MatterStack extractFromInside(MatterStack amount, int slot) {
+        return this.extractFromInside(amount, slot, false);
+    }
+
+    public MatterStack extractFromInside(MatterStack amount, int slot, boolean simulate) {
+        if (amount.getNoneTypeAmount().isGreaterThan(this.getStored(slot).getAmount()))
+            amount.setAmount(this.getStored(slot).getAmount());
+
+        if (simulate) return amount.copy();
+
+        if (this.storage[slot].extract(amount, false)) {
+            this.onChanged();
+            return amount.copy();
+        }
+        return MatterStack.empty();
     }
 
     @Override
@@ -197,6 +207,10 @@ public abstract class MatterHandler implements IMatterHandler {
 
     public int size() {
         return this.storage.length;
+    }
+
+    protected MatterSlotList getSlots() {
+        return this.slots;
     }
 
     public abstract void onChanged();

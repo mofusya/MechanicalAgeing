@@ -6,7 +6,6 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
-import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.category.IRecipeCategory;
@@ -232,8 +231,8 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
         }
 
         int upgradeSlot = this.getMachineTile().getUpgradeArchiveSlot();
-        var upgradeSlotBuild = this.getMachineTile().getSlots().get(upgradeSlot);
-        if (upgradeSlot >= 0 && upgradeSlot < this.getMachineTile().getSlots().size()){
+        if (upgradeSlot >= 0 && upgradeSlot < this.getMachineTile().getSlots().size()) {
+            var upgradeSlotBuild = this.getMachineTile().getSlots().get(upgradeSlot);
             builder.addSlot(RecipeIngredientRole.RENDER_ONLY, upgradeSlotBuild.x(), upgradeSlotBuild.y()).addIngredients(Ingredient.of(MAgTags.Items.MACHINE_UPGRADE_ARCHIVE));
         }
     }

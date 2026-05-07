@@ -60,8 +60,9 @@ public class MachineRegister {
         menuMap.put(resourceLocation, lazyMenu);
 
         final MachineTile propertyTile = sup.create(resourceLocation);
-        ServerPacket buttonPacket = this.packetRegister.register(new OnButtonPressPacket(id + "_on_press_button", (type, serverPlayer, pos) -> propertyTile.onButtonPress(type, serverPlayer, (MachineBlockEntity) serverPlayer.level().getBlockEntity(pos))));
-        propertyTile.setButtonPacket(buttonPacket);
+        OnButtonPressPacket buttonPacket = this.packetRegister.register(new OnButtonPressPacket(id + "_on_press_button", (type, serverPlayer, pos) -> propertyTile.onButtonPress(type, serverPlayer, (MachineBlockEntity) serverPlayer.level().getBlockEntity(pos))));
+        OnButtonPressPacket ioButtonPacket = this.packetRegister.register(new OnButtonPressPacket(id + "_on_press_io_button", (type, serverPlayer, pos) -> propertyTile.onIOButtonPress(type, serverPlayer, (MachineBlockEntity) serverPlayer.level().getBlockEntity(pos))));
+        propertyTile.setButtonPacket(buttonPacket, ioButtonPacket);
 
         final RegistryObject<Block> block = blocks.register(
                 id,
@@ -105,15 +106,15 @@ public class MachineRegister {
         return new MachineObject(propertyTile, block, blockEntity, menu);
     }
 
-    public List<RegistryObject<Block>> getBlockEntries(){
+    public List<RegistryObject<Block>> getBlockEntries() {
         return this.blocks.getBlocks();
     }
 
-    public List<RegistryObject<BlockEntityType<?>>> getBlockEntityEntries(){
+    public List<RegistryObject<BlockEntityType<?>>> getBlockEntityEntries() {
         return new ArrayList<>(this.blockEntities.getEntries());
     }
 
-    public List<RegistryObject<MenuType<MachineMenu>>> getMenuEntries(){
+    public List<RegistryObject<MenuType<MachineMenu>>> getMenuEntries() {
         return new ArrayList<>(this.machineMenus);
     }
 

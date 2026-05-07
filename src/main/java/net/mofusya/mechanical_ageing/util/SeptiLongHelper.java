@@ -3,39 +3,40 @@ package net.mofusya.mechanical_ageing.util;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class SeptiLongHelper {
-    private static final Map<SeptiLongValue, String> SUFFIX = suffix();
-    public static String convertToStringAndAddSuffix(SeptiLong septiLong){
-        for (SeptiLongValue divide : SUFFIX.keySet()){
-            if (septiLong.copy().divideAndGetFloat(divide.get()) >= 1){
-                var value = septiLong.copy().divide(divide.get());
-                return value + SUFFIX.get(divide);
-            }
+    private static final ArrayMap<SeptiLongValue, String> SUFFIX = suffix();
+
+    public static String convertToStringAndAddSuffix(SeptiLong septiLong) {
+        if (septiLong.isSmallerOrSameThan(0)) return septiLong.toString();
+        for (int i = 0; i < SUFFIX.getKeys().size(); i++) {
+            SeptiLongValue key = SUFFIX.getKeys().get(i);
+            if (septiLong.copy().divide(10).divide(key.get()).isSmallerThan(10)) continue;
+            if (i == 35) return septiLong.toString();
+
+            key = SUFFIX.getKeys().get(i + 1);
+            return septiLong.divide(key.get()) + SUFFIX.get(key);
         }
         return septiLong.toString();
     }
 
-    private static Map<SeptiLongValue, String> suffix(){
-        Map<SeptiLongValue, String> suffix = new HashMap<>();
-        suffix.put(SeptiLongValue.QUINTRIGINTILLION,"QiTg");
-        suffix.put(SeptiLongValue.QUATTUORTRIGINTILLION,"QaTg");
-        suffix.put(SeptiLongValue.TRESTRIGINTILLION,"TTg");
-        suffix.put(SeptiLongValue.DUOTRIGINTILLION,"DTg");
-        suffix.put(SeptiLongValue.UNTRIGINTILLION,"UTg");
-        suffix.put(SeptiLongValue.TRIGINTILLION,"Tg");
-        suffix.put(SeptiLongValue.NOVEMVIGINTILLION,"NoVg");
-        suffix.put(SeptiLongValue.OCTOVIGINTILLION,"OcVg");
-        suffix.put(SeptiLongValue.SEPTEMVIGINTILLION,"SpVg");
-        suffix.put(SeptiLongValue.SESVIGINTILLION,"SeVg");
-        suffix.put(SeptiLongValue.QUINVIGINTILLION,"QiVg");
-        suffix.put(SeptiLongValue.QUATTUORVIGINTILLION,"QaVg");
-        suffix.put(SeptiLongValue.TRESVIGINTILLION,"TVg");
-        suffix.put(SeptiLongValue.DUOVIGINTILLION,"DVg");
-        suffix.put(SeptiLongValue.UNVIGINTILLION,"UVg");
-        suffix.put(SeptiLongValue.VIGINTILLION,"Vg");
+    private static ArrayMap<SeptiLongValue, String> suffix() {
+        ArrayMap<SeptiLongValue, String> suffix = new ArrayMap<>();
+        suffix.put(SeptiLongValue.QUINTRIGINTILLION, "QiTg");
+        suffix.put(SeptiLongValue.QUATTUORTRIGINTILLION, "QaTg");
+        suffix.put(SeptiLongValue.TRESTRIGINTILLION, "TTg");
+        suffix.put(SeptiLongValue.DUOTRIGINTILLION, "DTg");
+        suffix.put(SeptiLongValue.UNTRIGINTILLION, "UTg");
+        suffix.put(SeptiLongValue.TRIGINTILLION, "Tg");
+        suffix.put(SeptiLongValue.NOVEMVIGINTILLION, "NoVg");
+        suffix.put(SeptiLongValue.OCTOVIGINTILLION, "OcVg");
+        suffix.put(SeptiLongValue.SEPTEMVIGINTILLION, "SpVg");
+        suffix.put(SeptiLongValue.SESVIGINTILLION, "SeVg");
+        suffix.put(SeptiLongValue.QUINVIGINTILLION, "QiVg");
+        suffix.put(SeptiLongValue.QUATTUORVIGINTILLION, "QaVg");
+        suffix.put(SeptiLongValue.TRESVIGINTILLION, "TVg");
+        suffix.put(SeptiLongValue.DUOVIGINTILLION, "DVg");
+        suffix.put(SeptiLongValue.UNVIGINTILLION, "UVg");
+        suffix.put(SeptiLongValue.VIGINTILLION, "Vg");
         suffix.put(SeptiLongValue.NOVENDECILLION, "NoDe");
         suffix.put(SeptiLongValue.OCTODECILLION, "OcDe");
         suffix.put(SeptiLongValue.SEPTENDECILLION, "SpDe");

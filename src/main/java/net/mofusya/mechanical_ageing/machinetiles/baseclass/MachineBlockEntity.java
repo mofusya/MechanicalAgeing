@@ -29,10 +29,13 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
-import net.mofusya.mechanical_ageing.machinetiles.ModCapabilities;
+import net.mofusya.mechanical_ageing.machinetiles.MAgCapabilities;
+import net.mofusya.mechanical_ageing.machinetiles.direction.DirectionType;
+import net.mofusya.mechanical_ageing.machinetiles.direction.MachineDirectionHandler;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotList;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.matter.IMatterHandler;
+import net.mofusya.mechanical_ageing.machinetiles.matter.LimitedMatterHandler;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterHandler;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import org.jetbrains.annotations.NotNull;
@@ -61,6 +64,8 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
     private final FluidTank fluidTank;
     private LazyOptional<FluidTank> lazyFluidHandler;
 
+    private final MachineDirectionHandler directionHandler;
+
     public MachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, MachineTile machineTile) {
         super(type, pos, state);
         this.machineTile = machineTile;
@@ -78,11 +83,9 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         };
         if (machineTile.getDataSlotCount() > 0) {
             this.data = new int[machineTile.getDataSlotCount()];
-            /*
             for (int i = 0; i < machineTile.getDataSlotCount(); i++) {
                 this.data[i] = machineTile.getDefaultDataSlotAmount(i);
             }
-             */
             this.containerData = new ContainerData() {
                 @Override
                 public int get(int index) {
@@ -147,6 +150,8 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
             this.fluidTank = null;
             this.lazyFluidHandler = null;
         }
+
+        this.directionHandler = new MachineDirectionHandler(machineTile.getSlots().size(), machineTile.getMatterSlots().size(), machineTile.getEnergySlots().size());
     }
 
     public void tick(Level level, BlockPos pos, BlockState state) {
@@ -175,18 +180,45 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+        if (this.getLevel() == null) return super.getCapability(cap, side);
+
+        if (side == null){
+            EnergySlotList energySlots = this.machineTile.getEnergySlots();
+            for (int i = 0; i < energySlots.size(); i++) {
+                if (cap == energySlots.get(i).energyType().getCapability()) {
+                    return this.lazyEnergyHandler.get(i).cast();
+                }
+            }
+
+            if (cap == MAgCapabilities.MATTER && this.matterHandler != null) {
+                return this.lazyMatterHandler.cast();
+            }
+
+            if (cap == ForgeCapabilities.FLUID_HANDLER && this.fluidTank != null){
+                return this.lazyFluidHandler.cast();
+            }
+
+            if (cap == ForgeCapabilities.ITEM_HANDLER) {
+                return this.lazyItemHandler.cast();
+            }
+
+            return super.getCapability(cap, side);
+        }
+
+        DirectionType combinedDirection = getCombinedDirection(this.getLevel().getBlockState(this.getBlockPos()).getValue(MachineBlock.FACING), side);
+
         EnergySlotList energySlots = this.machineTile.getEnergySlots();
-        for (int i = 0; i < energySlots.size(); i++) {
+        for (int i : this.getDirectionHandler().getEnergySlots(combinedDirection)) {
             if (cap == energySlots.get(i).energyType().getCapability()) {
                 return this.lazyEnergyHandler.get(i).cast();
             }
         }
 
-        if (cap == ModCapabilities.MATTER && this.matterHandler != null) {
-            return this.lazyMatterHandler.cast();
+        if (cap == MAgCapabilities.MATTER && this.matterHandler != null) {
+            return LazyOptional.of(() -> new LimitedMatterHandler((MatterHandler) this.matterHandler, this.getDirectionHandler().getMatterSlots(combinedDirection))).cast();
         }
 
-        if (cap == ForgeCapabilities.FLUID_HANDLER && this.fluidTank != null){
+        if (cap == ForgeCapabilities.FLUID_HANDLER && this.fluidTank != null && this.getDirectionHandler().getFluidDirection().equals(combinedDirection)){
             return this.lazyFluidHandler.cast();
         }
 
@@ -255,6 +287,8 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
             tag = fluidTank.writeToNBT(tag);
         }
 
+        this.directionHandler.serializeNBT(tag);
+
         super.saveAdditional(tag);
     }
 
@@ -280,6 +314,8 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         if (this.fluidTank != null){
             this.fluidTank.readFromNBT(tag);
         }
+
+        this.directionHandler.deserializeNBT(tag);
     }
 
     @Nullable
@@ -344,5 +380,48 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
     @Nullable
     public FluidTank getFluidTank() {
         return this.fluidTank;
+    }
+
+    public MachineDirectionHandler getDirectionHandler() {
+        return this.directionHandler;
+    }
+
+    //Helpers
+    public static DirectionType getCombinedDirection(Direction baseDirection, Direction direction){
+        return switch (baseDirection){
+            case NORTH -> switch (direction){
+                case NORTH -> DirectionType.BACK;
+                case SOUTH -> DirectionType.FRONT;
+                case WEST -> DirectionType.RIGHT;
+                case EAST -> DirectionType.LEFT;
+                case UP -> DirectionType.UP;
+                case DOWN -> DirectionType.DOWN;
+            };
+            case SOUTH -> switch (direction){
+                case NORTH -> DirectionType.FRONT;
+                case SOUTH -> DirectionType.BACK;
+                case WEST -> DirectionType.LEFT;
+                case EAST -> DirectionType.RIGHT;
+                case UP -> DirectionType.UP;
+                case DOWN -> DirectionType.DOWN;
+            };
+            case WEST -> switch (direction){
+                case NORTH -> DirectionType.LEFT;
+                case SOUTH -> DirectionType.RIGHT;
+                case WEST -> DirectionType.BACK;
+                case EAST -> DirectionType.FRONT;
+                case UP -> DirectionType.UP;
+                case DOWN -> DirectionType.DOWN;
+            };
+            case EAST -> switch (direction){
+                case NORTH -> DirectionType.RIGHT;
+                case SOUTH -> DirectionType.LEFT;
+                case WEST -> DirectionType.FRONT;
+                case EAST -> DirectionType.BACK;
+                case UP -> DirectionType.UP;
+                case DOWN -> DirectionType.DOWN;
+            };
+            default -> throw new IllegalStateException("Unexpected value: " + baseDirection);
+        };
     }
 }

@@ -110,4 +110,8 @@ public final class MatterStack {
     public @NotNull SeptiLong getAmount() {
         return this.type != null ? this.amount.copy() : SeptiLongValue.ZERO.get();
     }
+
+    public @NotNull SeptiLong getNoneTypeAmount() {
+        return this.amount.copy();
+    }
 }

@@ -52,6 +52,8 @@ public class DestructorTile extends MachineTile {
 
     @Override
     public void tick(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity) {
+        super.tick(level, pos, state, blockEntity);
+
         ForgeEnergyStorage forgeEnergyStorage = (ForgeEnergyStorage) blockEntity.getEnergyStorage(0);
         StarDustEnergyStorage starDustEnergyStorage = (StarDustEnergyStorage) blockEntity.getEnergyStorage(1);
         MatterHandler matterHandler = (MatterHandler) blockEntity.getMatterHandler();

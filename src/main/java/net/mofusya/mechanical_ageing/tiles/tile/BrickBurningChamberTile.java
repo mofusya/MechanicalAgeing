@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.items.ItemStackHandler;
 import net.mofusya.mechanical_ageing.machinetiles.IBgTileType;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import net.mofusya.mechanical_ageing.machinetiles.arrow.ArrowList;
@@ -48,7 +49,7 @@ public class BrickBurningChamberTile extends MachineTile {
     @Override
     public MatterSlotList getMatterSlots(MatterSlotList slots) {
         return super.getMatterSlots(slots)
-                .create(next(16, 2), 25, matterType -> matterType.is(MAgMatterTypes.FUEL), SeptiLongValue.MILLION.get(), SeptiLongValue.THOUSAND.get(), SeptiLongValue.ZERO.get())
+                .create(next(16, 2), 25, matterType -> matterType.is(MAgMatterTypes.FUEL), SeptiLongValue.MILLION.get(), SeptiLongValue.THOUSAND.get().multiply(10), SeptiLongValue.ZERO.get())
                 .create(next(16, 6) + 9, 25, matterType -> matterType.is(MAgMatterTypes.HEAT), new SeptiLong(2400), SeptiLongValue.ZERO.get(), new SeptiLong(300));
     }
 
@@ -65,38 +66,55 @@ public class BrickBurningChamberTile extends MachineTile {
 
     @Override
     public void tick(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity) {
+        super.tick(level, pos, state, blockEntity);
+
         var itemHandler = blockEntity.getItemHandler();
         MatterHandler matterHandler = (MatterHandler) blockEntity.getMatterHandler();
 
         if (matterHandler == null) return;
 
+        this.fuelRecipeTick(level, blockEntity, matterHandler, itemHandler);
+        this.smeltingRecipeTick(level, blockEntity, matterHandler);
+    }
 
+    private void fuelRecipeTick(Level level, MachineBlockEntity blockEntity, MatterHandler matterHandler, ItemStackHandler itemHandler) {
         for (int i = 0; i < 3; i++) {
             MAgContainer container = MAgContainer.builder()
                     .itemSlotsList(1 + i)
                     .build(blockEntity);
             Optional<FuelRecipe> recipe = level.getRecipeManager().getRecipeFor(FuelRecipe.Type.INSTANCE, container, level);
-            if (recipe.isPresent()) {
-                MatterStack result = recipe.get().getResult();
-                if (matterHandler.canReceiveFromInside(result, 0)) {
-                    itemHandler.extractItem(1 + i, 1, false);
-                    matterHandler.receiveFromInside(result, 0);
-                }
+
+            if (recipe.isEmpty()) return;
+
+            MatterStack result = recipe.get().getResult();
+            if (matterHandler.canReceiveFromInside(result, 0)) {
+                itemHandler.extractItem(1 + i, 1, false);
+                matterHandler.receiveFromInside(result, 0);
             }
         }
+    }
 
-        {
-            MAgContainer container = MAgContainer.builder()
-                    .matterSlotList(0)
-                    .build(blockEntity);
-            Optional<MatterBurningRecipe> recipe = level.getRecipeManager().getRecipeFor(MatterBurningRecipe.Type.INSTANCE, container, level);
-            if (recipe.isPresent()) {
-                MatterStack result = recipe.get().getResult();
-                if (matterHandler.canReceiveFromInside(result, 1)) {
-                    matterHandler.extractFromInside(recipe.get().getIngredient(), 0);
-                    matterHandler.receiveFromInside(result, 1);
-                }
-            }
+    private void smeltingRecipeTick(Level level, MachineBlockEntity blockEntity, MatterHandler matterHandler) {
+        MAgContainer container = MAgContainer.builder()
+                .matterSlotList(0)
+                .build(blockEntity);
+        Optional<MatterBurningRecipe> recipe = level.getRecipeManager().getRecipeFor(MatterBurningRecipe.Type.INSTANCE, container, level);
+
+        if (recipe.isEmpty()) return;
+
+        MatterStack ingredient = recipe.get().getIngredient();
+        ingredient.modifyAmount(amount -> amount.multiply(getUpgradeMultiplier(blockEntity, 4)));
+        MatterStack result = recipe.get().getResult();
+        result.modifyAmount(amount -> amount.multiply(getUpgradeMultiplier(blockEntity, 4)));
+
+        if (matterHandler.canExtractFromInside(ingredient, 0) &&
+                matterHandler.canReceiveFromInside(result, 1)) {
+            matterHandler.extractFromInside(ingredient, 0);
+            matterHandler.receiveFromInside(result, 1);
+        } else if (matterHandler.canExtractFromInside(recipe.get().getIngredient(), 0) &&
+                matterHandler.canReceiveFromInside(recipe.get().getResult(), 1)) {
+            matterHandler.extractFromInside(recipe.get().getIngredient(), 0);
+            matterHandler.receiveFromInside(recipe.get().getResult(), 1);
         }
     }
 }

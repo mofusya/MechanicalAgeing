@@ -49,10 +49,6 @@ public class TriDimCraftingTableTile extends MachineTile {
     public static final int OUTPUT_SLOT = 27;
 
     @Override
-    public void tick(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity) {
-    }
-
-    @Override
     public void onButtonPress(int type, ServerPlayer player, MachineBlockEntity blockEntity) {
         Level level = blockEntity.getLevel();
         switch (type) {

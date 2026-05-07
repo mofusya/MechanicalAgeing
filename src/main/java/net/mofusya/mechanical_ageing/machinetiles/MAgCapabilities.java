@@ -5,7 +5,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
 import net.mofusya.mechanical_ageing.machinetiles.matter.IMatterHandler;
 
-public class ModCapabilities {
+public class MAgCapabilities {
     public static final Capability<IMatterHandler> MATTER = CapabilityManager.get(new CapabilityToken<>() {
     });
 }
