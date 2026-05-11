@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 600
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_lead"
+  },
+  "result": {
+    "item": "mechanical_ageing:lead_ingot"
+  },
+  "smeltTime": 200
+}

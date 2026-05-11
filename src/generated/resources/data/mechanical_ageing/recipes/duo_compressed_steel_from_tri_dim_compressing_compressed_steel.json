@@ -1,0 +1,16 @@
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "key": {
+    "#": {
+      "item": "mechanical_ageing:compressed_steel"
+    }
+  },
+  "pattern": [
+    "#########",
+    "#########",
+    "#########"
+  ],
+  "result": {
+    "item": "mechanical_ageing:duo_compressed_steel"
+  }
+}

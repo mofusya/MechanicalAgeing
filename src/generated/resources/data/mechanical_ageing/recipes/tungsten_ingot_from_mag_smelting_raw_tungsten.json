@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 3369
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_tungsten"
+  },
+  "result": {
+    "item": "mechanical_ageing:tungsten_ingot"
+  },
+  "smeltTime": 200
+}

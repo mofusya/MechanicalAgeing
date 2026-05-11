@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 2223
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_mithril"
+  },
+  "result": {
+    "item": "mechanical_ageing:mithril_ingot"
+  },
+  "smeltTime": 200
+}

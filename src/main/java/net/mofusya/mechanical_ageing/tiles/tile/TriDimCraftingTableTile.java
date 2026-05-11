@@ -76,7 +76,7 @@ public class TriDimCraftingTableTile extends MachineTile {
                 Optional<TriDimCraftingRecipe> recipe = level.getRecipeManager().getRecipeFor(TriDimCraftingRecipe.Type.INSTANCE, container, level);
                 if (recipe.isPresent()) {
 
-                    ItemStack result = recipe.get().getResultItem(null);
+                    ItemStack result = recipe.get().getResultItem();
                     if (this.canItemInsertToSlot(blockEntity, OUTPUT_SLOT, result)) {
                         for (int i = 0; i < 27; i++) {
                             itemHandler.extractItem(i, 1, false);

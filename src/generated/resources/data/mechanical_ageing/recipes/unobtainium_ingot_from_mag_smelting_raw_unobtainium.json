@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 2147483647
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_unobtainium"
+  },
+  "result": {
+    "item": "mechanical_ageing:unobtainium_ingot"
+  },
+  "smeltTime": 200
+}

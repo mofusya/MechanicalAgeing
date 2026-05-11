@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 1235
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_silver"
+  },
+  "result": {
+    "item": "mechanical_ageing:silver_ingot"
+  },
+  "smeltTime": 200
+}

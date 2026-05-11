@@ -45,7 +45,7 @@ public class MetalSetRegister {
         RegistryObject<Item> nugget = this.itemRegisters.register(id + "_nugget", () -> new ToppedMetalAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)), slot);
         RegistryObject<Item> raw = this.itemRegisters.register("raw_" + id, () -> new ToppedMetalAttributedItem(builder.getItemBuild(), createMetalAttribute(builder)), slot);
 
-        MetalSet toReturn = new MetalSet(this.modId, id, compressedBlock, block, ore, deepslateOre, ingot, chunk, pureDust, dust, dirtyDust, particle, raw, nugget, builder.getMineableWith(), builder.getColor(), builder.getOreColor());
+        MetalSet toReturn = new MetalSet(this.modId, id, compressedBlock, block, ore, deepslateOre, ingot, chunk, pureDust, dust, dirtyDust, particle, raw, nugget, builder.getMineableWith(), builder.getColor(), builder.getOreColor(), builder.copy());
         this.metalSets.add(toReturn);
         return toReturn;
     }

@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 3306
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_osmium"
+  },
+  "result": {
+    "item": "mechanical_ageing:osmium_ingot"
+  },
+  "smeltTime": 200
+}

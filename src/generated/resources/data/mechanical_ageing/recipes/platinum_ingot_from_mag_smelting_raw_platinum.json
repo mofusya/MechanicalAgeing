@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 2041
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_platinum"
+  },
+  "result": {
+    "item": "mechanical_ageing:platinum_ingot"
+  },
+  "smeltTime": 200
+}

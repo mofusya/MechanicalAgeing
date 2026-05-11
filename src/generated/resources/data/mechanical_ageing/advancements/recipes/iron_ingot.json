@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_iron_ingot_from_mag_smelting_raw_iron_ingredient": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mechanical_ageing:raw_iron"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_recipe": {
+      "conditions": {
+        "recipe": "mechanical_ageing:iron_ingot"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_iron_ingot_from_mag_smelting_raw_iron_ingredient",
+      "has_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mechanical_ageing:iron_ingot"
+    ]
+  },
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_copper_ingot_from_mag_smelting_raw_copper_ingredient": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mechanical_ageing:raw_copper"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_recipe": {
+      "conditions": {
+        "recipe": "mechanical_ageing:copper_ingot"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_copper_ingot_from_mag_smelting_raw_copper_ingredient",
+      "has_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mechanical_ageing:copper_ingot"
+    ]
+  },
+  "sends_telemetry_event": true
+}

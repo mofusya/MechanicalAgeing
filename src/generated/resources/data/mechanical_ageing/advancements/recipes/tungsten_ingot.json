@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_recipe": {
+      "conditions": {
+        "recipe": "mechanical_ageing:tungsten_ingot"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_tungsten_ingot_from_mag_smelting_raw_tungsten_ingredient": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mechanical_ageing:raw_tungsten"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_tungsten_ingot_from_mag_smelting_raw_tungsten_ingredient",
+      "has_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mechanical_ageing:tungsten_ingot"
+    ]
+  },
+  "sends_telemetry_event": true
+}

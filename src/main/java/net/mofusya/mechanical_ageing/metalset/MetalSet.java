@@ -39,7 +39,9 @@ public final class MetalSet {
     private final String modId;
     private final String id;
 
-    public MetalSet(String modId, String id, RegistryObject<Block> compressedBlock, RegistryObject<Block> block, RegistryObject<Block> ore, RegistryObject<Block> deepslateOre, RegistryObject<Item> ingot, RegistryObject<Item> chunk, RegistryObject<Item> pureDust, RegistryObject<Item> dust, RegistryObject<Item> dirtyDust, RegistryObject<Item> particle, RegistryObject<Item> raw, RegistryObject<Item> nugget, TagKey<Block> mineableWith, int color, int oreColor) {
+    private final Builder builder;
+
+    public MetalSet(String modId, String id, RegistryObject<Block> compressedBlock, RegistryObject<Block> block, RegistryObject<Block> ore, RegistryObject<Block> deepslateOre, RegistryObject<Item> ingot, RegistryObject<Item> chunk, RegistryObject<Item> pureDust, RegistryObject<Item> dust, RegistryObject<Item> dirtyDust, RegistryObject<Item> particle, RegistryObject<Item> raw, RegistryObject<Item> nugget, TagKey<Block> mineableWith, int color, int oreColor, Builder builder) {
         this.modId = modId;
         this.id = id;
         this.compressedBlock = compressedBlock;
@@ -61,6 +63,8 @@ public final class MetalSet {
         this.oreKey = ModConfiguredFeatures.registerKey(id + "_ore");
         this.orePlacedKey = ModPlacedFeatures.registerKey(id + "_ore_placed");
         this.oreBiomeKey = ModBiomeModifiers.registerKey("add_" + id + "_ore");
+
+        this.builder = builder;
     }
 
     public Block compressedBlock() {
@@ -143,6 +147,10 @@ public final class MetalSet {
         return this.oreBiomeKey;
     }
 
+    public Builder getBuilder() {
+        return this.builder;
+    }
+
     public static Builder builder(double density, double hardness, int meltingPoint, int boilingPoint){
         return new Builder(density, hardness, meltingPoint, boilingPoint);
     }
@@ -175,6 +183,11 @@ public final class MetalSet {
 
         public Builder magnetic() {
             this.magnetic = true;
+            return this;
+        }
+
+        public Builder magnetic(boolean magnetic) {
+            this.magnetic = magnetic;
             return this;
         }
 
@@ -245,6 +258,17 @@ public final class MetalSet {
 
         public int getOreColor() {
             return this.oreColor;
+        }
+
+        public Builder copy(){
+            return new Builder(this.density, this.hardness, this.meltingPoint, this.boilingPoint)
+                    .radiationMultiplier(this.radiationMultiplier)
+                    .magnetic(this.magnetic)
+                    .mineableWith(this.mineableWith)
+                    .itemBuild(this.itemBuild)
+                    .blockBuild(this.blockBuild)
+                    .color(this.color)
+                    .oreColor(this.oreColor);
         }
     }
 }

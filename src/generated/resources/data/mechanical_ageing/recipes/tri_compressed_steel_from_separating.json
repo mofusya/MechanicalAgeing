@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "mechanical_ageing:quad_compressed_steel"
+    }
+  ],
+  "result": {
+    "count": 27,
+    "item": "mechanical_ageing:tri_compressed_steel"
+  }
+}

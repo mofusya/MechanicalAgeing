@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 1941
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_titanium"
+  },
+  "result": {
+    "item": "mechanical_ageing:titanium_ingot"
+  },
+  "smeltTime": 200
+}

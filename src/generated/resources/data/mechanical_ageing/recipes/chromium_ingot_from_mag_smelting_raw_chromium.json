@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 2180
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_chromium"
+  },
+  "result": {
+    "item": "mechanical_ageing:chromium_ingot"
+  },
+  "smeltTime": 200
+}

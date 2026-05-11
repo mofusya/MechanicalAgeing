@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cobalt_ingot_from_mag_smelting_raw_cobalt_ingredient": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mechanical_ageing:raw_cobalt"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_recipe": {
+      "conditions": {
+        "recipe": "mechanical_ageing:cobalt_ingot"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_cobalt_ingot_from_mag_smelting_raw_cobalt_ingredient",
+      "has_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mechanical_ageing:cobalt_ingot"
+    ]
+  },
+  "sends_telemetry_event": true
+}

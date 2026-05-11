@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 505
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_tin"
+  },
+  "result": {
+    "item": "mechanical_ageing:tin_ingot"
+  },
+  "smeltTime": 200
+}

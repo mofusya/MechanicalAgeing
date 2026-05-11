@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_mithril_ingot_from_mag_smelting_raw_mithril_ingredient": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mechanical_ageing:raw_mithril"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_recipe": {
+      "conditions": {
+        "recipe": "mechanical_ageing:mithril_ingot"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_mithril_ingot_from_mag_smelting_raw_mithril_ingredient",
+      "has_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mechanical_ageing:mithril_ingot"
+    ]
+  },
+  "sends_telemetry_event": true
+}

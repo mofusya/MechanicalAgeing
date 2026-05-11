@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 1811
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_iron"
+  },
+  "result": {
+    "item": "mechanical_ageing:iron_ingot"
+  },
+  "smeltTime": 200
+}

@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 1768
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_cobalt"
+  },
+  "result": {
+    "item": "mechanical_ageing:cobalt_ingot"
+  },
+  "smeltTime": 200
+}

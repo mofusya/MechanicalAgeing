@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_duo_compressed_steel_from_tri_dim_compressing_compressed_steel_ingredient": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mechanical_ageing:compressed_steel"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_recipe": {
+      "conditions": {
+        "recipe": "mechanical_ageing:duo_compressed_steel"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_duo_compressed_steel_from_tri_dim_compressing_compressed_steel_ingredient",
+      "has_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mechanical_ageing:duo_compressed_steel"
+    ]
+  },
+  "sends_telemetry_event": true
+}

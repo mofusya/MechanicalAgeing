@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 1728
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_nickel"
+  },
+  "result": {
+    "item": "mechanical_ageing:nickel_ingot"
+  },
+  "smeltTime": 200
+}

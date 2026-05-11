@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 933
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_aluminum"
+  },
+  "result": {
+    "item": "mechanical_ageing:aluminum_ingot"
+  },
+  "smeltTime": 200
+}

@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 1337
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_gold"
+  },
+  "result": {
+    "item": "mechanical_ageing:gold_ingot"
+  },
+  "smeltTime": 200
+}
