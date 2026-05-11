@@ -13,10 +13,10 @@ import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlock;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineMenu;
 import net.mofusya.mechanical_ageing.machinetiles.button.OnButtonPressPacket;
+import net.mofusya.mechanical_ageing.machinetiles.button.OnIOButtonPressPacket;
 import net.mofusya.mechanical_ageing.util.LazyPointer;
 import net.mofusya.ornatelib.registries.OrnateBlockDeferredRegister;
 import net.mofusya.ornatelib.registries.network.PacketRegister;
-import net.mofusya.ornatelib.registries.network.packet.ServerPacket;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -61,7 +61,7 @@ public class MachineRegister {
 
         final MachineTile propertyTile = sup.create(resourceLocation);
         OnButtonPressPacket buttonPacket = this.packetRegister.register(new OnButtonPressPacket(id + "_on_press_button", (type, serverPlayer, pos) -> propertyTile.onButtonPress(type, serverPlayer, (MachineBlockEntity) serverPlayer.level().getBlockEntity(pos))));
-        OnButtonPressPacket ioButtonPacket = this.packetRegister.register(new OnButtonPressPacket(id + "_on_press_io_button", (type, serverPlayer, pos) -> propertyTile.onIOButtonPress(type, serverPlayer, (MachineBlockEntity) serverPlayer.level().getBlockEntity(pos))));
+        OnIOButtonPressPacket ioButtonPacket = this.packetRegister.register(new OnIOButtonPressPacket(id + "_on_press_io_button", (index, type, serverPlayer, pos) -> propertyTile.onIOButtonPress(index, type, serverPlayer, (MachineBlockEntity) serverPlayer.level().getBlockEntity(pos))));
         propertyTile.setButtonPacket(buttonPacket, ioButtonPacket);
 
         final RegistryObject<Block> block = blocks.register(

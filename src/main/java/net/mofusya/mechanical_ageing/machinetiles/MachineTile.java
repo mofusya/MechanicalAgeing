@@ -14,6 +14,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -26,6 +28,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MAg;
@@ -38,6 +41,7 @@ import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineMenu;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineScreen;
 import net.mofusya.mechanical_ageing.machinetiles.button.ButtonList;
 import net.mofusya.mechanical_ageing.machinetiles.button.OnButtonPressPacket;
+import net.mofusya.mechanical_ageing.machinetiles.button.OnIOButtonPressPacket;
 import net.mofusya.mechanical_ageing.machinetiles.direction.DirectionType;
 import net.mofusya.mechanical_ageing.machinetiles.direction.MachineDirectionHandler;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotList;
@@ -75,7 +79,8 @@ public abstract class MachineTile {
     private final ResourceLocation id;
     @Nullable
     private OnButtonPressPacket buttonPacket;
-    private OnButtonPressPacket ioButtonPacket;
+    @Nullable
+    private OnIOButtonPressPacket ioButtonPacket;
 
     public MachineTile(ResourceLocation id) {
         this.id = id;
@@ -89,6 +94,36 @@ public abstract class MachineTile {
         MatterHandler matterHandler = (MatterHandler) blockEntity.getMatterHandler();
         MachineDirectionHandler directionHandler = blockEntity.getDirectionHandler();
 
+        this.energyIOHandler(level, pos, state, blockEntity, directionHandler);
+        this.matterIOHandler(level, pos, state, matterHandler, directionHandler);
+    }
+
+    private void energyIOHandler(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity, MachineDirectionHandler directionHandler) {
+        for (int i = 0; i < this.getEnergySlots().size(); i++) {
+            IEnergyStorage energyStorage = blockEntity.getEnergyStorage(i);
+            if (energyStorage == null) continue;
+            if (!energyStorage.canExtract()) continue;
+
+            Direction direction = getCombinedDirection(state.getValue(MachineBlock.FACING), directionHandler.getEnergyDirection(i));
+            if (direction == null) continue;
+
+            BlockPos pPos = pos.relative(direction, 1);
+            BlockEntity pBlockentity = level.getBlockEntity(pPos);
+            if (pBlockentity == null) continue;
+
+            pBlockentity.getCapability(this.getEnergySlots().get(i).energyType().getCapability(), direction.getOpposite()).ifPresent(handler -> {
+                if (!handler.canReceive()) return;
+
+                int maxReceive = handler.receiveEnergy(energyStorage.getEnergyStored(), true);
+                if (maxReceive > 0) return;
+
+                energyStorage.extractEnergy(maxReceive, false);
+                handler.receiveEnergy(maxReceive, false);
+            });
+        }
+    }
+
+    private void matterIOHandler(Level level, BlockPos pos, BlockState state, MatterHandler matterHandler, MachineDirectionHandler directionHandler) {
         if (matterHandler != null) {
             for (int i = 0; i < matterHandler.size(); i++) {
                 if (matterHandler.canReceive(i)) {
@@ -133,6 +168,13 @@ public abstract class MachineTile {
 
     public int getUpgradeArchiveSlot() {
         return 0;
+    }
+
+    public ArrayList<Integer> getNoneIOSlots() {
+        if (this.getUpgradeArchiveSlot() >= 0){
+            return new ArrayList<>(List.of(this.getUpgradeArchiveSlot()));
+        }
+        return new ArrayList<>();
     }
 
     public EnergySlotList getEnergySlots(EnergySlotList slots) {
@@ -191,6 +233,8 @@ public abstract class MachineTile {
     @Nullable
     private FluidTankRenderer fluidTankRenderer = null;
 
+    private int[] dummyIOButtonCounts = new int[4];
+
     public void screenInit(int x, int y, MachineMenu menu, MachineScreen screen) {
         ResourceLocation bgTile = this.getBgTileTypeLoc();
 
@@ -223,19 +267,54 @@ public abstract class MachineTile {
             }
         }
 
-        ResourceLocation ioButton = new ResourceLocation(MAg.MOD_ID, "textures/gui/io_buttons.png");
+        //Draw I/O Buttons
+        if (this.ioButtonPacket != null) {
+            ResourceLocation ioButton = new ResourceLocation(MAg.MOD_ID, "textures/gui/io_buttons.png");
 
-        for (int i = 0; i < this.getMatterSlots().size(); i++) {
-            var matter = this.getMatterSlots().get(i);
             int modX = x - 64;
             int modY = y + 16;
 
-            int finalI = i;
-            screen.addRenderableWidget(new ImageButton(modX + 6, modY + 7 + (i * 14), 12, 12, 36, 0, 0, ioButton, pButton -> ioButtonPacket.send2Server(finalI + this.getSlots().size(), menu.blockEntity.getBlockPos())));
+            //Draw Item slot I/O Button
+            int offset = 0;
+            for (int i = 0; i < this.getSlots().size(); i++) {
+                if (this.getNoneIOSlots().contains(i)) {
+                    offset++;
+                    continue;
+                }
+
+                int finalI = i;
+                screen.addRenderableWidget(new ImageButton(modX + 6, modY + 7 + ((i - offset) * 14), 12, 12, 12, 0, 0, ioButton, pButton -> this.ioButtonPacket.send2Server(0, finalI, menu.blockEntity.getBlockPos())));
+            }
+
+            //Draw Matter slot I/O Button
+            for (int i = 0; i < this.getMatterSlots().size(); i++) {
+                int finalI = i;
+                screen.addRenderableWidget(new ImageButton(modX + 20, modY + 7 + (i * 14), 12, 12, 36, 0, 0, ioButton, pButton -> this.ioButtonPacket.send2Server(1, finalI, menu.blockEntity.getBlockPos())));
+            }
+
+            //Draw Energy slot I/O Button
+            for (int i = 0; i < this.getEnergySlots().size(); i++) {
+                int finalI = i;
+                screen.addRenderableWidget(new ImageButton(modX + 34, modY + 7 + (i * 14), 12, 12, 24, 0, 0, ioButton, pButton -> this.ioButtonPacket.send2Server(2, finalI, menu.blockEntity.getBlockPos())));
+            }
+
+            //Draws Fluid slot I/O Button
+            if (this.getFluidSlot() != null) {
+                screen.addRenderableWidget(new ImageButton(modX + 48, modY + 7, 12, 12, 48, 0, 0, ioButton, pButton -> this.ioButtonPacket.send2Server(3, 0, menu.blockEntity.getBlockPos())));
+            }
         }
+
+        //Randomise and set dummy I/O Button counts
+        this.dummyIOButtonCounts = new int[]{
+                (this.getSlots().size() - this.getNoneIOSlots().size() <= 0 ? Mth.nextInt(RandomSource.create(), 1, 4) : 0),
+                (this.getMatterSlots().isEmpty() ? Mth.nextInt(RandomSource.create(), 1, 4) : 0),
+                (this.getEnergySlots().isEmpty() ? Mth.nextInt(RandomSource.create(), 1, 4) : 0),
+                (this.getFluidSlot() == null ? Mth.nextInt(RandomSource.create(), 1, 4) : 0)
+        };
     }
 
-    public void renderLabels(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY, MachineMenu menu, MachineScreen screen) {
+    public void renderLabels(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY, MachineMenu
+            menu, MachineScreen screen) {
         for (int i = 0; i < this.getEnergySlots().size(); i++) {
             EnergyDisplayTooltipArea tooltip = this.energyTooltips.get(i);
             tooltip.renderTooltips(guiGraphics, mouseX, mouseY, x, y, menu.blockEntity.getEnergyStorage(i).getEnergyStored(), menu.blockEntity.getEnergyStorage(i).getMaxEnergyStored());
@@ -256,7 +335,8 @@ public abstract class MachineTile {
         }
     }
 
-    public void renderBg(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY, MachineMenu menu, MachineScreen screen) {
+    public void renderBg(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY, MachineMenu
+            menu, MachineScreen screen) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
 
@@ -382,33 +462,75 @@ public abstract class MachineTile {
                     }
                 }
             }
-
-            //Write machine name
-            var displayName = this.getDisplayName();
-            ChatFormatting format = this.getBgTileType().getFormat();
-            if (format != null) {
-                displayName.withStyle(format);
-            }
-            guiGraphics.drawCenteredString(Minecraft.getInstance().font, displayName, x + screen.getXSize() / 2, y - 9, 4210752);
         }
+
+        //Draw dummy I/O Button
+        {
+            //Get I/O Button texture
+            ResourceLocation ioButton = new ResourceLocation(MAg.MOD_ID, "textures/gui/io_buttons.png");
+            RenderSystem.setShaderTexture(0, ioButton);
+
+            int modX = x - 64;
+            int modY = y + 16;
+
+            int item = this.dummyIOButtonCounts[0];
+            int matter = this.dummyIOButtonCounts[1];
+            int energy = this.dummyIOButtonCounts[2];
+            int fluid = this.dummyIOButtonCounts[3];
+
+            //Item
+            for (int i = 0; i < item; i++) {
+                drawDummyButton(guiGraphics, ioButton, modX, modY, 6, i);
+            }
+
+            //Matter
+            for (int i = 0; i < matter; i++) {
+                drawDummyButton(guiGraphics, ioButton, modX, modY, 20, i);
+            }
+
+            //Energy
+            for (int i = 0; i < energy; i++) {
+                drawDummyButton(guiGraphics, ioButton, modX, modY, 34, i);
+            }
+
+            //Fluid
+            for (int i = 0; i < fluid; i++) {
+                drawDummyButton(guiGraphics, ioButton, modX, modY, 48, i);
+            }
+        }
+
+        //Write machine name
+        var displayName = this.getDisplayName();
+        ChatFormatting format = this.getBgTileType().getFormat();
+        if (format != null) {
+            displayName.withStyle(format);
+        }
+        guiGraphics.drawCenteredString(Minecraft.getInstance().font, displayName, x + screen.getXSize() / 2, y - 9, 4210752);
     }
 
     public void onButtonPress(int type, ServerPlayer player, MachineBlockEntity blockEntity) {
         player.playSound(SoundEvents.UI_BUTTON_CLICK.get());
     }
 
-    public void onIOButtonPress(int type, ServerPlayer player, MachineBlockEntity blockEntity) {
+    public void onIOButtonPress(int index, int type, ServerPlayer player, MachineBlockEntity blockEntity) {
         MachineDirectionHandler directionHandler = blockEntity.getDirectionHandler();
-        if (type >= this.getSlots().size()) {
-            int modType = type - this.getSlots().size();
-            int direction = directionHandler.getMatterDirection(modType).ordinal();
-            if (direction >= DirectionType.values().length - 1) {
-                direction = 0;
-            } else {
-                direction++;
+
+        switch (index) {
+            case 0 -> {
+                directionHandler.setItemDirection(type, directionHandler.getItemDirection(type).next());
             }
-            directionHandler.setMatterDirection(modType, DirectionType.values()[direction]);
+            case 1 -> {
+                directionHandler.setMatterDirection(type, directionHandler.getMatterDirection(type).next());
+            }
+            case 2 -> {
+                directionHandler.setEnergyDirection(type, directionHandler.getEnergyDirection(type).next());
+            }
+            case 3 -> {
+                directionHandler.setFluidDirection(directionHandler.getFluidDirection().next());
+            }
         }
+
+        player.playSound(SoundEvents.UI_BUTTON_CLICK.get());
     }
 
     /*Getter setters*/
@@ -468,12 +590,17 @@ public abstract class MachineTile {
         return 0;
     }
 
-    public final void setButtonPacket(@NotNull OnButtonPressPacket buttonPacket, @NotNull OnButtonPressPacket ioButtonPacket) {
+    public final void setButtonPacket(@NotNull OnButtonPressPacket buttonPacket, @NotNull OnIOButtonPressPacket
+            ioButtonPacket) {
         this.buttonPacket = buttonPacket;
         this.ioButtonPacket = ioButtonPacket;
     }
 
     //Helper
+    private static void drawDummyButton(GuiGraphics guiGraphics, ResourceLocation ioButton, int modX, int modY, int offset, int i) {
+        guiGraphics.blit(ioButton, modX + offset, modY + 7 + (i * 14), 0, 0, 12, 12);
+    }
+
     private static boolean isMouseAboveArea(int pMouseX, int pMouseY, int x, int y, int offsetX,
                                             int offsetY, FluidTankRenderer renderer) {
         return MouseUtil.isMouseOver(pMouseX, pMouseY, x + offsetX, y + offsetY, renderer.getWidth(), renderer.getHeight());

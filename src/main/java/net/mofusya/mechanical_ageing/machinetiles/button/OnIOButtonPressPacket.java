@@ -5,54 +5,58 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import net.mofusya.mechanical_ageing.util.QuadConsumer;
-import net.mofusya.mechanical_ageing.util.TriConsumer;
 import net.mofusya.ornatelib.registries.network.packet.ServerPacket;
 
 import java.util.function.Supplier;
 
-public class OnButtonPressPacket extends ServerPacket {
+public class OnIOButtonPressPacket extends ServerPacket {
 
-    private final TriConsumer<Integer, ServerPlayer, BlockPos> run;
+    private final QuadConsumer<Integer, Integer, ServerPlayer, BlockPos> run;
+    public int index;
     public BlockPos pos;
 
-    public OnButtonPressPacket(String id, TriConsumer<Integer, ServerPlayer, BlockPos> run) {
+    public OnIOButtonPressPacket(String id, QuadConsumer<Integer, Integer, ServerPlayer, BlockPos> run) {
         super(id);
         this.run = run;
     }
 
-    public void send2Server(int type, BlockPos pos) {
-        OnButtonPressPacket toReturn = this.newSelf();
+    public void send2Server(int index, int type, BlockPos pos) {
+        OnIOButtonPressPacket toReturn = this.newSelf();
+        toReturn.index = index;
         toReturn.type = type;
         toReturn.pos = pos;
         this.simpleChannel.sendToServer(toReturn);
     }
 
     @Override
-    protected OnButtonPressPacket newSelf() {
-        return new OnButtonPressPacket(this.id, this.run);
+    protected OnIOButtonPressPacket newSelf() {
+        return new OnIOButtonPressPacket(this.id, this.run);
     }
 
     @Override
     public <T extends ServerPacket> void encode(T packet, FriendlyByteBuf buffer) {
         super.encode(packet, buffer);
-        buffer.writeBlockPos(((OnButtonPressPacket) packet).pos);
+        buffer.writeInt(((OnIOButtonPressPacket) packet).index);
+        buffer.writeBlockPos(((OnIOButtonPressPacket) packet).pos);
     }
 
     @Override
     public <T extends ServerPacket> T decode(FriendlyByteBuf buffer) {
-        OnButtonPressPacket toReturn = super.decode(buffer);
+        OnIOButtonPressPacket toReturn = super.decode(buffer);
+        toReturn.index = buffer.readInt();
         toReturn.pos = buffer.readBlockPos();
         return (T) toReturn;
     }
 
     @Override
     public <T extends ServerPacket> void handle(T packet, Supplier<NetworkEvent.Context> contextSupplier) {
-        this.pos = ((OnButtonPressPacket) packet).pos;
+        this.index = ((OnIOButtonPressPacket) packet).index;
+        this.pos = ((OnIOButtonPressPacket) packet).pos;
         super. handle(packet, contextSupplier);
     }
 
     @Override
     protected void run(ServerPlayer serverPlayer, int i) {
-        this.run.accept(i, serverPlayer, this.pos);
+        this.run.accept(this.index, i, serverPlayer, this.pos);
     }
 }

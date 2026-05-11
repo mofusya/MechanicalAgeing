@@ -112,9 +112,7 @@ public class MachineMenu extends AbstractContainerMenu {
         boolean moveItemStackTo(ItemStack var1, int var2, int var3, boolean var4);
     }
 
-    /**
-     * ----
-     **/
+    /* ---- */
 
     @Override
     public boolean stillValid(Player player) {

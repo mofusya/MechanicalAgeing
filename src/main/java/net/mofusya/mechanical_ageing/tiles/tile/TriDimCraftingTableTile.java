@@ -1,5 +1,6 @@
 package net.mofusya.mechanical_ageing.tiles.tile;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -17,8 +18,10 @@ import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.recipe.TriDimCraftingRecipe;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
+@MethodsReturnNonnullByDefault
 public class TriDimCraftingTableTile extends MachineTile {
     public TriDimCraftingTableTile(ResourceLocation id) {
         super(id);
@@ -33,6 +36,20 @@ public class TriDimCraftingTableTile extends MachineTile {
                     .createVerLine(116, 7 + (18 * i), itemStack -> true, SlotType.NORMAL, 3);
         }
         return toReturn.create(133, 63, itemStack -> false, SlotType.EXTRACT_ONLY);
+    }
+
+    @Override
+    public int getUpgradeArchiveSlot() {
+        return -1;
+    }
+
+    @Override
+    public ArrayList<Integer> getNoneIOSlots() {
+        ArrayList<Integer> toReturn = super.getNoneIOSlots();
+        for (int i = 0; i < this.getSlots().size() - 1; i++) {
+            toReturn.add(i);
+        }
+        return toReturn;
     }
 
     @Override

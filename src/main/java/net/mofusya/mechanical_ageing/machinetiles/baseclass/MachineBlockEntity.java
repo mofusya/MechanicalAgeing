@@ -37,6 +37,7 @@ import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.matter.IMatterHandler;
 import net.mofusya.mechanical_ageing.machinetiles.matter.LimitedMatterHandler;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterHandler;
+import net.mofusya.mechanical_ageing.machinetiles.slot.LimitedItemHandler;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -223,7 +224,7 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         }
 
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return this.lazyItemHandler.cast();
+            return LazyOptional.of(() -> new LimitedItemHandler(this.itemHandler, this.getDirectionHandler().getItemSlots(combinedDirection))).cast();
         }
 
         return super.getCapability(cap, side);

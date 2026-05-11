@@ -1,6 +1,5 @@
 package net.mofusya.mechanical_ageing.machinetiles.arrow;
 
-import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineMenu;
 
 import java.util.ArrayList;
