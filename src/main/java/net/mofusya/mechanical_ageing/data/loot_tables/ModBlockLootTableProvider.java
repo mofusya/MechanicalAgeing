@@ -7,6 +7,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.blocks.MAgBlocks;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
+import net.mofusya.mechanical_ageing.tiles.MAgMachines;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -21,6 +22,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
         ArrayList<RegistryObject<Block>> registries = new ArrayList<>();
 
         registries.addAll(MAgBlocks.BLOCKS.getBlocks());
+        registries.addAll(MAgMachines.MACHINES.getBlockEntries());
 
         for (RegistryObject<Block> block : registries) {
             this.dropSelf(block.get());
@@ -37,6 +39,7 @@ public class ModBlockLootTableProvider extends BlockLootSubProvider {
     @Override
     protected Iterable<Block> getKnownBlocks() {
         ArrayList<Block> blocks = new ArrayList<>();
+        blocks.addAll(MAgMachines.MACHINES.getBlockEntries().stream().map(RegistryObject::get).toList());
         blocks.addAll(MAgMetalSets.METAL_SET.getBlocks().stream().map(RegistryObject::get).toList());
         blocks.addAll(MAgBlocks.BLOCKS.getBlocks().stream().map(RegistryObject::get).toList());
         return blocks;

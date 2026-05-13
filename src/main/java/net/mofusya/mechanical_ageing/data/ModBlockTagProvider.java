@@ -11,6 +11,7 @@ import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.blocks.MAgBlocks;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
+import net.mofusya.mechanical_ageing.tiles.MAgMachines;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
 
             registries.addAll(MAgMetalSets.METAL_SET.getBlocks());
             registries.add(MAgBlocks.REINFORCED_BRICKS);
+            registries.addAll(MAgMachines.MACHINES.getBlockEntries());
 
             var tags = this.tag(BlockTags.MINEABLE_WITH_PICKAXE);
             for (RegistryObject<Block> block : registries) {
@@ -42,6 +44,17 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 tags.add(metalSet.block());
                 tags.add(metalSet.ore());
                 tags.add(metalSet.deepslateOre());
+            }
+        }
+
+        {
+            ArrayList<RegistryObject<Block>> registries = new ArrayList<>();
+
+            registries.addAll(MAgMachines.MACHINES.getBlockEntries());
+
+            var tags = this.tag(BlockTags.NEEDS_IRON_TOOL);
+            for (RegistryObject<Block> block : registries) {
+                tags.add(block.get());
             }
         }
     }

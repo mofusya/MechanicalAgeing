@@ -17,6 +17,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mofusya.mechanical_ageing.alloyset.AlloySet;
 import net.mofusya.mechanical_ageing.alloyset.MAgAlloySets;
 import net.mofusya.mechanical_ageing.blocks.MAgBlocks;
+import net.mofusya.mechanical_ageing.data.blockstate.MachineBlockStateBuilder;
+import net.mofusya.mechanical_ageing.data.blockstate.MachineBlockStateHelper;
 import net.mofusya.mechanical_ageing.items.MAgItem;
 import net.mofusya.mechanical_ageing.items.MAgTabs;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
@@ -55,6 +57,10 @@ public class MAg {
             ItemBlockRenderTypes.setRenderLayer(metalSet.ore(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(metalSet.deepslateOre(), RenderType.cutout());
         }
+
+        for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST){
+            ItemBlockRenderTypes.setRenderLayer(builder.getBlock(), RenderType.cutout());
+        }
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -69,6 +75,16 @@ public class MAg {
 
         @SubscribeEvent
         public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
+            for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST){
+                event.register((state, getter, pos, tintIndex) -> switch (tintIndex){
+                    case 0 -> builder.getFrameColor();
+                    case 1 -> builder.getSideColor();
+                    case 2 -> builder.getUpperCrystalColor();
+                    case 3 -> builder.getLowerCrystalColor();
+                    default -> 0xFFFFFF;
+                }, builder.getBlock());
+            }
+
             for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
 
                 event.register((state, level, pos, tintIndex) -> {
@@ -109,6 +125,16 @@ public class MAg {
 
         @SubscribeEvent
         public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
+            for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST){
+                event.register((itemStack, tintIndex) -> switch (tintIndex){
+                    case 0 -> builder.getFrameColor();
+                    case 1 -> builder.getSideColor();
+                    case 2 -> builder.getUpperCrystalColor();
+                    case 3 -> builder.getLowerCrystalColor();
+                    default -> 0xFFFFFF;
+                }, builder.getBlock());
+            }
+
             for (AlloySet alloySet : MAgAlloySets.ALLOYS.getEntries()) {
                 event.register((itemStack, tintIndex) -> tintIndex == 0 ? alloySet.color() : 0xFFFFFF,
                         alloySet.alloy(),

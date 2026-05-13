@@ -211,7 +211,7 @@ public abstract class MachineTile {
     }
 
     public BlockBehaviour.Properties getBlockBuild() {
-        return BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).mapColor(DyeColor.GRAY);
+        return BlockBehaviour.Properties.copy(Blocks.IRON_DOOR).mapColor(DyeColor.GRAY).strength(4.0f);
     }
 
     public IBgTileType getBgTileType() {
