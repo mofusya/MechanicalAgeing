@@ -10,6 +10,8 @@ import net.mofusya.mechanical_ageing.util.annotations.ParametersAreNonNullByDefa
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Predicate;
+
 @ParametersAreNonNullByDefault
 @FieldsMayBeNullByDefault
 public class MachineBlockStateBuilder {
@@ -17,6 +19,9 @@ public class MachineBlockStateBuilder {
     private final MachineBlock block;
     @NotNull
     private final ResourceLocation blockLoc;
+
+    private ResourceLocation background = null;
+    private int backgroundColor = -404;
 
     private ResourceLocation topBaseTexture = null;
     private ResourceLocation sideBaseTexture = null;
@@ -26,6 +31,7 @@ public class MachineBlockStateBuilder {
     private ResourceLocation sideCoverTexture = null;
     private ResourceLocation frontCoverTexture = null;
     private ResourceLocation bottomCoverTexture = null;
+
     private int frameColor = 0xFFFFFF;
     private int upperCrystalColor = -404;
     private int lowerCrystalColor = -404;
@@ -39,6 +45,24 @@ public class MachineBlockStateBuilder {
         if (blockLoc == null) throw new IllegalArgumentException("Illegal machine block");
 
         this.blockLoc = blockLoc;
+    }
+
+    public MachineBlockStateBuilder background(String path, boolean suffix){
+        return this.background(new ResourceLocation(MAg.MOD_ID, path), suffix);
+    }
+
+    public MachineBlockStateBuilder background(String namespace, String path, boolean suffix){
+        return this.background(new ResourceLocation(namespace, path), suffix);
+    }
+
+    public MachineBlockStateBuilder background(@Nullable ResourceLocation background, boolean suffix){
+        this.background = background == null ? null : (suffix ? background.withSuffix("_bg") : background);
+        return this;
+    }
+
+    public MachineBlockStateBuilder backgroundColor(int backgroundColor){
+        this.backgroundColor = backgroundColor;
+        return this;
     }
 
     public MachineBlockStateBuilder baseTextureFromLoc(boolean suffix) {
@@ -284,6 +308,15 @@ public class MachineBlockStateBuilder {
     @NotNull
     public String getName(){
         return this.getBlockLoc().getPath();
+    }
+
+    @Nullable
+    public ResourceLocation getBackground() {
+        return this.background;
+    }
+
+    public int getBackgroundColor() {
+        return this.backgroundColor;
     }
 
     @Nullable

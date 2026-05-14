@@ -17,9 +17,22 @@
     "base_front": "mechanical_ageing:block/machine/none",
     "base_side": "mechanical_ageing:block/machine/none",
     "base_top": "mechanical_ageing:block/machine/none",
-    "base_bottom": "mechanical_ageing:block/machine/none"
+    "base_bottom": "mechanical_ageing:block/machine/none",
+    "background": "mechanical_ageing:block/machine/none"
   },
   "elements": [
+    {
+      "from": [0.006, 0.006, 0.006],
+      "to": [15.994, 15.994, 15.994],
+      "faces": {
+        "north": {"texture": "#background", "tintindex": 4},
+        "east": {"texture": "#background", "tintindex": 4},
+        "south": {"texture": "#background", "tintindex": 4},
+        "west": {"texture": "#background", "tintindex": 4},
+        "up": { "texture": "#background", "tintindex": 4},
+        "down": {"texture": "#background", "tintindex": 4}
+      }
+    },
     {
       "from": [0.005, 0.005, 0.005],
       "to": [15.995, 15.995, 15.995],

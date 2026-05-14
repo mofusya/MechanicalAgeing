@@ -76,6 +76,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
         if (builder.getTopBaseTexture() != null) model.texture("base_top", builder.getTopBaseTexture());
         if (builder.getBottomBaseTexture() != null) model.texture("base_bottom", builder.getBottomBaseTexture());
 
+        if (builder.getBackground() != null) model.texture("background", builder.getBackground());
+
         ResourceLocation particleTexture;
         if (builder.getSideCoverTexture() != null) {
             particleTexture = builder.getSideCoverTexture();
@@ -99,7 +101,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
                     default -> 0;
                 };
 
-                configuredModel.rotationX(rotation);
+                configuredModel.rotationY(rotation);
             }
 
             return configuredModel.build();

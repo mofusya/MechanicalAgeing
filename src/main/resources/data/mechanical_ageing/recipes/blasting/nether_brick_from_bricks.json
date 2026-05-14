@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "ingredient": {
+    "item": "minecraft:bricks"
+  },
+  "result": "minecraft:nether_brick"
+}

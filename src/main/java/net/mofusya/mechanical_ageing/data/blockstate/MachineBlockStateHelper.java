@@ -26,14 +26,23 @@ public class MachineBlockStateHelper {
         );
 
         builderList.add(builder(MAgMachines.BRICK_BURNING_CHAMBER)
-                .baseTexture("minecraft", "block/lava_still", false)
+                .background("block/block", false)
+                .backgroundColor(MAgMetalSets.OSMIUM.color())
+                .baseTexture("minecraft", "block/fire_0", false)
                 .topBaseTexture("block/reinforced_bricks", false)
                 .bottomBaseTexture("block/reinforced_bricks", false)
                 .frameColor(0x8D6E63)
                 .upperCrystalColor(0x4E342E)
                 .lowerCrystalColor(0x4E342E)
                 .sideColor(MAgMetalSets.OSMIUM.color())
-                .hasFacing(false)
+        );
+
+        builderList.add(builder(MAgMachines.BRICK_SMELTING_CHAMBER)
+                .baseTexture("minecraft", "block/lava_still", false)
+                .bottomBaseTexture("block/reinforced_bricks", false)
+                .frameColor(0x8D6E63)
+                .upperCrystalColor(MAgMetalSets.OSMIUM.color())
+                .sideColor(0x4E342E)
         );
 
         return builderList;

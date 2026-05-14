@@ -77,10 +77,11 @@ public class MAg {
         public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
             for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST){
                 event.register((state, getter, pos, tintIndex) -> switch (tintIndex){
-                    case 0 -> builder.getFrameColor();
-                    case 1 -> builder.getSideColor();
-                    case 2 -> builder.getUpperCrystalColor();
-                    case 3 -> builder.getLowerCrystalColor();
+                    case 0 -> builder.getFrameColor() == -404 ? 0xFFFFFF : builder.getFrameColor();
+                    case 1 -> builder.getSideColor() == -404 ? 0xFFFFFF : builder.getSideColor();
+                    case 2 -> builder.getUpperCrystalColor() == -404 ? 0xFFFFFF : builder.getUpperCrystalColor();
+                    case 3 -> builder.getLowerCrystalColor() == -404 ? 0xFFFFFF : builder.getLowerCrystalColor();
+                    case 4 -> builder.getBackgroundColor() == -404 ? 0xFFFFFF : builder.getBackgroundColor();
                     default -> 0xFFFFFF;
                 }, builder.getBlock());
             }
@@ -127,10 +128,11 @@ public class MAg {
         public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
             for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST){
                 event.register((itemStack, tintIndex) -> switch (tintIndex){
-                    case 0 -> builder.getFrameColor();
-                    case 1 -> builder.getSideColor();
-                    case 2 -> builder.getUpperCrystalColor();
-                    case 3 -> builder.getLowerCrystalColor();
+                    case 0 -> builder.getFrameColor() == -404 ? 0xFFFFFF : builder.getFrameColor();
+                    case 1 -> builder.getSideColor() == -404 ? 0xFFFFFF : builder.getSideColor();
+                    case 2 -> builder.getUpperCrystalColor() == -404 ? 0xFFFFFF : builder.getUpperCrystalColor();
+                    case 3 -> builder.getLowerCrystalColor() == -404 ? 0xFFFFFF : builder.getLowerCrystalColor();
+                    case 4 -> builder.getBackgroundColor() == -404 ? 0xFFFFFF : builder.getBackgroundColor();
                     default -> 0xFFFFFF;
                 }, builder.getBlock());
             }
