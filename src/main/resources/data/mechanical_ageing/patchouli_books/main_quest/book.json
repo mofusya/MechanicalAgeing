@@ -1,0 +1,9 @@
+{
+  "name": "MAg: Main Quest",
+  "landing_text": "This book is a Gide/Quest/Tutorial for Mechanical Ageing.$(br)If your new or don't know what you're doing, I recommend looking through this Gide/Quest/Tutorial.",
+  "version": 1,
+  "creative_tab": "mechanical_ageing:main",
+  "use_resource_pack": true,
+  "pamphlets": true,
+  "model": "mechanical_ageing:main_quest_book"
+}

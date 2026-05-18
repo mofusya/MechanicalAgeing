@@ -1,0 +1,21 @@
+{
+  "name": "I-1.Tri-Dim Crafting Table",
+  "icon": "mechanical_ageing:tri_dimensional_crafting_table",
+  "category": "mechanical_ageing:brick_age",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": {
+        "item": "mechanical_ageing:tri_dimensional_crafting_table"
+      },
+      "text": "This Block is a new type of Crafting Tables that can make more complicated Blocks for MAg with the 27 slots inside.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:quest",
+      "title": "Chapter.I-1",
+      "text": "Obtain a Tri-Dimensional Crafting Table",
+      "trigger": "mechanical_ageing:main_quest/tri_dimensional_crafting_table"
+    }
+  ]
+}

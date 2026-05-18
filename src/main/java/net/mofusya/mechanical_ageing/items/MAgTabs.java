@@ -25,7 +25,6 @@ public class MAgTabs {
             .icon(() -> new ItemStack(MAgMetalSets.IRON.ingot()))
             .displayItems((parameters, output) -> {
                 List<ItemLike> items = new ArrayList<>();
-                items.addAll(MAgBlocks.BLOCKS.getItems(0).stream().map(RegistryObject::get).toList());
                 items.addAll(MAgAlloySets.ALLOYS.getItems().stream().map(RegistryObject::get).toList());
                 items.addAll(MAgMetalSets.METAL_SET.getAllItemLikes());
 
@@ -37,11 +36,24 @@ public class MAgTabs {
 
     public static final RegistryObject<CreativeModeTab> MACHINES = TABS.register("machines", () -> CreativeModeTab.builder()
             .title(Component.translatable("tab." + MAg.MOD_ID + ".machines"))
-            .icon(() -> new ItemStack(MAgMachines.DESTRUCTOR.block()))
+            .icon(() -> new ItemStack(MAgMachines.TRI_DIM_CRAFTING_TABLE.block()))
             .displayItems((parameters, output) -> {
                 List<ItemLike> items = new ArrayList<>();
                 items.addAll(MAgItem.ITEMS.getItems(1).stream().map(RegistryObject::get).toList());
                 items.addAll(MAgMachines.MACHINES.getBlockEntries().stream().map(RegistryObject::get).toList());
+
+                for (ItemLike item : items) {
+                    output.accept(item);
+                }
+            })
+            .build());
+
+    public static final RegistryObject<CreativeModeTab> MAIN = TABS.register("main", () -> CreativeModeTab.builder()
+            .title(Component.translatable("tab." + MAg.MOD_ID + ".main"))
+            .icon(() -> new ItemStack(MAgBlocks.REINFORCED_BRICKS.get()))
+            .displayItems((parameters, output) -> {
+                List<ItemLike> items = new ArrayList<>();
+                items.addAll(MAgBlocks.BLOCKS.getItems(0).stream().map(RegistryObject::get).toList());
 
                 for (ItemLike item : items) {
                     output.accept(item);

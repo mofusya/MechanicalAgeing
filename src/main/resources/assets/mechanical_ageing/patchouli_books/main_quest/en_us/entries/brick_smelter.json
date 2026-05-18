@@ -1,0 +1,31 @@
+{
+  "name": "I-5.Brick Smelter",
+  "icon": "mechanical_ageing:textures/block/machine/frame_bottom.png",
+  "category": "mechanical_ageing:brick_age",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "This structure is an easy set of Blocks that can smelt raw metals, and obtain 2x the amount compared to regular smelting by taking in a Fuel Item or a Fuel Matter.$(br2)This is an example for a Brick Smelter. Alternatives are perfectly fine and will be preferred."
+    },
+    {
+      "type": "patchouli:multiblock",
+      "name": "Brick Smelter",
+      "multiblock":{
+        "pattern": [
+          ["#"],
+          ["0"]
+        ],
+        "mapping": {
+          "0": "mechanical_ageing:brick_smelting_chamber",
+          "#": "mechanical_ageing:brick_burning_chamber"
+        },
+        "symmetrical": true
+      }
+    },
+    {
+      "type": "patchouli:quest",
+      "title": "Chapter.I-5",
+      "text": "Make your own Brick Smelter"
+    }
+  ]
+}

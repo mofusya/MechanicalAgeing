@@ -1,4 +1,4 @@
-// 1.20.1	2026-05-14T15:24:57.4135424	Block States: mechanical_ageing
+// 1.20.1	2026-05-14T23:34:50.9805567	Block States: mechanical_ageing
 89fb3ffac881ef081aad83e8cec9c6c7b8bd1719 assets/mechanical_ageing/blockstates/aluminum_block.json
 daff799ed41f06d8b79dde3765aaebcffb5a0343 assets/mechanical_ageing/blockstates/aluminum_ore.json
 5f36348755c2429d6a3870e2c19e421bd86f4a39 assets/mechanical_ageing/blockstates/brick_burning_chamber.json
@@ -69,8 +69,8 @@ c8dca42ff86af30a3ab109a17734255298b4e9c5 assets/mechanical_ageing/blockstates/ti
 1dc1fdbeff561bc75a24857f7d8909d9cc720de6 assets/mechanical_ageing/blockstates/unobtainium_ore.json
 8bc1a62d766cc4766d7df4b7ca8c2d9771e66285 assets/mechanical_ageing/models/block/aluminum_block.json
 b5e04a7477a6098d4d1c8434c6a5fd55ef9db16a assets/mechanical_ageing/models/block/aluminum_ore.json
-df1616eb6ab946fadffc8ae29e2abb1a53680088 assets/mechanical_ageing/models/block/brick_burning_chamber.json
-1c670678a526b8dcfa01ecfe84095faf5bf05699 assets/mechanical_ageing/models/block/brick_smelting_chamber.json
+ce397fd9e5e0c1f8c00358da792f42974a133bc8 assets/mechanical_ageing/models/block/brick_burning_chamber.json
+06c90f34cda97770e346aa94e170fa5bc941874c assets/mechanical_ageing/models/block/brick_smelting_chamber.json
 8bc1a62d766cc4766d7df4b7ca8c2d9771e66285 assets/mechanical_ageing/models/block/chromium_block.json
 b5e04a7477a6098d4d1c8434c6a5fd55ef9db16a assets/mechanical_ageing/models/block/chromium_ore.json
 8bc1a62d766cc4766d7df4b7ca8c2d9771e66285 assets/mechanical_ageing/models/block/cobalt_block.json

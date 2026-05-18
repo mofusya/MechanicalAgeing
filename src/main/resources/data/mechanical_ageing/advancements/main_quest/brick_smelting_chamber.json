@@ -1,0 +1,33 @@
+{
+  "parent": "mechanical_ageing:main_quest/brick_burning_chamber",
+  "display": {
+    "announce_to_chat": true,
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "mechanical_ageing:brick_smelting_chamber"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "block.mechanical_ageing.brick_smelting_chamber"
+    },
+    "description": {
+      "translate": ""
+    }
+  },
+  "criteria": {
+    "has_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mechanical_ageing:brick_smelting_chamber"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "sends_telemetry_event": true
+}

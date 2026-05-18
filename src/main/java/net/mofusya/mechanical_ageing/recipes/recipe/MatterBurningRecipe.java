@@ -26,7 +26,8 @@ public class MatterBurningRecipe extends MAgRecipe {
         var matterStacks = container.getMatters();
         if (matterStacks == null) return false;
 
-        return test(this.getIngredient(), matterStacks[0]);
+        boolean matches = test(this.getIngredient(), matterStacks[0]);
+        return matches;
     }
 
     public MatterStack getIngredient() {

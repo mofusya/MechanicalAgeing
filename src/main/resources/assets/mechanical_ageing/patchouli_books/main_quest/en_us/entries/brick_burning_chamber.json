@@ -1,0 +1,21 @@
+{
+  "name": "I-3.Brick Burning Chamber",
+  "icon": "mechanical_ageing:brick_burning_chamber",
+  "category": "mechanical_ageing:brick_age",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": {
+        "item": "mechanical_ageing:brick_burning_chamber"
+      },
+      "text": "This Block is the first Machine Block in Chapter.I. It can generate Heat Matter by taking in a Fuel Item or a Fuel Matter and burning it.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:quest",
+      "title": "Chapter.I-3",
+      "text": "Obtain a Brick Burning Chamber",
+      "trigger": "mechanical_ageing:main_quest/brick_burning_chamber"
+    }
+  ]
+}

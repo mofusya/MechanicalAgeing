@@ -11,6 +11,7 @@ import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.matter.MatterType;
 import net.mofusya.mechanical_ageing.util.SeptiLongHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MatterRenderer implements IIngredientRenderer<MatterStack> {
@@ -42,9 +43,13 @@ public class MatterRenderer implements IIngredientRenderer<MatterStack> {
     public List<Component> getTooltip(MatterStack matterStack, TooltipFlag tooltipFlag) {
         MatterType type = matterStack.getType();
         if (type == null) return List.of();
-        return List.of(
-                Component.translatable(type.getTranslationId()),
-                Component.literal(SeptiLongHelper.convertToStringAndAddSuffix(matterStack.getAmount()) + type.getSuffix()).withStyle(ChatFormatting.DARK_GRAY)
-        );
+
+        ArrayList<Component> components = new ArrayList<>();
+        components.add(Component.translatable(type.getTranslationId()));
+        components.add(Component.literal(SeptiLongHelper.convertToStringAndAddSuffix(matterStack.getAmount()) + type.getSuffix()).withStyle(ChatFormatting.DARK_GRAY));
+
+        matterStack.getTags().forEach((key, value) -> components.add(Component.translatable("matter_attribute." + key).append(": " + value).withStyle(ChatFormatting.DARK_GRAY)));
+
+        return components;
     }
 }

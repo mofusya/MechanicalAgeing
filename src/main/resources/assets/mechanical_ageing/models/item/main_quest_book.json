@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "minecraft:item/enchanted_book",
+    "layer1": "mechanical_ageing:item/book/main_quest"
+  }
+}

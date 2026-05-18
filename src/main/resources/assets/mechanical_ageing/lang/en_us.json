@@ -1,8 +1,9 @@
 {
   "config.jade.plugin_mechanical_ageing.machine_tile": "MachineTIle",
 
-  "tab.mechanical_ageing.material": "MechanicalAgeing-Materials-",
-  "tab.mechanical_ageing.machines": "MechanicalAgeing-Machines-",
+  "tab.mechanical_ageing.material": "MechanicalAgeing: Materials",
+  "tab.mechanical_ageing.machines": "MechanicalAgeing: Machines",
+  "tab.mechanical_ageing.main": "MechanicalAgeing",
 
   "block.mechanical_ageing.reinforced_bricks": "Reinforced Bricks",
 
@@ -17,6 +18,11 @@
   "matter.mechanical_ageing.water": "Water",
   "matter.mechanical_ageing.fuel": "Fuel",
   "matter.mechanical_ageing.heat": "Heat",
+
+  "matter_attribute.mechanical_ageing.tier": "Tier",
+
+  "advancements.mechanical_ageing.root": "Mechanical Ageing",
+  "advancements.mechanical_ageing.root.desc": "Chapter.I-The Brick Age",
 
   "item.mechanical_ageing.machine_upgrade_archive_tier_1": "Machine Upgrade Archive [I]",
   "item.mechanical_ageing.machine_upgrade_archive_tier_2": "Machine Upgrade Archive [II]",

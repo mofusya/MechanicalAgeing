@@ -2,6 +2,7 @@ package net.mofusya.mechanical_ageing.machinetiles.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.flansflame.flans_star_forge.screens.helper.MouseUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -13,7 +14,7 @@ import net.mofusya.mechanical_ageing.matter.MatterType;
 import net.mofusya.mechanical_ageing.util.SeptiLongHelper;
 import net.mofusya.ornatelib.lang.SeptiLong;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class MatterDisplayTooltipArea {
@@ -37,18 +38,32 @@ public class MatterDisplayTooltipArea {
 
             if (player.isShiftKeyDown()) {
                 var type = matterHandler.getStored(slot).getType();
-                guiGraphics.renderTooltip(Minecraft.getInstance().font,
-                        List.of(Component.translatable(type == null ? "block.minecraft.air" : type.getTranslationId()),
-                                Component.literal(" §8- " + matterHandler.getStored(slot).getAmount() + (type == null ? "mB" : type.getSuffix()) + " §r§f/"),
-                                Component.literal(" §8- " + matterHandler.getMaxStored(slot) + (type == null ? "mB" : type.getSuffix()))
-                        ), Optional.empty(), mouseX - x, mouseY - y);
+
+                ArrayList<Component> components = new ArrayList<>();
+                components.add(Component.translatable(type == null ? "block.minecraft.air" : type.getTranslationId()));
+                components.add(Component.literal(" §8- " + matterHandler.getStored(slot).getAmount() + (type == null ? "mB" : type.getSuffix()) + " §r§f/"));
+                components.add(Component.literal(" §8- " + matterHandler.getMaxStored(slot) + (type == null ? "mB" : type.getSuffix())));
+
+                matterHandler.getStored(slot).getTags().forEach((key, value) -> components.add(Component.translatable("matter_attribute." + key).append(": " + value).withStyle(ChatFormatting.DARK_GRAY)));
+
+                guiGraphics.renderTooltip(Minecraft.getInstance().font, components, Optional.empty(), mouseX - x, mouseY - y);
             } else {
                 var type = matterHandler.getStored(slot).getType();
-                guiGraphics.renderTooltip(Minecraft.getInstance().font,
-                        List.of(Component.translatable(type == null ? "block.minecraft.air" : type.getTranslationId()),
-                                Component.literal(" §8- " + SeptiLongHelper.convertToStringAndAddSuffix(matterHandler.getStored(slot).getAmount()) + (type == null ? "mB" : type.getSuffix()) + " /"),
-                                Component.literal(" §8- " + SeptiLongHelper.convertToStringAndAddSuffix(matterHandler.getMaxStored(slot)) + (type == null ? "mB" : type.getSuffix()))
-                        ), Optional.empty(), mouseX - x, mouseY - y);
+
+                ArrayList<Component> components = new ArrayList<>();
+                components.add(Component.translatable(type == null ? "block.minecraft.air" : type.getTranslationId()));
+                components.add(Component.literal(" §8- " + SeptiLongHelper.convertToStringAndAddSuffix(matterHandler.getStored(slot).getAmount()) + (type == null ? "mB" : type.getSuffix()) + " /"));
+                components.add(Component.literal(" §8- " + SeptiLongHelper.convertToStringAndAddSuffix(matterHandler.getMaxStored(slot)) + (type == null ? "mB" : type.getSuffix())));
+
+                var tags = matterHandler.getStored(slot).getTags();
+                if (tags.hasContent()) {
+                    components.add(Component.empty());
+                    tags.forEach((key, value) -> {
+                        components.add(Component.translatable("matter_attribute." + key).append(": " + value).withStyle(ChatFormatting.DARK_GRAY));
+                    });
+                }
+
+                guiGraphics.renderTooltip(Minecraft.getInstance().font, components, Optional.empty(), mouseX - x, mouseY - y);
             }
         }
     }

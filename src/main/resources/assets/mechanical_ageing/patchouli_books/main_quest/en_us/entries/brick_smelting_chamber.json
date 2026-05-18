@@ -1,0 +1,21 @@
+{
+  "name": "I-4.Brick Smelting Chamber",
+  "icon": "mechanical_ageing:brick_smelting_chamber",
+  "category": "mechanical_ageing:brick_age",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": {
+        "item": "mechanical_ageing:brick_smelting_chamber"
+      },
+      "text": "This Block is the second Machine Block in Chapter.I. It can smelt raw metals, and obtain 2x the amount compared to regular smelting by taking in Heat Matters.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:quest",
+      "title": "Chapter.I-4",
+      "text": "Obtain a Brick Smelting Chamber",
+      "trigger": "mechanical_ageing:main_quest/brick_smelting_chamber"
+    }
+  ]
+}

@@ -128,6 +128,8 @@ public abstract class MatterHandler implements IMatterHandler {
         SeptiLong receiveAmount = amount.getAmount();
 
         if (!this.canReceive(slot)) return false;
+        if (!MatterStack.checkTags(this.storage[slot], amount)) return false;
+
         if (amount.getType() != null && !matterSlot.isValidFunc().apply(amount.getType())) return false;
         if (!receiveAmount.isGreaterThan(this.getMaxReceive(slot))) return false;
         if (receiveAmount.isGreaterThan(this.getSpace(slot))) return false;
@@ -140,6 +142,8 @@ public abstract class MatterHandler implements IMatterHandler {
         SeptiLong extractAmount = amount.getAmount();
 
         if (!this.canExtract(slot)) return false;
+        if (!MatterStack.checkTags(this.storage[slot], amount)) return false;
+
         if (amount.getType() != null && !matterSlot.isValidFunc().apply(amount.getType())) return false;
         if (!extractAmount.isGreaterThan(this.getMaxExtract(slot))) return false;
         if (extractAmount.isGreaterThan(this.getStored(slot).getAmount())) return false;
@@ -151,6 +155,7 @@ public abstract class MatterHandler implements IMatterHandler {
         MatterSlotProperties matterSlot = this.slots.get(slot);
         SeptiLong receiveAmount = amount.getAmount();
 
+        if (!MatterStack.checkTags(this.storage[slot], amount)) return false;
         if (amount.getType() != null && !matterSlot.isValidFunc().apply(amount.getType())) return false;
         if (receiveAmount.isGreaterThan(this.getSpace(slot))) return false;
 
@@ -161,6 +166,7 @@ public abstract class MatterHandler implements IMatterHandler {
         MatterSlotProperties matterSlot = this.slots.get(slot);
         SeptiLong extractAmount = amount.getAmount();
 
+        if (!MatterStack.checkTags(this.storage[slot], amount)) return false;
         if (amount.getType() != null && !matterSlot.isValidFunc().apply(amount.getType())) return false;
         if (extractAmount.isGreaterThan(this.getStored(slot).getAmount())) return false;
 
@@ -185,13 +191,24 @@ public abstract class MatterHandler implements IMatterHandler {
             MatterStack storage = this.storage[i];
             tag.putString("matterStorageType_" + i, storage.getType() == null ? "404" : storage.getType().getId().toString());
             tag.putLongArray("matterStorageAmount_" + i, storage.getAmount().getLayer());
+            CompoundTag matterStorageTags = new CompoundTag();
+            for (int j = 0; j < storage.getTags().size(); j++) {
+                matterStorageTags.putString("key_" + j, storage.getTags().getKeys().get(j));
+                matterStorageTags.putString("value_" + j, storage.getTags().getValues().get(j));
+            }
+            tag.put("matterStorageTags_" + i, matterStorageTags);
         }
         return tag;
     }
 
     public void deserializeNBT(CompoundTag tag) {
         for (int i = 0; i < this.storage.length; i++) {
-            this.storage[i] = new MatterStack(tag.getString("matterStorageType_" + i).equals("404") ? null : MatterManager.get().get(new ResourceLocation(tag.getString("matterStorageType_" + i))), SeptiLong.createFromList(tag.getLongArray("matterStorageAmount_" + i)));
+            MatterStack matterStack = new MatterStack(tag.getString("matterStorageType_" + i).equals("404") ? null : MatterManager.get().get(new ResourceLocation(tag.getString("matterStorageType_" + i))), SeptiLong.createFromList(tag.getLongArray("matterStorageAmount_" + i)));
+            CompoundTag matterStorageTags = tag.getCompound("matterStorageTags_" + i);
+            for (int j = 0; matterStorageTags.contains("key_" + j) && matterStorageTags.contains("value_" + j); j++) {
+                matterStack.getTags().put(matterStorageTags.getString("key_" + j), matterStorageTags.getString("value_" + j));
+            }
+            this.storage[i] = matterStack;
         }
     }
 

@@ -1,0 +1,21 @@
+{
+  "name": "I-2.Reinforced Bricks",
+  "icon": "mechanical_ageing:reinforced_bricks",
+  "category": "mechanical_ageing:brick_age",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": {
+        "item": "mechanical_ageing:reinforced_bricks"
+      },
+      "text": "This Block is the main material Block used in Chapter.I. It can handle up to 2800 Kelvin and will mostly appear in Machines with heat handling.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:quest",
+      "title": "Chapter.I-2",
+      "text": "Obtain some Reinforced Bricks",
+      "trigger": "mechanical_ageing:main_quest/reinforced_bricks"
+    }
+  ]
+}

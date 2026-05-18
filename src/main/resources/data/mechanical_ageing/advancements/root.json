@@ -1,0 +1,29 @@
+{
+  "display": {
+    "announce_to_chat": true,
+    "background": "mechanical_ageing:textures/block/block.png",
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "mechanical_ageing:iron_chunk"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.mechanical_ageing.root"
+    },
+    "description": {
+      "translate": "advancements.mechanical_ageing.root.desc"
+    }
+  },
+  "criteria": {
+    "tick": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "rewards": {
+    "loot": [
+      "mechanical_ageing:main_quest_book"
+    ]
+  },
+  "sends_telemetry_event": true
+}

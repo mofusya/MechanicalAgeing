@@ -1,0 +1,33 @@
+{
+  "parent": "mechanical_ageing:root",
+  "display": {
+    "announce_to_chat": true,
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "mechanical_ageing:tri_dimensional_crafting_table"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "block.mechanical_ageing.tri_dimensional_crafting_table"
+    },
+    "description": {
+      "translate": ""
+    }
+  },
+  "criteria": {
+    "has_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mechanical_ageing:tri_dimensional_crafting_table"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "sends_telemetry_event": true
+}

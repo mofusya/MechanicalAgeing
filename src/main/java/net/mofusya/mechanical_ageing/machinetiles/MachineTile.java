@@ -317,7 +317,7 @@ public abstract class MachineTile {
             menu, MachineScreen screen) {
         for (int i = 0; i < this.getEnergySlots().size(); i++) {
             EnergyDisplayTooltipArea tooltip = this.energyTooltips.get(i);
-            tooltip.renderTooltips(guiGraphics, mouseX, mouseY, x, y, menu.blockEntity.getEnergyStorage(i).getEnergyStored(), menu.blockEntity.getEnergyStorage(i).getMaxEnergyStored());
+            tooltip.renderTooltips(guiGraphics, mouseX, mouseY, x, y, menu.blockEntity.getEnergyStorage(i));
         }
 
         for (int i = 0; i < this.getMatterSlots().size(); i++) {

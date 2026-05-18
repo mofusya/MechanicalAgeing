@@ -1,5 +1,6 @@
 package net.mofusya.mechanical_ageing.matter;
 
+import net.mofusya.mechanical_ageing.util.ArrayMap;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +13,8 @@ public final class MatterStack {
     private MatterType type;
     @NotNull
     private SeptiLong amount;
+    @NotNull
+    private ArrayMap<String, String> tags;
 
     public MatterStack(@Nullable MatterType type) {
         this(type, 0);
@@ -22,15 +25,23 @@ public final class MatterStack {
     }
 
     public MatterStack(@Nullable MatterType type, @NotNull SeptiLong amount) {
+        this(type, amount, null);
+    }
+
+    public MatterStack(@Nullable MatterType type, @NotNull SeptiLong amount, @Nullable ArrayMap<String, String> tags) {
         this.type = type;
         this.amount = amount;
+        this.tags = tags == null ? new ArrayMap<>() : tags;
     }
 
     public boolean receive(MatterStack matterStack, boolean simulate) {
         if (matterStack == null) return false;
+        if (!checkTags(this, matterStack)) return false;
+
         if (this.type == null) {
             if (!simulate) {
                 this.modify(matterType -> matterStack.getType(), matterAmount -> matterAmount.add(matterStack.getAmount()));
+                this.getTags().putAll(matterStack.getTags());
             }
             return true;
         } else if (matterStack.getType() == null || this.type.is(matterStack.getType())) {
@@ -44,6 +55,8 @@ public final class MatterStack {
 
     public boolean extract(MatterStack matterStack, boolean simulate) {
         if (matterStack == null || this.type == null || this.amount.isSmallerOrSameThan(0)) return false;
+        if (!checkTags(this, matterStack)) return false;
+
         if (matterStack.getType() == null || this.type.is(matterStack.getType())) {
             if (!simulate) {
                 this.modifyAmount(matterAmount -> matterAmount.remove(matterStack.getAmount()));
@@ -54,7 +67,7 @@ public final class MatterStack {
     }
 
     public MatterStack copy() {
-        return new MatterStack(this.type, this.amount);
+        return new MatterStack(this.type, this.amount, this.tags);
     }
 
     public static MatterStack empty() {
@@ -103,6 +116,11 @@ public final class MatterStack {
         if (amountFunc != null) this.amount = amountFunc.apply(this.amount);
     }
 
+    public MatterStack tag(String key, String value){
+        this.getTags().put(key, value);
+        return this;
+    }
+
     public @Nullable MatterType getType() {
         return this.amount.isGreaterThan(0) ? this.type : null;
     }
@@ -113,5 +131,31 @@ public final class MatterStack {
 
     public @NotNull SeptiLong getNoneTypeAmount() {
         return this.amount.copy();
+    }
+
+    public @NotNull ArrayMap<String, String> getTags() {
+        if (!this.amount.isGreaterThan(0)) this.tags = new ArrayMap<>();
+
+        return this.tags;
+    }
+
+    public static boolean checkTags(MatterStack matterStackA, MatterStack matterStackB){
+        var aKeys = matterStackA.getTags().getKeys();
+        var bKeys = matterStackB.getTags().getKeys();
+
+        if (aKeys.size() != bKeys.size()){
+            if (matterStackA.getType() == null || matterStackB.getType() == null) return true;
+
+            return false;
+        }
+
+        for (String aKey : aKeys){
+            if (!bKeys.contains(aKey)) return false;
+        }
+        for (String bKey : bKeys){
+            if (!aKeys.contains(bKey)) return false;
+        }
+
+        return true;
     }
 }

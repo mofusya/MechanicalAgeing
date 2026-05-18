@@ -170,6 +170,8 @@ dependencies {
 
     implementation fg.deobf("curse.maven:ornatelib-1479095:7779710")
 
+    implementation fg.deobf("curse.maven:patchouli-306770:7731017")
+
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 }

@@ -74,7 +74,7 @@ public class BrickBurningChamberTile extends MachineTile {
         if (matterHandler == null) return;
 
         this.fuelRecipeTick(level, blockEntity, matterHandler, itemHandler);
-        this.smeltingRecipeTick(level, blockEntity, matterHandler);
+        this.burningRecipeTick(level, blockEntity, matterHandler);
     }
 
     private void fuelRecipeTick(Level level, MachineBlockEntity blockEntity, MatterHandler matterHandler, ItemStackHandler itemHandler) {
@@ -94,7 +94,7 @@ public class BrickBurningChamberTile extends MachineTile {
         }
     }
 
-    private void smeltingRecipeTick(Level level, MachineBlockEntity blockEntity, MatterHandler matterHandler) {
+    private void burningRecipeTick(Level level, MachineBlockEntity blockEntity, MatterHandler matterHandler) {
         MAgContainer container = MAgContainer.builder()
                 .matterSlotList(0)
                 .build(blockEntity);

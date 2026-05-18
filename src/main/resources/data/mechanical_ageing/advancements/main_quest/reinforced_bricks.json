@@ -1,0 +1,33 @@
+{
+  "parent": "mechanical_ageing:main_quest/tri_dimensional_crafting_table",
+  "display": {
+    "announce_to_chat": true,
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "mechanical_ageing:reinforced_bricks"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "block.mechanical_ageing.reinforced_bricks"
+    },
+    "description": {
+      "translate": ""
+    }
+  },
+  "criteria": {
+    "has_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mechanical_ageing:reinforced_bricks"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "sends_telemetry_event": true
+}

@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergyType;
+import net.mofusya.mechanical_ageing.machinetiles.energy.ISeptiLongEnergyHandler;
 import net.mofusya.mechanical_ageing.util.SeptiLongHelper;
 import net.mofusya.ornatelib.lang.SeptiLong;
 
@@ -42,23 +43,32 @@ public class EnergyDisplayTooltipArea {
         this.bgTile = bgTile;
     }
 
-    private List<Component> getTooltips(int energyStored, int maxEnergyStored) {
+    private List<Component> getTooltips(IEnergyStorage energyStorage) {
+        String storedString;
+        String maxStorageString;
+
+        if (energyStorage instanceof ISeptiLongEnergyHandler septiLongEnergyHandler) {
+            storedString = SeptiLongHelper.convertToStringAndAddSuffix(septiLongEnergyHandler.getEnergyStored());
+            maxStorageString = SeptiLongHelper.convertToStringAndAddSuffix(septiLongEnergyHandler.getMaxEnergyStored());
+        } else {
+            storedString = SeptiLongHelper.convertToStringAndAddSuffix(new SeptiLong(energyStorage.getEnergyStored()));
+            maxStorageString = SeptiLongHelper.convertToStringAndAddSuffix(new SeptiLong(energyStorage.getMaxEnergyStored()));
+        }
+
         return List.of(
-                Component.literal(SeptiLongHelper.convertToStringAndAddSuffix(new SeptiLong(energyStored)) + this.type.suffix() + " /"),
-                Component.literal(SeptiLongHelper.convertToStringAndAddSuffix(new SeptiLong(maxEnergyStored)) + this.type.suffix())
+                Component.literal(storedString + this.type.suffix() + " /"),
+                Component.literal(maxStorageString + this.type.suffix())
         );
     }
 
-    public void renderTooltips(GuiGraphics guiGraphics, int mouseX, int mouseY, int x, int y, int energyStored, int maxEnergyStored) {
+    public void renderTooltips(GuiGraphics guiGraphics, int mouseX, int mouseY, int x, int y, IEnergyStorage energyStorage) {
         if (MouseUtil.isMouseOver(mouseX, mouseY, this.x + 1, this.y + 1, BAR_SIZE[0], BAR_SIZE[1]) || MouseUtil.isMouseOver(mouseX, mouseY, this.x + 11, this.y + 1, BAR_SIZE[0], BAR_SIZE[1])) {
-            guiGraphics.renderTooltip(Minecraft.getInstance().font, this.getTooltips(energyStored, maxEnergyStored), Optional.empty(), mouseX - x, mouseY - y);
+            guiGraphics.renderTooltip(Minecraft.getInstance().font, this.getTooltips(energyStorage), Optional.empty(), mouseX - x, mouseY - y);
         }
     }
 
     public void render(GuiGraphics guiGraphics, IEnergyStorage energyStorage) {
-        int energyStored = energyStorage.getEnergyStored();
-        int maxEnergyStored = energyStorage.getMaxEnergyStored();
-        int stored = (int) ((energyStored / (float) maxEnergyStored) * BAR_SIZE[1]);
+        int stored = getStored(energyStorage);
 
         //Get tile texture
         RenderSystem.setShaderTexture(0, this.bgTile);
@@ -78,5 +88,21 @@ public class EnergyDisplayTooltipArea {
                 y + BAR_SIZE[1], this.type.getColor(), this.type.getGradientColor() == -404 ? this.type.getColor() : this.type.getGradientColor());
         guiGraphics.fillGradient(x + 11, y + 1 + (BAR_SIZE[1] - stored), x + 10 + BAR_SIZE[0],
                 y + BAR_SIZE[1], this.type.getColor(), this.type.getGradientColor() == -404 ? this.type.getColor() : this.type.getGradientColor());
+    }
+
+    private static int getStored(IEnergyStorage energyStorage) {
+        int stored;
+        if (energyStorage instanceof ISeptiLongEnergyHandler septiLongEnergyHandler) {
+            SeptiLong energyStored = septiLongEnergyHandler.getEnergyStored();
+            SeptiLong maxEnergyStored = septiLongEnergyHandler.getMaxEnergyStored();
+
+            stored = (int) (energyStored.divideAndGetFloat(maxEnergyStored) * BAR_SIZE[1]);
+        } else {
+            int energyStored = energyStorage.getEnergyStored();
+            int maxEnergyStored = energyStorage.getMaxEnergyStored();
+
+            stored = (int) ((energyStored / (float) maxEnergyStored) * BAR_SIZE[1]);
+        }
+        return stored;
     }
 }
