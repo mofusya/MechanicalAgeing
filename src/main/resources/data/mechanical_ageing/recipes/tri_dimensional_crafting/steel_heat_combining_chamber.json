@@ -1,0 +1,25 @@
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "pattern": [
+    "%#%###%#%",
+    "I#I#F#I#I",
+    "I#I# #I#I"
+  ],
+  "key": {
+    "F": {
+      "item": "mechanical_ageing:brick_heat_combining_chamber"
+    },
+    "#": {
+      "item": "mechanical_ageing:steel"
+    },
+    "%": {
+      "item": "mechanical_ageing:compressed_steel"
+    },
+    "I": {
+      "item": "mechanical_ageing:tungsten_ingot"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:steel_heat_combining_chamber"
+  }
+}

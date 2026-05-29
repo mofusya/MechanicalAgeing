@@ -1,0 +1,17 @@
+{
+  "parent": "mechanical_ageing:block/multi_layered_machine_block",
+  "textures": {
+    "background": "mechanical_ageing:block/compressed_block",
+    "base_front": "minecraft:block/fire_0",
+    "base_side": "minecraft:block/fire_0",
+    "frame_bottom": "mechanical_ageing:block/machine/frame_bottom",
+    "frame_side": "mechanical_ageing:block/machine/frame_side",
+    "frame_top": "mechanical_ageing:block/machine/frame_top",
+    "main_crystal_side": "mechanical_ageing:block/machine/upper_crystal",
+    "main_crystal_vert": "mechanical_ageing:block/machine/crystal",
+    "particle": "minecraft:block/fire_0",
+    "side_side": "mechanical_ageing:block/machine/side",
+    "sub_crystal_side": "mechanical_ageing:block/machine/lower_crystal",
+    "sub_crystal_vert": "mechanical_ageing:block/machine/crystal"
+  }
+}

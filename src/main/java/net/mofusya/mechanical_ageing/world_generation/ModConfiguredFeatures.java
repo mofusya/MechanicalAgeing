@@ -30,7 +30,7 @@ public class ModConfiguredFeatures {
                     OreConfiguration.target(stoneReplaceables, metalSet.ore().defaultBlockState()),
                     OreConfiguration.target(deepslateReplaceables, metalSet.deepslateOre().defaultBlockState()));
 
-            register(context, metalSet.getOreKey(), Feature.ORE, new OreConfiguration(ores, 6));
+            register(context, metalSet.getOreKey(), Feature.ORE, new OreConfiguration(ores, 8));
         }
     }
 

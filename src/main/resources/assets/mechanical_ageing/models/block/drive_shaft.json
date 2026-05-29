@@ -1,0 +1,21 @@
+{
+	"parent": "block/block",
+	"textures": {
+		"shaft": "mechanical_ageing:block/drive_shaft",
+		"particle": "mechanical_ageing:block/drive_shaft"
+	},
+	"elements": [
+		{
+			"from": [6, 0, 6],
+			"to": [10, 16, 10],
+			"faces": {
+				"north": {"uv": [0, 0, 3, 16], "texture": "#shaft"},
+				"east": {"uv": [3, 0, 6, 16], "texture": "#shaft"},
+				"south": {"uv": [6, 0, 9, 16], "texture": "#shaft"},
+				"west": {"uv": [9, 0, 12, 16], "texture": "#shaft"},
+				"up": {"uv": [15, 3, 12, 0], "texture": "#shaft"},
+				"down": {"uv": [15, 3, 12, 6], "texture": "#shaft"}
+			}
+		}
+	]
+}

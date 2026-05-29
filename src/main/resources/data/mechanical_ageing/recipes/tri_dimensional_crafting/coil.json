@@ -1,0 +1,22 @@
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "pattern": [
+    " I  %  I ",
+    "% II#II %",
+    " I  I  I "
+  ],
+  "key": {
+    "#": {
+      "item": "mechanical_ageing:drive_shaft"
+    },
+    "I": {
+      "item": "mechanical_ageing:copper_ingot"
+    },
+    "%": {
+      "item": "mechanical_ageing:copper_chunk"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:coil"
+  }
+}

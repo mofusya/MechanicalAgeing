@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 @FieldsAreNonNullByDefault
 @ParametersAreNonNullByDefault
-public class MachineDirectionHandler {
+public abstract class MachineDirectionHandler {
     private final DirectionType[] itemDirection;
     private final DirectionType[] matterDirection;
     private final DirectionType[] energyDirection;
-    private DirectionType fluidDirection = DirectionType.UP;
+    private DirectionType fluidDirection = DirectionType.NONE;
 
     public MachineDirectionHandler(int itemCount, int matteCount, int energyCount) {
         this.itemDirection = new DirectionType[itemCount];
@@ -29,6 +29,7 @@ public class MachineDirectionHandler {
 
     public void setItemDirection(int slot, DirectionType direction) {
         this.itemDirection[slot] = direction;
+        this.onChange();
     }
 
     public ArrayList<Integer> getItemSlots(DirectionType direction){
@@ -49,6 +50,7 @@ public class MachineDirectionHandler {
 
     public void setMatterDirection(int slot, DirectionType direction) {
         this.matterDirection[slot] = direction;
+        this.onChange();
     }
 
     public ArrayList<Integer> getMatterSlots(DirectionType direction){
@@ -66,9 +68,11 @@ public class MachineDirectionHandler {
 
     public void setFluidDirection(DirectionType direction) {
         this.fluidDirection = direction;
+        this.onChange();
     }
 
     public DirectionType getEnergyDirection(int slot) {
+
         if (this.energyDirection[slot] == null) {
             this.energyDirection[slot] = DirectionType.NONE;
         }
@@ -77,6 +81,7 @@ public class MachineDirectionHandler {
 
     public void setEnergyDirection(int slot, DirectionType direction) {
         this.energyDirection[slot] = direction;
+        this.onChange();
     }
 
     public ArrayList<Integer> getEnergySlots(DirectionType direction){
@@ -116,4 +121,6 @@ public class MachineDirectionHandler {
             this.setEnergyDirection(i, DirectionType.valueOf(tag.getString("direction_handler_energy" + i)));
         }
     }
+
+    public abstract void onChange();
 }

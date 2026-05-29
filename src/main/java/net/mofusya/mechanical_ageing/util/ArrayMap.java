@@ -1,5 +1,7 @@
 package net.mofusya.mechanical_ageing.util;
 
+import org.checkerframework.checker.units.qual.K;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -7,6 +9,13 @@ import java.util.function.BiConsumer;
 public class ArrayMap<KEY, VALUE> {
     private final ArrayList<KEY> keys = new ArrayList<>();
     private final ArrayList<VALUE> values = new ArrayList<>();
+
+    public ArrayMap() {
+    }
+
+    public ArrayMap(ArrayMap<KEY, VALUE> arrayMap) {
+        this.putAll(arrayMap);
+    }
 
     public void put(KEY key, VALUE value) {
         if (this.keys.contains(key)) {
@@ -22,7 +31,9 @@ public class ArrayMap<KEY, VALUE> {
     }
 
     public VALUE get(KEY key) {
-        return this.values.get(this.keys.indexOf(key));
+        int index = this.keys.indexOf(key);
+        if (index < 0) return null;
+        return this.values.get(index);
     }
 
     public final List<KEY> getKeys(VALUE pValue) {

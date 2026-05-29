@@ -103,11 +103,11 @@ public class MachineBlockStateBuilder {
         return this.topBaseTexture(this.getBlockLoc(), suffix);
     }
 
-    public MachineBlockStateBuilder topBaseTexture(String path, boolean suffix) {
+    public MachineBlockStateBuilder topBaseTexture(@NotNull String path, boolean suffix) {
         return this.topBaseTexture(new ResourceLocation(MAg.MOD_ID, path), suffix);
     }
 
-    public MachineBlockStateBuilder topBaseTexture(String namespace, String path, boolean suffix) {
+    public MachineBlockStateBuilder topBaseTexture(@NotNull String namespace, @NotNull String path, boolean suffix) {
         return this.topBaseTexture(new ResourceLocation(namespace, path), suffix);
     }
 
@@ -120,11 +120,11 @@ public class MachineBlockStateBuilder {
         return this.sideBaseTexture(this.getBlockLoc(), suffix);
     }
 
-    public MachineBlockStateBuilder sideBaseTexture(String path, boolean suffix) {
+    public MachineBlockStateBuilder sideBaseTexture(@NotNull String path, boolean suffix) {
         return this.sideBaseTexture(new ResourceLocation(MAg.MOD_ID, path), suffix);
     }
 
-    public MachineBlockStateBuilder sideBaseTexture(String namespace, String path, boolean suffix) {
+    public MachineBlockStateBuilder sideBaseTexture(@NotNull String namespace, @NotNull String path, boolean suffix) {
         return this.sideBaseTexture(new ResourceLocation(namespace, path), suffix);
     }
 
@@ -137,11 +137,11 @@ public class MachineBlockStateBuilder {
         return this.frontBaseTexture(this.getBlockLoc(), suffix);
     }
 
-    public MachineBlockStateBuilder frontBaseTexture(String path, boolean suffix) {
+    public MachineBlockStateBuilder frontBaseTexture(@NotNull String path, boolean suffix) {
         return this.frontBaseTexture(new ResourceLocation(MAg.MOD_ID, path), suffix);
     }
 
-    public MachineBlockStateBuilder frontBaseTexture(String namespace, String path, boolean suffix) {
+    public MachineBlockStateBuilder frontBaseTexture(@NotNull String namespace, @NotNull String path, boolean suffix) {
         return this.frontBaseTexture(new ResourceLocation(namespace, path), suffix);
     }
 
@@ -154,11 +154,11 @@ public class MachineBlockStateBuilder {
         return this.bottomBaseTexture(this.getBlockLoc(), suffix);
     }
 
-    public MachineBlockStateBuilder bottomBaseTexture(String path, boolean suffix) {
+    public MachineBlockStateBuilder bottomBaseTexture(@NotNull String path, boolean suffix) {
         return this.bottomBaseTexture(new ResourceLocation(MAg.MOD_ID, path), suffix);
     }
 
-    public MachineBlockStateBuilder bottomBaseTexture(String namespace, String path, boolean suffix) {
+    public MachineBlockStateBuilder bottomBaseTexture(@NotNull String namespace, @NotNull String path, boolean suffix) {
         return this.bottomBaseTexture(new ResourceLocation(namespace, path), suffix);
     }
 
@@ -171,11 +171,11 @@ public class MachineBlockStateBuilder {
         return this.coverTexture(this.getBlockLoc(), suffix);
     }
 
-    public MachineBlockStateBuilder coverTexture(String path, boolean suffix) {
+    public MachineBlockStateBuilder coverTexture(@NotNull String path, boolean suffix) {
         return this.coverTexture(new ResourceLocation(MAg.MOD_ID, path), suffix);
     }
 
-    public MachineBlockStateBuilder coverTexture(String nameSpace, String path, boolean suffix) {
+    public MachineBlockStateBuilder coverTexture(@NotNull String nameSpace, @NotNull String path, boolean suffix) {
         return this.coverTexture(new ResourceLocation(nameSpace, path), suffix);
     }
 
@@ -205,11 +205,11 @@ public class MachineBlockStateBuilder {
         return this.topCoverTexture(this.getBlockLoc(), suffix);
     }
 
-    public MachineBlockStateBuilder topCoverTexture(String path, boolean suffix) {
+    public MachineBlockStateBuilder topCoverTexture(@NotNull String path, boolean suffix) {
         return this.topCoverTexture(new ResourceLocation(MAg.MOD_ID, path), suffix);
     }
 
-    public MachineBlockStateBuilder topCoverTexture(String nameSpace, String path, boolean suffix) {
+    public MachineBlockStateBuilder topCoverTexture(@NotNull String nameSpace, @NotNull String path, boolean suffix) {
         return this.topCoverTexture(new ResourceLocation(nameSpace, path), suffix);
     }
 
@@ -222,11 +222,11 @@ public class MachineBlockStateBuilder {
         return this.sideCoverTexture(this.getBlockLoc(), suffix);
     }
 
-    public MachineBlockStateBuilder sideCoverTexture(String path, boolean suffix) {
+    public MachineBlockStateBuilder sideCoverTexture(@NotNull String path, boolean suffix) {
         return this.sideCoverTexture(new ResourceLocation(MAg.MOD_ID, path), suffix);
     }
 
-    public MachineBlockStateBuilder sideCoverTexture(String nameSpace, String path, boolean suffix) {
+    public MachineBlockStateBuilder sideCoverTexture(@NotNull String nameSpace, @NotNull String path, boolean suffix) {
         return this.sideCoverTexture(new ResourceLocation(nameSpace, path), suffix);
     }
 
@@ -239,11 +239,11 @@ public class MachineBlockStateBuilder {
         return this.frontCoverTexture(this.getBlockLoc(), suffix);
     }
 
-    public MachineBlockStateBuilder frontCoverTexture(String path, boolean suffix) {
+    public MachineBlockStateBuilder frontCoverTexture(@NotNull String path, boolean suffix) {
         return this.frontCoverTexture(new ResourceLocation(MAg.MOD_ID, path), suffix);
     }
 
-    public MachineBlockStateBuilder frontCoverTexture(String nameSpace, String path, boolean suffix) {
+    public MachineBlockStateBuilder frontCoverTexture(@NotNull String nameSpace, @NotNull String path, boolean suffix) {
         return this.frontCoverTexture(new ResourceLocation(nameSpace, path), suffix);
     }
 
@@ -256,11 +256,11 @@ public class MachineBlockStateBuilder {
         return this.bottomCoverTexture(this.getBlockLoc(), suffix);
     }
 
-    public MachineBlockStateBuilder bottomCoverTexture(String path, boolean suffix) {
+    public MachineBlockStateBuilder bottomCoverTexture(@NotNull String path, boolean suffix) {
         return this.bottomCoverTexture(new ResourceLocation(MAg.MOD_ID, path), suffix);
     }
 
-    public MachineBlockStateBuilder bottomCoverTexture(String nameSpace, String path, boolean suffix) {
+    public MachineBlockStateBuilder bottomCoverTexture(@NotNull String nameSpace, @NotNull String path, boolean suffix) {
         return this.bottomCoverTexture(new ResourceLocation(nameSpace, path), suffix);
     }
 

@@ -2,7 +2,6 @@ package net.mofusya.mechanical_ageing.machinetiles;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.ChatFormatting;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.ImageButton;
@@ -57,10 +56,13 @@ import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.machinetiles.util.MouseUtil;
+import net.mofusya.mechanical_ageing.machinetiles.watt.WattSlotProperties;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.tag.MAgTags;
 import net.mofusya.mechanical_ageing.tiles.BgTileType;
+import net.mofusya.mechanical_ageing.tiles.MAgCapabilities;
 import net.mofusya.mechanical_ageing.util.annotations.FieldsAreNonNullByDefault;
+import net.mofusya.mechanical_ageing.util.annotations.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -71,7 +73,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 @FieldsAreNonNullByDefault
-@MethodsReturnNonnullByDefault
+@MethodsReturnNonNullByDefault
 public abstract class MachineTile {
     private final Supplier<RegistryObject<Block>> block;
     private final Supplier<RegistryObject<BlockEntityType<MachineBlockEntity>>> blockEntity;
@@ -98,6 +100,7 @@ public abstract class MachineTile {
         this.matterIOHandler(level, pos, state, matterHandler, directionHandler);
     }
 
+    //PUSH
     private void energyIOHandler(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity, MachineDirectionHandler directionHandler) {
         for (int i = 0; i < this.getEnergySlots().size(); i++) {
             IEnergyStorage energyStorage = blockEntity.getEnergyStorage(i);
@@ -123,6 +126,7 @@ public abstract class MachineTile {
         }
     }
 
+    //PULL
     private void matterIOHandler(Level level, BlockPos pos, BlockState state, MatterHandler matterHandler, MachineDirectionHandler directionHandler) {
         if (matterHandler != null) {
             for (int i = 0; i < matterHandler.size(); i++) {
@@ -171,7 +175,7 @@ public abstract class MachineTile {
     }
 
     public ArrayList<Integer> getNoneIOSlots() {
-        if (this.getUpgradeArchiveSlot() >= 0){
+        if (this.getUpgradeArchiveSlot() >= 0) {
             return new ArrayList<>(List.of(this.getUpgradeArchiveSlot()));
         }
         return new ArrayList<>();
@@ -187,6 +191,11 @@ public abstract class MachineTile {
 
     @Nullable
     public FluidSlotProperties getFluidSlot() {
+        return null;
+    }
+
+    @Nullable
+    public WattSlotProperties getWattSlot() {
         return null;
     }
 

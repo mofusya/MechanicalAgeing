@@ -2,6 +2,7 @@ package net.mofusya.mechanical_ageing.jei.category;
 
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -24,6 +25,11 @@ public class FuelCategory extends MAgCategory<FuelRecipe> {
     public void getElements(FuelRecipe recipe, ElementList elements) {
         elements.addIngredient(Ingredient.EMPTY, recipe.getIngredient());
         elements.addMatter(recipe.getResult());
+    }
+
+    @Override
+    public Component getTitle() {
+        return Component.translatable("recipe.mechanical_ageing.fuel");
     }
 
     @Override

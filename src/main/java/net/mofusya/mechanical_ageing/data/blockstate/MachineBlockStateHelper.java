@@ -1,5 +1,7 @@
 package net.mofusya.mechanical_ageing.data.blockstate;
 
+import net.minecraft.resources.ResourceLocation;
+import net.mofusya.mechanical_ageing.alloyset.MAgAlloySets;
 import net.mofusya.mechanical_ageing.machinetiles.MachineObject;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
 import net.mofusya.mechanical_ageing.tiles.MAgMachines;
@@ -43,6 +45,67 @@ public class MachineBlockStateHelper {
                 .frameColor(0x8D6E63)
                 .upperCrystalColor(MAgMetalSets.OSMIUM.color())
                 .sideColor(0x4E342E)
+        );
+
+        builderList.add(builder(MAgMachines.BRICK_HEAT_COMBINING_CHAMBER)
+                .baseTexture("minecraft", "block/lava_still", false)
+                .topBaseTexture("block/reinforced_bricks", false)
+                .bottomBaseTexture("block/reinforced_bricks", false)
+                .frameColor(0x8D6E63)
+                .upperCrystalColor(MAgMetalSets.TITANIUM.color())
+                .sideColor(0x4E342E)
+        );
+
+        builderList.add(builder(MAgMachines.STEEL_BURNING_CHAMBER)
+                .background("block/compressed_block", false)
+                .backgroundColor(MAgAlloySets.STEEL.color())
+                .baseTexture("minecraft", "block/fire_0", false)
+                .topBaseTexture((ResourceLocation) null, false)
+                .bottomBaseTexture((ResourceLocation) null, false)
+                .frameColor(MAgAlloySets.STEEL.color())
+                .upperCrystalColor(MAgAlloySets.STEEL.color())
+                .lowerCrystalColor(MAgAlloySets.STEEL.color())
+                .sideColor(MAgMetalSets.TUNGSTEN.color())
+        );
+
+        builderList.add(builder(MAgMachines.STEEL_SMELTING_CHAMBER)
+                .background("block/compressed_block", false)
+                .backgroundColor(MAgAlloySets.STEEL.color())
+                .baseTexture("minecraft", "block/lava_still", false)
+                .bottomBaseTexture((ResourceLocation) null, false)
+                .frameColor(MAgAlloySets.STEEL.color())
+                .upperCrystalColor(MAgMetalSets.TUNGSTEN.color())
+                .sideColor(MAgAlloySets.STEEL.color())
+        );
+
+        builderList.add(builder(MAgMachines.STEEL_HEAT_COMBINING_CHAMBER)
+                .background("block/compressed_block", false)
+                .backgroundColor(MAgAlloySets.STEEL.color())
+                .baseTexture("minecraft", "block/lava_still", false)
+                .topBaseTexture((ResourceLocation) null, false)
+                .bottomBaseTexture((ResourceLocation) null, false)
+                .frameColor(MAgAlloySets.STEEL.color())
+                .upperCrystalColor(MAgAlloySets.STEEL.color())
+                .sideColor(MAgMetalSets.TUNGSTEN.color())
+        );
+
+        builderList.add(builder(MAgMachines.STEEL_HEATING_CHAMBER)
+                .background("block/compressed_block", false)
+                .backgroundColor(MAgAlloySets.STEEL.color())
+                .frameColor(MAgAlloySets.STEEL.color())
+                .upperCrystalColor(MAgAlloySets.STEEL.color())
+                .lowerCrystalColor(MAgAlloySets.STEEL.color())
+                .sideColor(MAgMetalSets.TUNGSTEN.color())
+        );
+
+        builderList.add(builder(MAgMachines.IMPULSE_TURBINE)
+                .background("block/compressed_block", false)
+                .backgroundColor(MAgAlloySets.STEEL.color() - 0x202020)
+                .coverTexture("block/impulse_turbine_shaft", false)
+                .bottomCoverTexture((ResourceLocation) null, false)
+                .topCoverTexture((ResourceLocation) null, false)
+                .frameColor(MAgAlloySets.STEEL.color())
+                .sideColor(MAgMetalSets.TUNGSTEN.color())
         );
 
         return builderList;

@@ -20,11 +20,11 @@ public class ToppedAttributedItem extends AttributedItem {
         for (String attribute : this.display) {
             String value = "";
             if (this.integerAttribute.containsKey(attribute)) {
-                value = String.valueOf(this.getIntegerAttribute(attribute) == Integer.MAX_VALUE ? "ℵ₀" : this.getIntegerAttribute(attribute));
+                value = String.valueOf(this.getIntegerAttribute(attribute) == -1 ? "ℵ₀" : this.getIntegerAttribute(attribute));
             } else if (this.doubleAttribute.containsKey(attribute)) {
-                value = String.valueOf(this.getDoubleAttribute(attribute) == Double.MAX_VALUE ? "ℵ₀" : this.getDoubleAttribute(attribute));
+                value = String.valueOf(this.getDoubleAttribute(attribute) == -1 ? "ℵ₀" : this.getDoubleAttribute(attribute));
             } else if (this.floatAttribute.containsKey(attribute)) {
-                value = String.valueOf(this.getFloatAttribute(attribute) == Float.MAX_VALUE ? "ℵ₀" : this.getFloatAttribute(attribute));
+                value = String.valueOf(this.getFloatAttribute(attribute) == -1 ? "ℵ₀" : this.getFloatAttribute(attribute));
             } else if (this.booleanAttribute.containsKey(attribute)) {
                 value = String.valueOf(this.getBooleanAttribute(attribute));
             } else if (this.stringAttribute.containsKey(attribute)) {

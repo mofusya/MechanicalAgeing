@@ -1,3 +1,3 @@
-// 1.20.1	2026-05-12T15:14:56.1050986	Tags for minecraft:block mod id mechanical_ageing
-181e91f2588dcefdc92f4c30733fe3ab1d714ea1 data/minecraft/tags/blocks/mineable/pickaxe.json
-85d328bc30cea1da7906b521fc39b8546ce3fc2d data/minecraft/tags/blocks/needs_iron_tool.json
+// 1.20.1	2026-05-27T00:34:09.9159949	Tags for minecraft:block mod id mechanical_ageing
+14c4f1fd441f0a91d199b528db5b1e20bcd5b9f9 data/minecraft/tags/blocks/mineable/pickaxe.json
+bc1da63f80189188cc0c9644cfa79f24355ae575 data/minecraft/tags/blocks/needs_iron_tool.json

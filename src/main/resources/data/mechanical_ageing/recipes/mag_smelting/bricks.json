@@ -1,0 +1,15 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 400
+  },
+  "ingredient": {
+    "item": "minecraft:clay"
+  },
+  "result": {
+    "item": "minecraft:bricks",
+    "count": 4
+  },
+  "smeltTime": 200
+}

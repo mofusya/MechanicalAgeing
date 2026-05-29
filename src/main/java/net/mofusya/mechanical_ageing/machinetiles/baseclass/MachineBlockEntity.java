@@ -29,7 +29,6 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
-import net.mofusya.mechanical_ageing.machinetiles.MAgCapabilities;
 import net.mofusya.mechanical_ageing.machinetiles.direction.DirectionType;
 import net.mofusya.mechanical_ageing.machinetiles.direction.MachineDirectionHandler;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotList;
@@ -39,6 +38,7 @@ import net.mofusya.mechanical_ageing.machinetiles.matter.LimitedMatterHandler;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterHandler;
 import net.mofusya.mechanical_ageing.machinetiles.slot.LimitedItemHandler;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
+import net.mofusya.mechanical_ageing.tiles.MAgCapabilities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -152,7 +152,13 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
             this.lazyFluidHandler = null;
         }
 
-        this.directionHandler = new MachineDirectionHandler(machineTile.getSlots().size(), machineTile.getMatterSlots().size(), machineTile.getEnergySlots().size());
+        this.directionHandler = new MachineDirectionHandler(machineTile.getSlots().size(), machineTile.getMatterSlots().size(), machineTile.getEnergySlots().size()) {
+            @Override
+            public void onChange() {
+                MachineBlockEntity.this.setChanged();
+                MachineBlockEntity.this.getLevel().sendBlockUpdated(MachineBlockEntity.this.getBlockPos(), MachineBlockEntity.this.getBlockState(), MachineBlockEntity.this.getBlockState(), 3);
+            }
+        };
     }
 
     public void tick(Level level, BlockPos pos, BlockState state) {
@@ -183,7 +189,7 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (this.getLevel() == null) return super.getCapability(cap, side);
 
-        if (side == null){
+        if (side == null) {
             EnergySlotList energySlots = this.machineTile.getEnergySlots();
             for (int i = 0; i < energySlots.size(); i++) {
                 if (cap == energySlots.get(i).energyType().getCapability()) {
@@ -195,7 +201,7 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
                 return this.lazyMatterHandler.cast();
             }
 
-            if (cap == ForgeCapabilities.FLUID_HANDLER && this.fluidTank != null){
+            if (cap == ForgeCapabilities.FLUID_HANDLER && this.fluidTank != null) {
                 return this.lazyFluidHandler.cast();
             }
 
@@ -219,7 +225,7 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
             return LazyOptional.of(() -> new LimitedMatterHandler((MatterHandler) this.matterHandler, this.getDirectionHandler().getMatterSlots(combinedDirection))).cast();
         }
 
-        if (cap == ForgeCapabilities.FLUID_HANDLER && this.fluidTank != null && this.getDirectionHandler().getFluidDirection().equals(combinedDirection)){
+        if (cap == ForgeCapabilities.FLUID_HANDLER && this.fluidTank != null && this.getDirectionHandler().getFluidDirection().equals(combinedDirection)) {
             return this.lazyFluidHandler.cast();
         }
 
@@ -241,11 +247,11 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
             this.lazyEnergyHandler.set(i, LazyOptional.of(() -> this.energyStorages.get(finalI)));
         }
 
-        if (this.lazyMatterHandler != null){
+        if (this.lazyMatterHandler != null) {
             this.lazyMatterHandler = LazyOptional.of(() -> this.matterHandler);
         }
 
-        if (this.lazyFluidHandler != null){
+        if (this.lazyFluidHandler != null) {
             this.lazyFluidHandler = LazyOptional.of(() -> this.fluidTank);
         }
     }
@@ -266,7 +272,7 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
             this.lazyMatterHandler.invalidate();
         }
 
-        if (this.lazyFluidHandler != null){
+        if (this.lazyFluidHandler != null) {
             this.lazyFluidHandler.invalidate();
         }
     }
@@ -277,14 +283,15 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
 
         EnergySlotList energySlots = this.machineTile.getEnergySlots();
         for (int i = 0; i < energySlots.size(); i++) {
-            tag.putInt("energy_storage_" + (i + 1), this.energyStorages.get(i).getEnergyStored());
+            EnergySlotProperties energySlot = energySlots.get(i);
+            energySlot.energyType().serializeNBT(this.energyStorages.get(i), tag, "energy_storage_" + (i + 1));
         }
 
         if (this.matterHandler != null) {
             tag = ((MatterHandler) this.matterHandler).serializeNBT(tag);
         }
 
-        if (this.fluidTank != null){
+        if (this.fluidTank != null) {
             tag = fluidTank.writeToNBT(tag);
         }
 
@@ -300,19 +307,15 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
 
         EnergySlotList energySlots = this.machineTile.getEnergySlots();
         for (int i = 0; i < energySlots.size(); i++) {
-            EnergySlotProperties energy = energySlots.get(i);
-            var energyStorage = energySlots.get(i).energyType().getStorage().apply(() -> {
-                MachineBlockEntity.this.setChanged();
-                MachineBlockEntity.this.getLevel().sendBlockUpdated(MachineBlockEntity.this.getBlockPos(), MachineBlockEntity.this.getBlockState(), MachineBlockEntity.this.getBlockState(), 3);
-            }, energy.capacity(), energy.maxReceive(), energy.maxExtract(), tag.getInt("energy_storage_" + (i + 1)));
-            this.energyStorages.set(i, energyStorage);
+            EnergySlotProperties energySlot = energySlots.get(i);
+            energySlot.energyType().deserializeNBT(this.energyStorages.get(i), tag, "energy_storage_" + (i + 1));
         }
 
         if (this.matterHandler != null) {
             ((MatterHandler) this.matterHandler).deserializeNBT(tag);
         }
 
-        if (this.fluidTank != null){
+        if (this.fluidTank != null) {
             this.fluidTank.readFromNBT(tag);
         }
 
@@ -388,9 +391,9 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
     }
 
     //Helpers
-    public static DirectionType getCombinedDirection(Direction baseDirection, Direction direction){
-        return switch (baseDirection){
-            case NORTH -> switch (direction){
+    public static DirectionType getCombinedDirection(Direction baseDirection, Direction direction) {
+        return switch (baseDirection) {
+            case NORTH -> switch (direction) {
                 case NORTH -> DirectionType.BACK;
                 case SOUTH -> DirectionType.FRONT;
                 case WEST -> DirectionType.RIGHT;
@@ -398,7 +401,7 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
                 case UP -> DirectionType.UP;
                 case DOWN -> DirectionType.DOWN;
             };
-            case SOUTH -> switch (direction){
+            case SOUTH -> switch (direction) {
                 case NORTH -> DirectionType.FRONT;
                 case SOUTH -> DirectionType.BACK;
                 case WEST -> DirectionType.LEFT;
@@ -406,7 +409,7 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
                 case UP -> DirectionType.UP;
                 case DOWN -> DirectionType.DOWN;
             };
-            case WEST -> switch (direction){
+            case WEST -> switch (direction) {
                 case NORTH -> DirectionType.LEFT;
                 case SOUTH -> DirectionType.RIGHT;
                 case WEST -> DirectionType.BACK;
@@ -414,7 +417,7 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
                 case UP -> DirectionType.UP;
                 case DOWN -> DirectionType.DOWN;
             };
-            case EAST -> switch (direction){
+            case EAST -> switch (direction) {
                 case NORTH -> DirectionType.RIGHT;
                 case SOUTH -> DirectionType.LEFT;
                 case WEST -> DirectionType.FRONT;

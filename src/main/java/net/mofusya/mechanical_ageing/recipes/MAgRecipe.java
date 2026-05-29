@@ -11,6 +11,7 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.mofusya.mechanical_ageing.matter.LazyMatterStack;
+import net.mofusya.mechanical_ageing.matter.LazyMatterType;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.util.ArrayMap;
 import net.mofusya.ornatelib.lang.SeptiLong;
@@ -137,6 +138,33 @@ public abstract class MAgRecipe implements Recipe<MAgContainer> {
         return new LazyMatterStack(type, amount, tags);
     }
 
+    protected static LazyMatterType readMatterType(JsonObject json, String id) {
+        JsonObject matter = GsonHelper.getAsJsonObject(json, id);
+        ResourceLocation type = new ResourceLocation(GsonHelper.getAsString(matter, "type"));
+
+        ArrayMap<String, String> tags = new ArrayMap<>();
+        JsonArray tagsJson = matter.getAsJsonArray("tags");
+        if (tagsJson != null) {
+            tagsJson.forEach(tag -> {
+                JsonObject tagJson = tag.getAsJsonObject();
+                tags.put(GsonHelper.getAsString(tagJson, "key"), GsonHelper.getAsString(tagJson, "value"));
+            });
+        }
+
+        return new LazyMatterType(type, tags);
+    }
+
+    protected static LazyMatterType readMatterType(FriendlyByteBuf buf) {
+        ResourceLocation type = buf.readResourceLocation();
+        int tagsSize = buf.readInt();
+        ArrayMap<String, String> tags = new ArrayMap<>();
+        for (int i = 0; i < tagsSize; i++) {
+            tags.put(buf.readResourceLocation().getPath(), buf.readResourceLocation().getPath());
+        }
+
+        return new LazyMatterType(type, tags);
+    }
+
     protected static int readInt(JsonObject json, String id) {
         return GsonHelper.getAsInt(json, id);
     }
@@ -163,6 +191,15 @@ public abstract class MAgRecipe implements Recipe<MAgContainer> {
     protected static void writeToBuf(FriendlyByteBuf buf, LazyMatterStack matterStack) {
         buf.writeResourceLocation(matterStack.type());
         writeToBuf(buf, matterStack.amount());
+        buf.writeInt(matterStack.tags().size());
+        matterStack.tags().forEach((key, value) -> {
+            buf.writeResourceLocation(new ResourceLocation("null_404", key));
+            buf.writeResourceLocation(new ResourceLocation("null_404", value));
+        });
+    }
+
+    protected static void writeToBuf(FriendlyByteBuf buf, LazyMatterType matterStack) {
+        buf.writeResourceLocation(matterStack.type());
         buf.writeInt(matterStack.tags().size());
         matterStack.tags().forEach((key, value) -> {
             buf.writeResourceLocation(new ResourceLocation("null_404", key));

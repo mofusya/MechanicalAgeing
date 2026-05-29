@@ -30,7 +30,7 @@ public final class MatterStack {
 
     public MatterStack(@Nullable MatterType type, @NotNull SeptiLong amount, @Nullable ArrayMap<String, String> tags) {
         this.type = type;
-        this.amount = amount;
+        this.amount = amount.copy();
         this.tags = tags == null ? new ArrayMap<>() : tags;
     }
 

@@ -1,0 +1,27 @@
+{
+  "type": "mechanical_ageing:heating",
+  "ingredient": {
+    "type": "mechanical_ageing:water",
+    "amount": {
+      "digit": "ONE",
+      "multiplier": 1
+    }
+  },
+  "heatAmount":{
+    "digit": "ONE",
+    "multiplier": 100
+  },
+  "result": {
+    "type": "mechanical_ageing:water_vapor",
+    "amount": {
+      "digit": "HUNDRED",
+      "multiplier": 17
+    },
+    "tags": [
+      {
+        "key": "mechanical_ageing.tier",
+        "value": "1"
+      }
+    ]
+  }
+}

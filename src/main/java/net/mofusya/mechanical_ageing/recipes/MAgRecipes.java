@@ -1,14 +1,12 @@
 package net.mofusya.mechanical_ageing.recipes;
 
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MAg;
-import net.mofusya.mechanical_ageing.recipes.recipe.FuelRecipe;
-import net.mofusya.mechanical_ageing.recipes.recipe.MatterBurningRecipe;
-import net.mofusya.mechanical_ageing.recipes.recipe.SmeltingRecipe;
-import net.mofusya.mechanical_ageing.recipes.recipe.TriDimCraftingRecipe;
+import net.mofusya.mechanical_ageing.recipes.recipe.*;
 
 public class MAgRecipes {
     public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
@@ -25,4 +23,13 @@ public class MAgRecipes {
 
     public static final RegistryObject<RecipeSerializer<SmeltingRecipe>> SMELTING =
             SERIALIZERS.register("smelting", () -> SmeltingRecipe.Serializer.INSTANCE);
+
+    public static final RegistryObject<RecipeSerializer<AlloyingRecipe>> ALLOYING =
+            SERIALIZERS.register("alloying", () -> AlloyingRecipe.Serializer.INSTANCE);
+
+    public static final RegistryObject<RecipeSerializer<HeatingRecipe>> HEATING =
+            SERIALIZERS.register("heating", () -> HeatingRecipe.Serializer.INSTANCE);
+
+    public static final RegistryObject<RecipeSerializer<TurbineRotatingRecipe>> TURBINE_ROTATING =
+            SERIALIZERS.register("turbine_rotating", () -> TurbineRotatingRecipe.Serializer.INSTANCE);
 }

@@ -1,0 +1,16 @@
+{
+  "type": "mechanical_ageing:turbine_rotating",
+  "ingredient": {
+    "type": "mechanical_ageing:water_vapor",
+    "tags": [
+      {
+        "key": "mechanical_ageing.tier",
+        "value": "1"
+      }
+    ]
+  },
+  "result": {
+    "digit": "TEN",
+    "multiplier": 2
+  }
+}

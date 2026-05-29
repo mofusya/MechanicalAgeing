@@ -1,0 +1,16 @@
+{
+  "parent": "mechanical_ageing:block/multi_layered_machine_block",
+  "textures": {
+    "base_bottom": "minecraft:block/oak_planks",
+    "base_front": "minecraft:block/crafting_table_side",
+    "base_side": "minecraft:block/crafting_table_side",
+    "base_top": "minecraft:block/crafting_table_top",
+    "frame_bottom": "mechanical_ageing:block/machine/frame_bottom",
+    "frame_side": "mechanical_ageing:block/machine/frame_side",
+    "frame_top": "mechanical_ageing:block/machine/frame_top",
+    "main_crystal_side": "mechanical_ageing:block/machine/upper_crystal",
+    "main_crystal_vert": "mechanical_ageing:block/machine/crystal",
+    "particle": "minecraft:block/crafting_table_side",
+    "side_side": "mechanical_ageing:block/machine/side"
+  }
+}

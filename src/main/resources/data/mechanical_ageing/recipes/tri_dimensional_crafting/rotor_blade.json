@@ -1,0 +1,19 @@
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "pattern": [
+    "    #    ",
+    "   #%#   ",
+    "    #    "
+  ],
+  "key": {
+    "#": {
+      "item": "mechanical_ageing:titanium_ingot"
+    },
+    "%": {
+      "item": "mechanical_ageing:drive_shaft"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:rotor_blade"
+  }
+}

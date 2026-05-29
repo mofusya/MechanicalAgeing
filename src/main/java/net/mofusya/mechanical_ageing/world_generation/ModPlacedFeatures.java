@@ -24,7 +24,7 @@ public class ModPlacedFeatures {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
-            register(context, metalSet.getOrePlacedKey(), configuredFeatures.getOrThrow(metalSet.getOreKey()), ModOrePlacement.commonOrePlacement(8,
+            register(context, metalSet.getOrePlacedKey(), configuredFeatures.getOrThrow(metalSet.getOreKey()), ModOrePlacement.commonOrePlacement(16,
                     HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(32))
             ));
         }

@@ -58,7 +58,7 @@ public class MAg {
             ItemBlockRenderTypes.setRenderLayer(metalSet.deepslateOre(), RenderType.cutout());
         }
 
-        for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST){
+        for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST) {
             ItemBlockRenderTypes.setRenderLayer(builder.getBlock(), RenderType.cutout());
         }
     }
@@ -75,8 +75,8 @@ public class MAg {
 
         @SubscribeEvent
         public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
-            for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST){
-                event.register((state, getter, pos, tintIndex) -> switch (tintIndex){
+            for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST) {
+                event.register((state, getter, pos, tintIndex) -> switch (tintIndex) {
                     case 0 -> builder.getFrameColor() == -404 ? 0xFFFFFF : builder.getFrameColor();
                     case 1 -> builder.getSideColor() == -404 ? 0xFFFFFF : builder.getSideColor();
                     case 2 -> builder.getUpperCrystalColor() == -404 ? 0xFFFFFF : builder.getUpperCrystalColor();
@@ -126,8 +126,8 @@ public class MAg {
 
         @SubscribeEvent
         public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-            for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST){
-                event.register((itemStack, tintIndex) -> switch (tintIndex){
+            for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST) {
+                event.register((itemStack, tintIndex) -> switch (tintIndex) {
                     case 0 -> builder.getFrameColor() == -404 ? 0xFFFFFF : builder.getFrameColor();
                     case 1 -> builder.getSideColor() == -404 ? 0xFFFFFF : builder.getSideColor();
                     case 2 -> builder.getUpperCrystalColor() == -404 ? 0xFFFFFF : builder.getUpperCrystalColor();

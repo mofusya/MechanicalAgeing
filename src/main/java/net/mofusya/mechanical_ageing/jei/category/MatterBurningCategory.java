@@ -2,6 +2,7 @@ package net.mofusya.mechanical_ageing.jei.category;
 
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.mofusya.mechanical_ageing.MAg;
@@ -25,13 +26,18 @@ public class MatterBurningCategory extends MAgCategory<MatterBurningRecipe> {
     }
 
     @Override
+    public Component getTitle() {
+        return Component.translatable("recipe.mechanical_ageing.matter_bunging");
+    }
+
+    @Override
     protected MachineTile getMachineTile() {
-        return MAgMachines.BRICK_BURNING_CHAMBER.tile();
+        return MAgMachines.STEEL_BURNING_CHAMBER.tile();
     }
 
     @Override
     protected ItemLike getIconItem() {
-        return MAgMachines.BRICK_BURNING_CHAMBER.block();
+        return MAgMachines.STEEL_BURNING_CHAMBER.block();
     }
 
     @Override

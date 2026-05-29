@@ -10,7 +10,7 @@ import net.mofusya.ornatelib.registries.OrnateItemDeferredRegister;
 import java.util.ArrayList;
 
 public class MAgItem {
-    public static final OrnateItemDeferredRegister ITEMS = OrnateItemDeferredRegister.create(MAg.MOD_ID, 2);
+    public static final OrnateItemDeferredRegister ITEMS = OrnateItemDeferredRegister.create(MAg.MOD_ID, 3);
 
     public static final ArrayList<RegistryObject<Item>> MACHINE_UPGRADE_ARCHIVES = new ArrayList<>();
 

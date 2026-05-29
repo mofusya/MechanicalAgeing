@@ -14,6 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.world_generation.ModBiomeModifiers;
 import net.mofusya.mechanical_ageing.world_generation.ModConfiguredFeatures;
 import net.mofusya.mechanical_ageing.world_generation.ModPlacedFeatures;
+import net.mofusya.ornatelib.lang.SeptiLong;
 
 public final class MetalSet {
     private final ResourceKey<ConfiguredFeature<?, ?>> oreKey;
@@ -259,6 +260,7 @@ public final class MetalSet {
         public int getOreColor() {
             return this.oreColor;
         }
+
 
         public Builder copy(){
             return new Builder(this.density, this.hardness, this.meltingPoint, this.boilingPoint)

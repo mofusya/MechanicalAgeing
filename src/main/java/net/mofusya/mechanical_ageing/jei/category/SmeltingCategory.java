@@ -2,6 +2,7 @@ package net.mofusya.mechanical_ageing.jei.category;
 
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -28,13 +29,18 @@ public class SmeltingCategory extends MAgCategory<SmeltingRecipe> {
     }
 
     @Override
+    public Component getTitle() {
+        return Component.translatable("recipe.mechanical_ageing.smelting");
+    }
+
+    @Override
     protected MachineTile getMachineTile() {
-        return MAgMachines.BRICK_SMELTING_CHAMBER.tile();
+        return MAgMachines.STEEL_SMELTING_CHAMBER.tile();
     }
 
     @Override
     protected ItemLike getIconItem() {
-        return MAgMachines.BRICK_SMELTING_CHAMBER.block();
+        return MAgMachines.STEEL_SMELTING_CHAMBER.block();
     }
 
     @Override

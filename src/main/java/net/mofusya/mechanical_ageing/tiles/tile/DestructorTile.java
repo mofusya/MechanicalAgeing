@@ -2,7 +2,6 @@ package net.mofusya.mechanical_ageing.tiles.tile;
 
 import net.flansflame.flans_star_forge.energy.QuintLong;
 import net.flansflame.flans_star_forge.energy.StarDustEnergyStorage;
-import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -16,16 +15,17 @@ import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotList;
 import net.mofusya.mechanical_ageing.machinetiles.fluid.FluidSlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterHandler;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterSlotList;
-import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
+import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.tiles.energy.ForgeEnergyStorage;
 import net.mofusya.mechanical_ageing.tiles.energy.ForgeEnergyType;
 import net.mofusya.mechanical_ageing.tiles.energy.StarDustEnergyType;
+import net.mofusya.mechanical_ageing.util.annotations.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
 import org.jetbrains.annotations.Nullable;
 
-@MethodsReturnNonnullByDefault
+@MethodsReturnNonNullByDefault
 public class DestructorTile extends MachineTile {
     public DestructorTile(ResourceLocation location) {
         super(location);

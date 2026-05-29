@@ -1,0 +1,25 @@
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "pattern": [
+    "I%I%%%I%I",
+    "#%#%F%#%#",
+    "#%#% %#%#"
+  ],
+  "key": {
+    "#": {
+      "item": "mechanical_ageing:osmium_ingot"
+    },
+    "I": {
+      "item": "mechanical_ageing:titanium_block"
+    },
+    "%": {
+      "item": "mechanical_ageing:reinforced_bricks"
+    },
+    "F": {
+      "item": "mechanical_ageing:brick_smelting_chamber"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:brick_heat_combining_chamber"
+  }
+}

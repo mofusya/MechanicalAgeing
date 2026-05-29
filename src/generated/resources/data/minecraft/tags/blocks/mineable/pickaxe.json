@@ -65,9 +65,18 @@
     "mechanical_ageing:titanium_block",
     "mechanical_ageing:compressed_titanium_block",
     "mechanical_ageing:reinforced_bricks",
+    "mechanical_ageing:drive_shaft",
+    "mechanical_ageing:rotor_blade",
+    "mechanical_ageing:coil",
     "mechanical_ageing:tri_dimensional_crafting_table",
     "mechanical_ageing:destructor",
     "mechanical_ageing:brick_burning_chamber",
-    "mechanical_ageing:brick_smelting_chamber"
+    "mechanical_ageing:brick_smelting_chamber",
+    "mechanical_ageing:brick_heat_combining_chamber",
+    "mechanical_ageing:steel_burning_chamber",
+    "mechanical_ageing:steel_smelting_chamber",
+    "mechanical_ageing:steel_heat_combining_chamber",
+    "mechanical_ageing:steel_heating_chamber",
+    "mechanical_ageing:impulse_turbine"
   ]
 }

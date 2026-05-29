@@ -14,7 +14,6 @@ public final class MatterType {
         this.suffix = builder.suffix;
     }
 
-
     /*===Getters====*/
 
     public int getColor() {

@@ -168,12 +168,11 @@ dependencies {
     implementation fg.deobf("curse.maven:flansknowledgelib-1336263:7680293")
     implementation fg.deobf("curse.maven:geckolib-388172:7553267")
 
-    implementation fg.deobf("curse.maven:ornatelib-1479095:7779710")
+    implementation fg.deobf("curse.maven:ornatelib-1479095:8126131")
 
     implementation fg.deobf("curse.maven:patchouli-306770:7731017")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

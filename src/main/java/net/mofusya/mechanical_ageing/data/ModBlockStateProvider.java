@@ -31,6 +31,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         ArrayList<RegistryObject<Block>> registries = new ArrayList<>();
 
         registries.addAll(MAgBlocks.BLOCKS.getBlocks());
+        registries.remove(MAgBlocks.DRIVE_SHAFT);
+        registries.remove(MAgBlocks.ROTOR_BLADE);
+        registries.remove(MAgBlocks.COIL_BLOCK);
 
         for (RegistryObject<Block> block : registries) {
             this.blockWithItem(block);

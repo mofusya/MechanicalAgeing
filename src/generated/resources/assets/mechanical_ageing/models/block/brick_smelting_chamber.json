@@ -1,0 +1,16 @@
+{
+  "parent": "mechanical_ageing:block/multi_layered_machine_block",
+  "textures": {
+    "base_bottom": "mechanical_ageing:block/reinforced_bricks",
+    "base_front": "minecraft:block/lava_still",
+    "base_side": "minecraft:block/lava_still",
+    "base_top": "minecraft:block/lava_still",
+    "frame_bottom": "mechanical_ageing:block/machine/frame_bottom",
+    "frame_side": "mechanical_ageing:block/machine/frame_side",
+    "frame_top": "mechanical_ageing:block/machine/frame_top",
+    "main_crystal_side": "mechanical_ageing:block/machine/upper_crystal",
+    "main_crystal_vert": "mechanical_ageing:block/machine/crystal",
+    "particle": "minecraft:block/lava_still",
+    "side_side": "mechanical_ageing:block/machine/side"
+  }
+}

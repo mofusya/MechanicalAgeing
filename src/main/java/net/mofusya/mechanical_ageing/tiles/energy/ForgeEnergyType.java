@@ -1,5 +1,6 @@
 package net.mofusya.mechanical_ageing.tiles.energy;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -35,5 +36,11 @@ public class ForgeEnergyType extends EnergyType<ForgeEnergyStorage> {
     @Override
     public int getGradientColor() {
         return 0xFF164520;
+    }
+
+    @Override
+    public void deserializeNBT(IEnergyStorage iEnergyStorage, CompoundTag tag, String nbtId) {
+        ForgeEnergyStorage storage = (ForgeEnergyStorage) iEnergyStorage;
+        storage.setEnergy(tag.getInt(nbtId));
     }
 }

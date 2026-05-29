@@ -1,7 +1,5 @@
 package net.mofusya.mechanical_ageing.tiles.tile;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -9,7 +7,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.button.ButtonList;
@@ -17,11 +14,12 @@ import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.recipe.TriDimCraftingRecipe;
+import net.mofusya.mechanical_ageing.util.annotations.MethodsReturnNonNullByDefault;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
-@MethodsReturnNonnullByDefault
+@MethodsReturnNonNullByDefault
 public class TriDimCraftingTableTile extends MachineTile {
     public TriDimCraftingTableTile(ResourceLocation id) {
         super(id);

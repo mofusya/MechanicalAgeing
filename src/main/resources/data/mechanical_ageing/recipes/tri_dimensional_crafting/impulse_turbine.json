@@ -1,0 +1,28 @@
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "pattern": [
+    "####%####",
+    "I$II@II$I",
+    "####%####"
+  ],
+  "key": {
+    "#": {
+      "item": "mechanical_ageing:steel"
+    },
+    "%": {
+      "item": "mechanical_ageing:compressed_steel"
+    },
+    "I": {
+      "item": "mechanical_ageing:tungsten_ingot"
+    },
+    "$": {
+      "item": "mechanical_ageing:drive_shaft"
+    },
+    "@": {
+      "item": "mechanical_ageing:rotor_blade"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:impulse_turbine"
+  }
+}

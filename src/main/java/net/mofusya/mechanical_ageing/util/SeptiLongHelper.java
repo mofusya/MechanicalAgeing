@@ -1,9 +1,21 @@
 package net.mofusya.mechanical_ageing.util;
 
+import net.minecraft.nbt.CompoundTag;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
 
 public class SeptiLongHelper {
+
+    public static CompoundTag serialiseNBT(String name, SeptiLong septiLong) {
+        CompoundTag tag = new CompoundTag();
+        tag.putLongArray(name, septiLong.getLayer());
+        return tag;
+    }
+
+    public static SeptiLong deserializeNBT(String name, CompoundTag tag) {
+        return SeptiLong.createFromList(tag.getLongArray(name));
+    }
+
     private static final ArrayMap<SeptiLongValue, String> SUFFIX = suffix();
 
     public static String convertToStringAndAddSuffix(SeptiLong septiLong) {

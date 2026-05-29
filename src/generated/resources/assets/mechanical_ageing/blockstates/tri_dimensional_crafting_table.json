@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "facing=east,lit=false": {
+      "model": "mechanical_ageing:block/tri_dimensional_crafting_table"
+    },
+    "facing=east,lit=true": {
+      "model": "mechanical_ageing:block/tri_dimensional_crafting_table"
+    },
+    "facing=north,lit=false": {
+      "model": "mechanical_ageing:block/tri_dimensional_crafting_table"
+    },
+    "facing=north,lit=true": {
+      "model": "mechanical_ageing:block/tri_dimensional_crafting_table"
+    },
+    "facing=south,lit=false": {
+      "model": "mechanical_ageing:block/tri_dimensional_crafting_table"
+    },
+    "facing=south,lit=true": {
+      "model": "mechanical_ageing:block/tri_dimensional_crafting_table"
+    },
+    "facing=west,lit=false": {
+      "model": "mechanical_ageing:block/tri_dimensional_crafting_table"
+    },
+    "facing=west,lit=true": {
+      "model": "mechanical_ageing:block/tri_dimensional_crafting_table"
+    }
+  }
+}

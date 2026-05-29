@@ -28,7 +28,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
             ArrayList<RegistryObject<Block>> registries = new ArrayList<>();
 
             registries.addAll(MAgMetalSets.METAL_SET.getBlocks());
-            registries.add(MAgBlocks.REINFORCED_BRICKS);
+            registries.addAll(MAgBlocks.BLOCKS.getBlocks(0));
             registries.addAll(MAgMachines.MACHINES.getBlockEntries());
 
             var tags = this.tag(BlockTags.MINEABLE_WITH_PICKAXE);
@@ -51,6 +51,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
             ArrayList<RegistryObject<Block>> registries = new ArrayList<>();
 
             registries.addAll(MAgMachines.MACHINES.getBlockEntries());
+            registries.addAll(MAgBlocks.BLOCKS.getBlocks(0));
 
             var tags = this.tag(BlockTags.NEEDS_IRON_TOOL);
             for (RegistryObject<Block> block : registries) {

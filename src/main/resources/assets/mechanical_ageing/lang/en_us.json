@@ -5,17 +5,45 @@
   "tab.mechanical_ageing.machines": "MechanicalAgeing: Machines",
   "tab.mechanical_ageing.main": "MechanicalAgeing",
 
+  "item.mechanical_ageing.circuit_board": "Circuit Board",
+  "item.mechanical_ageing.circuit_board.conductivity": "§7Conductivity§8(Wh)",
+  "item.mechanical_ageing.circuit_board.durability": "§7Durability§8(Wh)",
+
   "block.mechanical_ageing.reinforced_bricks": "Reinforced Bricks",
+  "block.mechanical_ageing.drive_shaft": "Drive Shaft",
+  "block.mechanical_ageing.rotor_blade": "Rotor Blade",
+  "block.mechanical_ageing.coil": "Coil Block",
 
   "block.mechanical_ageing.tri_dimensional_crafting_table": "Tri-Dimensional Crafting Table",
   "block.mechanical_ageing.tri_dimensional_crafting_table.machine_name": "Tri-D CT",
   "block.mechanical_ageing.destructor": "Destructor",
+
   "block.mechanical_ageing.brick_burning_chamber": "Brick Burning Chamber",
   "block.mechanical_ageing.brick_burning_chamber.machine_name": "Brick BC",
   "block.mechanical_ageing.brick_smelting_chamber": "Brick Smelting Chamber",
   "block.mechanical_ageing.brick_smelting_chamber.machine_name": "Brick SC",
+  "block.mechanical_ageing.brick_heat_combining_chamber": "Brick Heat Combining Chamber",
+  "block.mechanical_ageing.brick_heat_combining_chamber.machine_name": "Brick HCC",
+
+  "block.mechanical_ageing.steel_burning_chamber": "Steel Burning Chamber",
+  "block.mechanical_ageing.steel_burning_chamber.machine_name": "Steel BC",
+  "block.mechanical_ageing.steel_smelting_chamber": "Steel Smelting Chamber",
+  "block.mechanical_ageing.steel_smelting_chamber.machine_name": "Steel SC",
+  "block.mechanical_ageing.steel_heat_combining_chamber": "Steel Heat Combining Chamber",
+  "block.mechanical_ageing.steel_heat_combining_chamber.machine_name": "Steel HCC",
+  "block.mechanical_ageing.steel_heating_chamber": "Steel Heating Chamber",
+  "block.mechanical_ageing.steel_heating_chamber.machine_name": "Steel HC",
+  "block.mechanical_ageing.impulse_turbine": "Impulse Turbine",
+
+  "recipe.mechanical_ageing.fuel": "Fuel",
+  "recipe.mechanical_ageing.matter_bunging": "Matter Burning",
+  "recipe.mechanical_ageing.smelting": "Smelting",
+  "recipe.mechanical_ageing.alloying": "Alloying",
+  "recipe.mechanical_ageing.heating": "Heating",
+  "recipe.mechanical_ageing.turbine_rotating": "Turbine Rotating",
 
   "matter.mechanical_ageing.water": "Water",
+  "matter.mechanical_ageing.water_vapor": "Water Vapor",
   "matter.mechanical_ageing.fuel": "Fuel",
   "matter.mechanical_ageing.heat": "Heat",
 
@@ -265,6 +293,8 @@
   "item.mechanical_ageing.attributed_item.boiling_point": "§7Boiling Point§8(K)",
   "item.mechanical_ageing.attributed_item.radiation_multiplier": "§7Radiation Multiplier",
   "item.mechanical_ageing.attributed_item.magnetic": "§7Magnetic",
+
+  "item.mechanical_ageing.attributed_item.durability_rp": "§7Durability§8(RP)",
 
   "mechanical_ageing.tooltip.liquid.amount.with.capacity": "%s / %s mB",
   "mechanical_ageing.tooltip.liquid.amount": "%s mB"

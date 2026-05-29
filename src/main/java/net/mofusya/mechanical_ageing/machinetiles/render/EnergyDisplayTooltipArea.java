@@ -10,7 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergyType;
-import net.mofusya.mechanical_ageing.machinetiles.energy.ISeptiLongEnergyHandler;
 import net.mofusya.mechanical_ageing.util.SeptiLongHelper;
 import net.mofusya.ornatelib.lang.SeptiLong;
 
@@ -47,13 +46,8 @@ public class EnergyDisplayTooltipArea {
         String storedString;
         String maxStorageString;
 
-        if (energyStorage instanceof ISeptiLongEnergyHandler septiLongEnergyHandler) {
-            storedString = SeptiLongHelper.convertToStringAndAddSuffix(septiLongEnergyHandler.getEnergyStored());
-            maxStorageString = SeptiLongHelper.convertToStringAndAddSuffix(septiLongEnergyHandler.getMaxEnergyStored());
-        } else {
-            storedString = SeptiLongHelper.convertToStringAndAddSuffix(new SeptiLong(energyStorage.getEnergyStored()));
-            maxStorageString = SeptiLongHelper.convertToStringAndAddSuffix(new SeptiLong(energyStorage.getMaxEnergyStored()));
-        }
+        storedString = SeptiLongHelper.convertToStringAndAddSuffix(new SeptiLong(energyStorage.getEnergyStored()));
+        maxStorageString = SeptiLongHelper.convertToStringAndAddSuffix(new SeptiLong(energyStorage.getMaxEnergyStored()));
 
         return List.of(
                 Component.literal(storedString + this.type.suffix() + " /"),
@@ -92,17 +86,10 @@ public class EnergyDisplayTooltipArea {
 
     private static int getStored(IEnergyStorage energyStorage) {
         int stored;
-        if (energyStorage instanceof ISeptiLongEnergyHandler septiLongEnergyHandler) {
-            SeptiLong energyStored = septiLongEnergyHandler.getEnergyStored();
-            SeptiLong maxEnergyStored = septiLongEnergyHandler.getMaxEnergyStored();
+        int energyStored = energyStorage.getEnergyStored();
+        int maxEnergyStored = energyStorage.getMaxEnergyStored();
 
-            stored = (int) (energyStored.divideAndGetFloat(maxEnergyStored) * BAR_SIZE[1]);
-        } else {
-            int energyStored = energyStorage.getEnergyStored();
-            int maxEnergyStored = energyStorage.getMaxEnergyStored();
-
-            stored = (int) ((energyStored / (float) maxEnergyStored) * BAR_SIZE[1]);
-        }
+        stored = (int) ((energyStored / (float) maxEnergyStored) * BAR_SIZE[1]);
         return stored;
     }
 }

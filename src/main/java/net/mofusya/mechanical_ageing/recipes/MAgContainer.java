@@ -15,7 +15,7 @@ public class MAgContainer extends SimpleContainer {
     @Nullable
     private final FluidStack fluid;
 
-    public MAgContainer(ItemStack[] items, int @Nullable [] energies, MatterStack @Nullable [] matters, @Nullable FluidStack fluid) {
+    private MAgContainer(ItemStack[] items, int @Nullable [] energies, MatterStack @Nullable [] matters, @Nullable FluidStack fluid) {
         super(items);
         this.energies = energies;
         this.matters = matters;
@@ -53,7 +53,7 @@ public class MAgContainer extends SimpleContainer {
 
         public Builder itemSlots(int start, int end) {
             ArrayList<Integer> slots = new ArrayList<>();
-            for (int i = start; i <= end; i++) {
+            for (int i = start; i < end; i++) {
                 slots.add(i);
             }
             int[] slotList = new int[slots.size()];
@@ -78,7 +78,7 @@ public class MAgContainer extends SimpleContainer {
 
         public Builder energySlots(int start, int end) {
             ArrayList<Integer> slots = new ArrayList<>();
-            for (int i = start; i <= end; i++) {
+            for (int i = start; i < end; i++) {
                 slots.add(i);
             }
             int[] slotList = new int[slots.size()];
@@ -103,7 +103,7 @@ public class MAgContainer extends SimpleContainer {
 
         public Builder matterSlots(int start, int end) {
             ArrayList<Integer> slots = new ArrayList<>();
-            for (int i = start; i <= end; i++) {
+            for (int i = start; i < end; i++) {
                 slots.add(i);
             }
             int[] slotList = new int[slots.size()];

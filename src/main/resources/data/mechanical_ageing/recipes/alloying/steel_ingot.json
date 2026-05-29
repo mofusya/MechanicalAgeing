@@ -1,0 +1,17 @@
+{
+  "type": "mechanical_ageing:alloying",
+  "ingredient": {
+    "item": "mechanical_ageing:iron_ingot"
+  },
+  "subIngredient": {
+    "item": "minecraft:coal"
+  },
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 1600
+  },
+  "smeltTime": 200,
+  "result": {
+    "item": "mechanical_ageing:steel"
+  }
+}
