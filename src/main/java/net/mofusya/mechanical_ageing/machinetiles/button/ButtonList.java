@@ -1,13 +1,13 @@
 package net.mofusya.mechanical_ageing.machinetiles.button;
 
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineMenu;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineScreen;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiFunction;
 
 public class ButtonList extends ArrayList<ButtonProperties> {
@@ -17,11 +17,21 @@ public class ButtonList extends ArrayList<ButtonProperties> {
     }
 
     public ButtonList create(int x, int y, String label, SlotType type) {
-        this.create(x, y, (screen, menu) -> Component.literal(label), type);
+        this.create(x, y, (screen, menu) -> List.of(Component.literal(label)), type);
         return this;
     }
 
-    public ButtonList create(int x, int y, @Nullable BiFunction<MachineScreen, MachineMenu, MutableComponent> labelFunc, SlotType type) {
+    public ButtonList create(int x, int y, Component label, SlotType type) {
+        this.create(x, y, (screen, menu) -> List.of(label), type);
+        return this;
+    }
+
+    public ButtonList create(int x, int y, List<Component> label, SlotType type) {
+        this.create(x, y, (screen, menu) -> label, type);
+        return this;
+    }
+
+    public ButtonList create(int x, int y, @Nullable BiFunction<MachineScreen, MachineMenu, List<Component>> labelFunc, SlotType type) {
         this.add(new ButtonProperties(x - 1, y - 1, labelFunc, type));
         return this;
     }

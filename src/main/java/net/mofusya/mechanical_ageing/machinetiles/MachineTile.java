@@ -342,6 +342,14 @@ public abstract class MachineTile {
                     fluidTank.getFluid(), TooltipFlag.Default.NORMAL), Optional.empty(), mouseX - x, mouseY - y
             );
         }
+
+        var buttons = this.getButtons();
+        for (var button : buttons) {
+            var label = button.labelFunc();
+            if (!MouseUtil.isMouseOver(mouseX, mouseY, x, y, button.x(), button.y(), 16, 16) || label == null) return;
+
+            guiGraphics.renderTooltip(screen.getMinecraft().font, label.apply(screen, menu), Optional.empty(), mouseX - x, mouseY - y);
+        }
     }
 
     public void renderBg(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY, MachineMenu

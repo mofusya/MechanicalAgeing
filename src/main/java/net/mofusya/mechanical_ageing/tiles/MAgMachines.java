@@ -38,4 +38,5 @@ public class MAgMachines {
             id -> new ImpulseTurbineChamber(id,
                     SeptiLongValue.BILLION.get(), SeptiLongValue.BILLION.get(), SeptiLongValue.ZERO.get(),
                     new SeptiLong(1048576), new SeptiLong(), new SeptiLong(1048576)));
+    public static final MachineObject BASIC_MATTER_PUMP = MACHINES.register("basic_matter_pump", BasicMatterPumpTile::new);
 }
