@@ -17,7 +17,7 @@ import net.mofusya.mechanical_ageing.data.recipes.recipe.SmeltingBuilder;
 import net.mofusya.mechanical_ageing.data.recipes.recipe.TriDimensionalCraftingBuilder;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
-import net.mofusya.mechanical_ageing.util.ArrayMap;
+import net.mofusya.ornatelib.util.ArrayMap;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
 
 import java.util.List;

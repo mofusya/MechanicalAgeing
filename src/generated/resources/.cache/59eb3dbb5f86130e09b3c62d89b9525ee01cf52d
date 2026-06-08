@@ -1,6 +1,8 @@
-// 1.20.1	2026-05-27T00:34:09.9166554	Loot Tables
+// 1.20.1	2026-06-03T00:39:52.833351	Loot Tables
 e961023aadff7e9a06eaf93db4149837fc2ca6af data/mechanical_ageing/loot_tables/blocks/aluminum_block.json
 71bd2b145e6f9ae11a07a10dbe766a6f6ed8d6d5 data/mechanical_ageing/loot_tables/blocks/aluminum_ore.json
+f84e982671aabab9ca8eba3afd34774fe4b4bd53 data/mechanical_ageing/loot_tables/blocks/basic_rotation_generator.json
+d9dadb3ed7fcc8200add138d133f9df042f7ff4d data/mechanical_ageing/loot_tables/blocks/basic_watter_pump.json
 be90577cce646d7fda832e143472f015760a7ded data/mechanical_ageing/loot_tables/blocks/brick_burning_chamber.json
 6141eb934cbd0cde4d1cfd039e49e17336e4b97f data/mechanical_ageing/loot_tables/blocks/brick_heat_combining_chamber.json
 23c73717457787337e3f2db69a596e5b2caa6dee data/mechanical_ageing/loot_tables/blocks/brick_smelting_chamber.json

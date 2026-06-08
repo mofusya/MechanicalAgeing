@@ -4,7 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.mofusya.mechanical_ageing.machinetiles.IBgTileType;
 import net.mofusya.mechanical_ageing.tiles.BgTileType;
-import net.mofusya.mechanical_ageing.util.annotations.MethodsReturnNonNullByDefault;
+import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 
 @MethodsReturnNonNullByDefault

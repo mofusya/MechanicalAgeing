@@ -12,4 +12,6 @@ public interface IMetalAttributed {
     float getRadiationMultiplier();
 
     boolean isMagnetic();
+
+    boolean hasMagneticField();
 }

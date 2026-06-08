@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.TooltipFlag;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.matter.MatterType;
-import net.mofusya.mechanical_ageing.util.SeptiLongHelper;
+import net.mofusya.ornatelib.util.SeptiLongHelper;
 
 import java.util.ArrayList;
 import java.util.List;

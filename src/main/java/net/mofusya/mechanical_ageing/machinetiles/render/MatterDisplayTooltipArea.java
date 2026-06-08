@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Player;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import net.mofusya.mechanical_ageing.machinetiles.matter.IMatterHandler;
 import net.mofusya.mechanical_ageing.matter.MatterType;
-import net.mofusya.mechanical_ageing.util.SeptiLongHelper;
+import net.mofusya.ornatelib.util.SeptiLongHelper;
 import net.mofusya.ornatelib.lang.SeptiLong;
 
 import java.util.ArrayList;

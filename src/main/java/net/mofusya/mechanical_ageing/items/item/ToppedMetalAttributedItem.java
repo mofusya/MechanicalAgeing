@@ -36,4 +36,9 @@ public class ToppedMetalAttributedItem extends ToppedAttributedItem implements I
     public boolean isMagnetic() {
         return this.getBooleanAttribute("magnetic");
     }
+
+    @Override
+    public boolean hasMagneticField() {
+        return this.getBooleanAttribute("has_magnetic_field");
+    }
 }

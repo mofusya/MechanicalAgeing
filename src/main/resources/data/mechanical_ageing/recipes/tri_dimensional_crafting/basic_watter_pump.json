@@ -1,0 +1,28 @@
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "pattern": [
+    "I#I#%#I#I",
+    "$#$#@#$#$",
+    "I#I#%#I#I"
+  ],
+  "key": {
+    "#": {
+      "item": "mechanical_ageing:steel"
+    },
+    "%": {
+      "item": "mechanical_ageing:iron_chunk"
+    },
+    "I": {
+      "item": "mechanical_ageing:aluminum_ingot"
+    },
+    "$": {
+      "item": "mechanical_ageing:compressed_steel"
+    },
+    "@": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:basic_watter_pump"
+  }
+}

@@ -11,7 +11,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.mofusya.mechanical_ageing.data.recipes.MAgFinishedRecipe;
 import net.mofusya.mechanical_ageing.data.recipes.MAgRecipeBuilder;
 import net.mofusya.mechanical_ageing.recipes.recipe.TriDimCraftingRecipe;
-import net.mofusya.mechanical_ageing.util.ArrayMap;
+import net.mofusya.ornatelib.util.ArrayMap;
 
 public class TriDimensionalCraftingBuilder extends MAgRecipeBuilder {
 

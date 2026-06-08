@@ -6,7 +6,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.mofusya.mechanical_ageing.machinetiles.IBgTileType;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import net.mofusya.mechanical_ageing.machinetiles.arrow.ArrowList;
 import net.mofusya.mechanical_ageing.machinetiles.arrow.ArrowType;
@@ -18,8 +17,7 @@ import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.recipe.SmeltingRecipe;
-import net.mofusya.mechanical_ageing.tiles.BgTileType;
-import net.mofusya.mechanical_ageing.util.annotations.MethodsReturnNonNullByDefault;
+import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import org.jetbrains.annotations.Nullable;
 

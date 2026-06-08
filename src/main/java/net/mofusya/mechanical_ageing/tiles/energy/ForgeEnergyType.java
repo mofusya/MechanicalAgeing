@@ -30,12 +30,12 @@ public class ForgeEnergyType extends EnergyType<ForgeEnergyStorage> {
 
     @Override
     public int getColor() {
-        return 0xFF00E86C;
+        return 0xD000E86C;
     }
 
     @Override
     public int getGradientColor() {
-        return 0xFF164520;
+        return 0xD0164520;
     }
 
     @Override

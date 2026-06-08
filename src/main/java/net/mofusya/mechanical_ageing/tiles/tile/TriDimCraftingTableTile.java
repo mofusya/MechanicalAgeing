@@ -14,7 +14,7 @@ import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.recipe.TriDimCraftingRecipe;
-import net.mofusya.mechanical_ageing.util.annotations.MethodsReturnNonNullByDefault;
+import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -69,7 +69,7 @@ public class TriDimCraftingTableTile extends MachineTile {
         switch (type) {
             case 0 -> {
                 var itemHandler = blockEntity.getItemHandler();
-                MAgContainer container = MAgContainer.builder().itemSlots(26).build(blockEntity);
+                MAgContainer container = MAgContainer.builder().itemSlots(27).build(blockEntity);
 
                 Optional<TriDimCraftingRecipe> recipe = level.getRecipeManager().getRecipeFor(TriDimCraftingRecipe.Type.INSTANCE, container, level);
                 if (recipe.isPresent()) {

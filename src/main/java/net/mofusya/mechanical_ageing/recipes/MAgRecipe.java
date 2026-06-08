@@ -13,7 +13,7 @@ import net.minecraft.world.item.crafting.*;
 import net.mofusya.mechanical_ageing.matter.LazyMatterStack;
 import net.mofusya.mechanical_ageing.matter.LazyMatterType;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
-import net.mofusya.mechanical_ageing.util.ArrayMap;
+import net.mofusya.ornatelib.util.ArrayMap;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
 

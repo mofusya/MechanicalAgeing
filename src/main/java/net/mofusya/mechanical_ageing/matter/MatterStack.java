@@ -1,6 +1,6 @@
 package net.mofusya.mechanical_ageing.matter;
 
-import net.mofusya.mechanical_ageing.util.ArrayMap;
+import net.mofusya.ornatelib.util.ArrayMap;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
 import org.jetbrains.annotations.NotNull;
@@ -38,13 +38,17 @@ public final class MatterStack {
         if (matterStack == null) return false;
         if (!checkTags(this, matterStack)) return false;
 
+        if (matterStack.getType() != null && matterStack.getType().is(MAgMatterTypes.WATER_VAPOR) && !matterStack.getTags().hasContent()){
+            return false;
+        }
+
         if (this.type == null) {
             if (!simulate) {
                 this.modify(matterType -> matterStack.getType(), matterAmount -> matterAmount.add(matterStack.getAmount()));
                 this.getTags().putAll(matterStack.getTags());
             }
             return true;
-        } else if (matterStack.getType() == null || this.type.is(matterStack.getType())) {
+        } else if (matterStack.getType() == null || (this.type.is(matterStack.getType()) && this.tags.matches(matterStack.getTags()))) {
             if (!simulate) {
                 this.modifyAmount(matterAmount -> matterAmount.add(matterStack.getAmount()));
             }
@@ -57,9 +61,12 @@ public final class MatterStack {
         if (matterStack == null || this.type == null || this.amount.isSmallerOrSameThan(0)) return false;
         if (!checkTags(this, matterStack)) return false;
 
-        if (matterStack.getType() == null || this.type.is(matterStack.getType())) {
+        if (matterStack.getType() == null || (this.type.is(matterStack.getType()) && this.tags.matches(matterStack.getTags()))) {
             if (!simulate) {
                 this.modifyAmount(matterAmount -> matterAmount.remove(matterStack.getAmount()));
+                if (this.getNoneTypeAmount().isSmallerOrSameThan(0)){
+                    this.type = null;
+                }
             }
             return true;
         }
@@ -77,7 +84,7 @@ public final class MatterStack {
     //Getter setter modifiers
     public void setType(@Nullable MatterType type) {
         this.type = type;
-        if (type == null){
+        if (type == null) {
             this.amount = SeptiLongValue.ZERO.get();
         }
     }
@@ -116,7 +123,7 @@ public final class MatterStack {
         if (amountFunc != null) this.amount = amountFunc.apply(this.amount);
     }
 
-    public MatterStack tag(String key, String value){
+    public MatterStack tag(String key, String value) {
         this.getTags().put(key, value);
         return this;
     }
@@ -139,23 +146,10 @@ public final class MatterStack {
         return this.tags;
     }
 
-    public static boolean checkTags(MatterStack matterStackA, MatterStack matterStackB){
-        var aKeys = matterStackA.getTags().getKeys();
-        var bKeys = matterStackB.getTags().getKeys();
+    public static boolean checkTags(MatterStack matterStackA, MatterStack matterStackB) {
+        if (matterStackA == null || matterStackB == null) return true;
+        if (matterStackA.getType() == null || matterStackB.getType() == null) return true;
 
-        if (aKeys.size() != bKeys.size()){
-            if (matterStackA.getType() == null || matterStackB.getType() == null) return true;
-
-            return false;
-        }
-
-        for (String aKey : aKeys){
-            if (!bKeys.contains(aKey)) return false;
-        }
-        for (String bKey : bKeys){
-            if (!aKeys.contains(bKey)) return false;
-        }
-
-        return true;
+        return matterStackA.getTags().matches(matterStackB.getTags());
     }
 }

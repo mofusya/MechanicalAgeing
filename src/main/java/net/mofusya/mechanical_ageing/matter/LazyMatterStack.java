@@ -1,12 +1,11 @@
 package net.mofusya.mechanical_ageing.matter;
 
 import net.minecraft.resources.ResourceLocation;
-import net.mofusya.mechanical_ageing.util.ArrayMap;
+import net.mofusya.ornatelib.util.ArrayMap;
 import net.mofusya.ornatelib.lang.SeptiLong;
-import org.jetbrains.annotations.Nullable;
 
 public record LazyMatterStack(ResourceLocation type, SeptiLong amount, ArrayMap<String, String> tags) {
     public MatterStack get(){
-        return new MatterStack(MatterManager.get().get(this.type), this.amount.copy(), this.tags);
+        return new MatterStack(MatterManager.get().get(this.type), this.amount.copy(), new ArrayMap<>(this.tags));
     }
 }

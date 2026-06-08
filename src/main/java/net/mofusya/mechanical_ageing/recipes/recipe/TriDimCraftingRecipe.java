@@ -20,9 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TriDimCraftingRecipe extends MAgRecipe {
-    private static final int MAX_WIDTH = 9;
-    private static final int MAX_HEIGHT = 3;
-
     private final int width;
     private final int height;
     private final NonNullList<Ingredient> ingredients;
@@ -38,36 +35,11 @@ public class TriDimCraftingRecipe extends MAgRecipe {
 
     @Override
     public boolean matches(MAgContainer container, Level level) {
-        for (int i = 0; i <= MAX_WIDTH - this.width; i++) {
-            for (int j = 0; j <= MAX_HEIGHT - this.height; j++) {
-                if (this.test(container, i, j, false)) return true;
-                if (this.test(container, i, j, true)) return true;
-            }
+        boolean toReturn = true;
+        for (int i = 0; i < 27; i++) {
+            if (!this.getIngredients().get(i).test(container.getItem(i))) toReturn = false;
         }
-        return false;
-    }
-
-    private boolean test(MAgContainer inventory, int xOffset, int yOffset, boolean mirrored) {
-        for (int x = 0; x < MAX_WIDTH; x++) {
-            for (int y = 0; y < MAX_HEIGHT; y++) {
-                int subX = x - xOffset;
-                int subY = y - yOffset;
-                Ingredient ingredient;
-
-                if (subX >= 0 && subY >= 0 && subX < this.width && subY < this.height) {
-                    if (mirrored) {
-                        ingredient = this.ingredients.get(this.width - subX - 1 + subY * this.width);
-                    } else {
-                        ingredient = this.ingredients.get(subX + subY * this.width);
-                    }
-
-                    if (!ingredient.test(inventory.getItem(x + y * MAX_WIDTH))) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
+        return toReturn;
     }
 
     @Override

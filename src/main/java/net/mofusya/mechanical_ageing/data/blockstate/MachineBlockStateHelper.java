@@ -108,6 +108,27 @@ public class MachineBlockStateHelper {
                 .sideColor(MAgMetalSets.TUNGSTEN.color())
         );
 
+        builderList.add(builder(MAgMachines.BASIC_WATTER_PUMP)
+                .background("block/compressed_block", false)
+                .backgroundColor(MAgAlloySets.STEEL.color())
+                .baseTexture("minecraft", "block/water_still", false)
+                .frameColor(MAgAlloySets.STEEL.color())
+                .sideColor(MAgAlloySets.STEEL.color() - 0x202020)
+                .upperCrystalColor(MAgMetalSets.ALUMINUM.color())
+                .lowerCrystalColor(MAgMetalSets.ALUMINUM.color())
+        );
+
+        builderList.add(builder(MAgMachines.BASIC_ROTATION_GENERATOR)
+                .background("block/compressed_block", false)
+                .backgroundColor(MAgAlloySets.STEEL.color())
+                .coverTexture("block/impulse_turbine_shaft", false)
+                .bottomCoverTexture((ResourceLocation) null, false)
+                .topCoverTexture((ResourceLocation) null, false)
+                .frameColor(MAgAlloySets.STEEL.color())
+                .upperCrystalColor(MAgMetalSets.ALUMINUM.color())
+                .lowerCrystalColor(MAgAlloySets.STEEL.color() - 0x202020)
+        );
+
         return builderList;
     }
 

@@ -1,8 +1,8 @@
 package net.mofusya.mechanical_ageing.machinetiles.direction;
 
 import net.minecraft.nbt.CompoundTag;
-import net.mofusya.mechanical_ageing.util.annotations.FieldsAreNonNullByDefault;
-import net.mofusya.mechanical_ageing.util.annotations.ParametersAreNonNullByDefault;
+import net.mofusya.ornatelib.util.annotation.FieldsAreNonNullByDefault;
+import net.mofusya.ornatelib.util.annotation.ParametersAreNonNullByDefault;
 
 import java.util.ArrayList;
 
@@ -13,6 +13,7 @@ public abstract class MachineDirectionHandler {
     private final DirectionType[] matterDirection;
     private final DirectionType[] energyDirection;
     private DirectionType fluidDirection = DirectionType.NONE;
+    private DirectionType wattEnergyDirection = DirectionType.NONE;
 
     public MachineDirectionHandler(int itemCount, int matteCount, int energyCount) {
         this.itemDirection = new DirectionType[itemCount];
@@ -93,6 +94,15 @@ public abstract class MachineDirectionHandler {
         return toReturn;
     }
 
+    public DirectionType getWattEnergyDirection(){
+        return this.wattEnergyDirection;
+    }
+
+    public void setWattEnergyDirection(DirectionType direction){
+        this.wattEnergyDirection = direction;
+        this.onChange();
+    }
+
     public void serializeNBT(CompoundTag tag) {
         for (int i = 0; i < this.itemDirection.length; i++) {
             DirectionType direction = this.getItemDirection(i);
@@ -107,6 +117,7 @@ public abstract class MachineDirectionHandler {
             DirectionType direction = this.getEnergyDirection(i);
             tag.putString("direction_handler_energy" + i, direction.name());
         }
+        tag.putString("direction_handler_watt", this.getWattEnergyDirection().name());
     }
 
     public void deserializeNBT(CompoundTag tag) {
@@ -120,6 +131,7 @@ public abstract class MachineDirectionHandler {
         for (int i = 0; i < this.energyDirection.length; i++) {
             this.setEnergyDirection(i, DirectionType.valueOf(tag.getString("direction_handler_energy" + i)));
         }
+        this.setWattEnergyDirection(DirectionType.valueOf(tag.getString("direction_handler_watt")));
     }
 
     public abstract void onChange();

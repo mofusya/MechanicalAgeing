@@ -75,6 +75,7 @@ public final class AlloySet {
         private final int boilingPoint;
         private float radiationMultiplier = 1f;
         private boolean magnetic = false;
+        private boolean hasMagneticField;
         private int color = 0xFFFFFF;
 
         private Item.Properties itemBuild = new Item.Properties();
@@ -98,6 +99,12 @@ public final class AlloySet {
 
         public Builder magnetic() {
             this.magnetic = true;
+            return this;
+        }
+
+        public Builder hasMagneticField(){
+            this.magnetic = true;
+            this.hasMagneticField = true;
             return this;
         }
 
@@ -128,6 +135,10 @@ public final class AlloySet {
 
         public boolean isMagnetic() {
             return this.magnetic;
+        }
+
+        public boolean isMagneticFielded() {
+            return this.hasMagneticField;
         }
 
         public int getMeltingPoint() {

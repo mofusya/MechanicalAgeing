@@ -5,12 +5,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.machinetiles.MachineObject;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlock;
-import net.mofusya.mechanical_ageing.util.annotations.FieldsMayBeNullByDefault;
-import net.mofusya.mechanical_ageing.util.annotations.ParametersAreNonNullByDefault;
+import net.mofusya.ornatelib.util.annotation.FieldsMayBeNullByDefault;
+import net.mofusya.ornatelib.util.annotation.ParametersAreNonNullByDefault;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Predicate;
 
 @ParametersAreNonNullByDefault
 @FieldsMayBeNullByDefault

@@ -1,7 +1,5 @@
 package net.mofusya.mechanical_ageing.tiles.tile;
 
-import net.flansflame.flans_star_forge.energy.QuintLong;
-import net.flansflame.flans_star_forge.energy.StarDustEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -15,12 +13,13 @@ import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotList;
 import net.mofusya.mechanical_ageing.machinetiles.fluid.FluidSlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterHandler;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterSlotList;
+import net.mofusya.mechanical_ageing.machinetiles.watt.WattEnergyStorage;
+import net.mofusya.mechanical_ageing.machinetiles.watt.WattSlotProperties;
 import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.tiles.energy.ForgeEnergyStorage;
 import net.mofusya.mechanical_ageing.tiles.energy.ForgeEnergyType;
-import net.mofusya.mechanical_ageing.tiles.energy.StarDustEnergyType;
-import net.mofusya.mechanical_ageing.util.annotations.MethodsReturnNonNullByDefault;
+import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +34,12 @@ public class DestructorTile extends MachineTile {
     public EnergySlotList getEnergySlots(EnergySlotList slots) {
         return super.getEnergySlots(slots)
                 .create(34, ForgeEnergyType::new, 1000, 10, 0)
-                .create(151, StarDustEnergyType::new, 100, 0, 10);
+                /*.create(151, StarDustEnergyType::new, 100, 0, 10)*/;
+    }
+
+    @Override
+    public @Nullable WattSlotProperties getWattSlot() {
+        return new WattSlotProperties(151, new SeptiLong(100), new SeptiLong(), new SeptiLong(10));
     }
 
     @Override
@@ -55,20 +59,23 @@ public class DestructorTile extends MachineTile {
         super.tick(level, pos, state, blockEntity);
 
         ForgeEnergyStorage forgeEnergyStorage = (ForgeEnergyStorage) blockEntity.getEnergyStorage(0);
-        StarDustEnergyStorage starDustEnergyStorage = (StarDustEnergyStorage) blockEntity.getEnergyStorage(1);
+        //StarDustEnergyStorage starDustEnergyStorage = (StarDustEnergyStorage) blockEntity.getEnergyStorage(1);
+        WattEnergyStorage wattEnergyStorage = (WattEnergyStorage) blockEntity.getWattEnergyStorage();
         MatterHandler matterHandler = (MatterHandler) blockEntity.getMatterHandler();
         FluidTank fluidTank = blockEntity.getFluidTank();
         if (matterHandler == null) return;
         if (fluidTank == null) return;
 
         if (forgeEnergyStorage.getEnergyStored() > 100 && fluidTank.drain(500, IFluidHandler.FluidAction.SIMULATE).getAmount() >= 500 &&
-                starDustEnergyStorage.receiveEnergyFromInside(new QuintLong(1), true).isGreaterOrSameThan(new QuintLong(1)) &&
+                //starDustEnergyStorage.receiveEnergyFromInside(new QuintLong(1), true).isGreaterOrSameThan(new QuintLong(1)) &&
+                wattEnergyStorage.canReceiveFromInside(new SeptiLong(1)) &&
                 matterHandler.canReceiveFromInside(new MatterStack(MAgMatterTypes.WATER, SeptiLongValue.THOUSAND.get()), 0) &&
                 matterHandler.canReceiveFromInside(new MatterStack(MAgMatterTypes.FUEL, new SeptiLong(1)), 1)
         ) {
             forgeEnergyStorage.extractEnergyFromInside(100, false);
             fluidTank.drain(500, IFluidHandler.FluidAction.EXECUTE);
-            starDustEnergyStorage.receiveEnergyFromInside(new QuintLong(1), false);
+            //starDustEnergyStorage.receiveEnergyFromInside(new QuintLong(1), false);
+            wattEnergyStorage.receiveFromInside(new SeptiLong(1), false);
             matterHandler.receiveFromInside(new MatterStack(MAgMatterTypes.WATER, SeptiLongValue.THOUSAND.get()), 0);
             matterHandler.receiveFromInside(new MatterStack(MAgMatterTypes.FUEL, new SeptiLong(1)), 1);
         }

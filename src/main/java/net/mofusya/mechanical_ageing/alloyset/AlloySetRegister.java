@@ -56,7 +56,8 @@ public class AlloySetRegister {
                 .attribute("melting_point", builder.getMeltingPoint(), true)
                 .attribute("boiling_point", builder.getBoilingPoint(), true)
                 .attribute("radiation_multiplier", builder.getRadiationMultiplier(), true)
-                .attribute("magnetic", builder.isMagnetic(), true);
+                .attribute("magnetic", builder.isMagnetic(), true)
+                .attribute("has_magnetic_field", builder.isMagneticFielded(), true);
     }
 
     public void register(IEventBus eventBus) {

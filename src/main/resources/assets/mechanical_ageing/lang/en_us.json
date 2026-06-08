@@ -34,6 +34,10 @@
   "block.mechanical_ageing.steel_heating_chamber": "Steel Heating Chamber",
   "block.mechanical_ageing.steel_heating_chamber.machine_name": "Steel HC",
   "block.mechanical_ageing.impulse_turbine": "Impulse Turbine",
+  "block.mechanical_ageing.basic_watter_pump": "Basic Water Pump",
+  "block.mechanical_ageing.basic_watter_pump.machine_name": "Basic Pump",
+  "block.mechanical_ageing.basic_rotation_generator": "Basic Rotation Generator",
+  "block.mechanical_ageing.basic_rotation_generator.machine_name": "Basic Rot-Gen",
 
   "recipe.mechanical_ageing.fuel": "Fuel",
   "recipe.mechanical_ageing.matter_bunging": "Matter Burning",
@@ -46,6 +50,7 @@
   "matter.mechanical_ageing.water_vapor": "Water Vapor",
   "matter.mechanical_ageing.fuel": "Fuel",
   "matter.mechanical_ageing.heat": "Heat",
+  "matter.mechanical_ageing.rotation": "Rotation",
 
   "matter_attribute.mechanical_ageing.tier": "Tier",
 
@@ -79,16 +84,22 @@
   "item.mechanical_ageing.tri_compressed_steel": "Tri-Compressed Steel [x19,683]",
   "item.mechanical_ageing.quad_compressed_steel": "Quad-Compressed Steel [x531,441]",
 
+  "item.mechanical_ageing.magnetite": "Magnetite",
+  "item.mechanical_ageing.compressed_magnetite": "Compressed Magnetite [x27]",
+  "item.mechanical_ageing.duo_compressed_magnetite": "Duo-Compressed Magnetite [x729]",
+  "item.mechanical_ageing.tri_compressed_magnetite": "Tri-Compressed Magnetite [x19,683]",
+  "item.mechanical_ageing.quad_compressed_magnetite": "Quad-Compressed Magnetite [x531,441]",
+
   "block.mechanical_ageing.compressed_iron_block": "Compressed Iron Block",
   "block.mechanical_ageing.iron_block": "Iron Block",
-  "block.mechanical_ageing.iron_ore": "Iron Ore",
-  "block.mechanical_ageing.deepslate_iron_ore": "Deepslate Iron Ore",
+  "block.mechanical_ageing.iron_ore": "Magnetite Ore",
+  "block.mechanical_ageing.deepslate_iron_ore": "Deepslate Magnetite Ore",
   "item.mechanical_ageing.iron_ingot": "Iron Ingots",
   "item.mechanical_ageing.iron_chunk": "Iron Chunk",
   "item.mechanical_ageing.pure_iron_dust": "Pure Iron Dust",
-  "item.mechanical_ageing.iron_dust": "Iron Dust",
-  "item.mechanical_ageing.dirty_iron_dust": "Dirty Iron Dust",
-  "item.mechanical_ageing.iron_particle": "Iron Particle",
+  "item.mechanical_ageing.iron_dust": "Magnetite Dust",
+  "item.mechanical_ageing.dirty_iron_dust": "Dirty Magnetite Dust",
+  "item.mechanical_ageing.iron_particle": "Magnetite Particle",
   "item.mechanical_ageing.raw_iron": "Raw Iron",
   "item.mechanical_ageing.iron_nugget": "Iron Nugget",
 
@@ -293,6 +304,7 @@
   "item.mechanical_ageing.attributed_item.boiling_point": "§7Boiling Point§8(K)",
   "item.mechanical_ageing.attributed_item.radiation_multiplier": "§7Radiation Multiplier",
   "item.mechanical_ageing.attributed_item.magnetic": "§7Magnetic",
+  "item.mechanical_ageing.attributed_item.has_magnetic_field": "§7Has Magnetic Field",
 
   "item.mechanical_ageing.attributed_item.durability_rp": "§7Durability§8(RP)",
 

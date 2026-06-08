@@ -2,7 +2,7 @@
   "type": "mechanical_ageing:tri_dimensional_crafting",
   "pattern": [
     " I  %  I ",
-    "% II#II %",
+    "%#IICII#%",
     " I  I  I "
   ],
   "key": {
@@ -14,6 +14,9 @@
     },
     "%": {
       "item": "mechanical_ageing:copper_chunk"
+    },
+    "C": {
+      "item": "mechanical_ageing:magnetite"
     }
   },
   "result": {

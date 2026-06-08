@@ -163,6 +163,7 @@ public final class MetalSet {
         private final int boilingPoint;
         private float radiationMultiplier = 1f;
         private boolean magnetic = false;
+        private boolean hasMagneticField = false;
         private TagKey<Block> mineableWith = BlockTags.NEEDS_IRON_TOOL;
         private int color = 0xFFFFFF;
         private int oreColor = -404;
@@ -189,6 +190,12 @@ public final class MetalSet {
 
         public Builder magnetic(boolean magnetic) {
             this.magnetic = magnetic;
+            return this;
+        }
+
+        public Builder hasMagneticField(){
+            this.magnetic = true;
+            this.hasMagneticField = true;
             return this;
         }
 
@@ -239,6 +246,10 @@ public final class MetalSet {
 
         public boolean isMagnetic() {
             return this.magnetic;
+        }
+
+        public boolean isMagneticFielded() {
+            return this.hasMagneticField;
         }
 
         public TagKey<Block> getMineableWith() {

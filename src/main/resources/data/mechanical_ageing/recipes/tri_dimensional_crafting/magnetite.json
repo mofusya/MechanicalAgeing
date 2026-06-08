@@ -1,0 +1,16 @@
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "pattern": [
+    "#### ####",
+    "# #   # #",
+    "#### ####"
+  ],
+  "key": {
+    "#": {
+      "item": "mechanical_ageing:raw_iron"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:magnetite"
+  }
+}

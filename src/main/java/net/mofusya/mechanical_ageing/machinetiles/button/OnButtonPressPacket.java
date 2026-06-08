@@ -4,8 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
-import net.mofusya.mechanical_ageing.util.QuadConsumer;
-import net.mofusya.mechanical_ageing.util.TriConsumer;
+import net.mofusya.ornatelib.util.function.TriConsumer;
 import net.mofusya.ornatelib.registries.network.packet.ServerPacket;
 
 import java.util.function.Supplier;

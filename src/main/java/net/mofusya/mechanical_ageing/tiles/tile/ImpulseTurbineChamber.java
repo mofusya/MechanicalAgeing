@@ -11,12 +11,11 @@ import net.mofusya.mechanical_ageing.machinetiles.arrow.ArrowType;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterHandler;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterSlotList;
-import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.recipe.TurbineRotatingRecipe;
-import net.mofusya.mechanical_ageing.util.annotations.MethodsReturnNonNullByDefault;
+import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,7 +60,7 @@ public class ImpulseTurbineChamber extends MachineTile {
     @Override
     public MatterSlotList getMatterSlots(MatterSlotList slots) {
         return super.getMatterSlots(slots)
-                .create(25, 25, matterType -> true, this.vaporTankCapacity, this.vaporTankMaxReceive, this.vaporTankMaxExtract)
+                .create(25, 25, matterType -> true, matterTag -> matterTag.getKeys().contains("mechanical_ageing.tier"), this.vaporTankCapacity, this.vaporTankMaxReceive, this.vaporTankMaxExtract)
                 .create(next(16, 6) + 9, 25, matterType -> matterType.is(MAgMatterTypes.ROTATION), this.rotationTankCapacity, this.rotationTankMaxReceive, this.rotationTankMaxExtract);
     }
 
@@ -99,7 +98,7 @@ public class ImpulseTurbineChamber extends MachineTile {
                 matterHandler.canExtractFromInside(ingredient, 0)){
             matterHandler.receiveFromInside(result, 1);
             matterHandler.extractFromInside(ingredient, 0);
-        } else if (matterHandler.canExtractFromInside(recipe.get().getResult(), 1)){
+        } else if (matterHandler.canReceiveFromInside(recipe.get().getResult(), 1)){
             matterHandler.receiveFromInside(recipe.get().getResult(), 1);
             matterHandler.extractFromInside(recipe.get().getIngredient(), 0);
         }

@@ -12,7 +12,7 @@ import java.util.function.BiFunction;
 
 public class ButtonList extends ArrayList<ButtonProperties> {
     public ButtonList create(int x, int y, SlotType type) {
-        this.create(x, y, (String) null, type);
+        this.create(x, y, (BiFunction<MachineScreen, MachineMenu, List<Component>>) null, type);
         return this;
     }
 

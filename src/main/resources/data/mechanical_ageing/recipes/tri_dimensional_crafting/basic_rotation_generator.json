@@ -1,0 +1,25 @@
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "pattern": [
+    "I#II#II#I",
+    "#$##$##$#",
+    "%#%%#%%#%"
+  ],
+  "key": {
+    "#": {
+      "item": "mechanical_ageing:steel"
+    },
+    "%": {
+      "item": "mechanical_ageing:compressed_steel"
+    },
+    "I": {
+      "item": "mechanical_ageing:aluminum_ingot"
+    },
+    "$": {
+      "item": "mechanical_ageing:drive_shaft"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:basic_rotation_generator"
+  }
+}

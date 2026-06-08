@@ -1,29 +1,36 @@
-package net.mofusya.mechanical_ageing.tiles.energy;
+package net.mofusya.mechanical_ageing.machinetiles.watt;
 
 import net.minecraft.nbt.CompoundTag;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class WattEnergyStorage {
+public class WattEnergyStorage implements IWattEnergyStorage {
     protected final SeptiLong stored;
     protected final SeptiLong capacity;
     protected final @Nullable SeptiLong maxReceive;
     protected final @Nullable SeptiLong maxExtract;
 
-    public WattEnergyStorage(SeptiLong stored, SeptiLong capacity) {
-        this(stored, capacity, capacity, capacity);
+    protected final Runnable changeFunc;
+
+    public WattEnergyStorage(SeptiLong capacity, Runnable changeFunc) {
+        this(capacity, new SeptiLong(), capacity, capacity, changeFunc);
     }
 
-    public WattEnergyStorage(SeptiLong stored, SeptiLong capacity, @Nullable SeptiLong maxTransfer) {
-        this(stored, capacity, maxTransfer, maxTransfer);
+    public WattEnergyStorage(SeptiLong capacity, SeptiLong stored, Runnable changeFunc) {
+        this(capacity, stored, capacity, capacity, changeFunc);
     }
 
-    public WattEnergyStorage(SeptiLong stored, SeptiLong capacity, @Nullable SeptiLong maxReceive, @Nullable SeptiLong maxExtract) {
-        this.stored = stored.copy();
+    public WattEnergyStorage(SeptiLong capacity, SeptiLong stored, @Nullable SeptiLong maxTransfer, Runnable changeFunc) {
+        this(capacity, stored, maxTransfer, maxTransfer, changeFunc);
+    }
+
+    public WattEnergyStorage(SeptiLong capacity, SeptiLong stored, @Nullable SeptiLong maxReceive, @Nullable SeptiLong maxExtract, Runnable changeFunc) {
         this.capacity = capacity.copy();
+        this.stored = stored.copy();
         this.maxReceive = maxReceive == null ? null : maxReceive.copy();
         this.maxExtract = maxExtract == null ? null : maxExtract.copy();
+        this.changeFunc = changeFunc;
     }
 
     public SeptiLong receive(SeptiLong maxReceive, boolean simulate) {
@@ -132,8 +139,18 @@ public abstract class WattEnergyStorage {
     }
 
     public SeptiLong getSpace() {
-        return this.getCapacity().remove(this.getStored());
+        return this.getCapacity().remove(this.getStored()).copy();
     }
 
-    public abstract void onChanged();
+    public void serializeNBT(CompoundTag tag){
+        tag.putLongArray("wattEnergyStorage", this.getStored().getLayer());
+    }
+
+    public void deSerializeNBT(CompoundTag tag){
+        this.stored.set(SeptiLong.createFromList(tag.getLongArray("wattEnergyStorage")));
+    }
+
+    public void onChanged(){
+        this.changeFunc.run();
+    }
 }

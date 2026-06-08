@@ -20,14 +20,14 @@ modの目標：
 - [x] 楽に合金を追加するビルダー
 
 ステージとマルチブロック：  
-- [ ] St.1-[[Brick Age]]/仮設精錬炉  
-- [ ] St.2-Mechanic Age/電気精錬炉  
-- [ ] St.3-Semi Nuclear Age/核分裂炉  
-- [ ] St.4-Nuclear Age/核融合炉  
-- [ ] St.5-Planetary Age/惑星発電機  
-- [ ] St.6-Solar Age/光星発電機  
-- [ ] St.7-Galactic Age/重力発電機  
-- [ ] St.8-Multiversal Age/魔力発電機  
+- [ ] St.1-[[Brick Age]]/仮設精錬炉
+- [ ] St.2-Mechanic Age/電気精錬炉
+- [ ] St.3-Semi Nuclear Age/核分裂炉
+- [ ] St.4-Nuclear Age/核融合炉
+- [ ] St.5-Planetary Age/惑星発電機
+- [ ] St.6-Solar Age/光星発電機
+- [ ] St.7-Galactic Age/重力発電機
+- [ ] St.8-Multiversal Age/魔力発電機
 
 発電機：  
 - [ ] 火力発電機（物燃やす -> 質量Enが熱Enに変換する -> 水を蒸発 -> タービン回す）  

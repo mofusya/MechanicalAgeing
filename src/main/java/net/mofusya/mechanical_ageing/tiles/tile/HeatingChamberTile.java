@@ -11,12 +11,11 @@ import net.mofusya.mechanical_ageing.machinetiles.arrow.ArrowType;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterHandler;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterSlotList;
-import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.recipe.HeatingRecipe;
-import net.mofusya.mechanical_ageing.util.annotations.MethodsReturnNonNullByDefault;
+import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,7 +68,7 @@ public class HeatingChamberTile extends MachineTile {
         return super.getMatterSlots(slots)
                 .create(next(15), 25, matterType -> matterType.is(MAgMatterTypes.HEAT), this.heatTankCapacity, this.heatTankMaxReceive, this.heatTankMaxExtract)
                 .create(next(15, 2), 25, matterType -> true, this.ingredientTankCapacity, this.ingredientTankMaxReceive, this.ingredientTankMaxExtract)
-                .create(next(16, 6) + 9, 25, matterType -> true, this.resultTankCapacity, this.resultTankMaxReceive, this.resultTankMaxExtract);
+                .create(next(16, 6) + 9, 25, matterType -> true, matterTag -> matterTag.getKeys().contains("mechanical_ageing.tier"), this.resultTankCapacity, this.resultTankMaxReceive, this.resultTankMaxExtract);
     }
 
     @Override
@@ -109,11 +108,15 @@ public class HeatingChamberTile extends MachineTile {
                 matterHandler.canExtractFromInside(ingredient, 1)) {
             matterHandler.receiveFromInside(result, 2);
             matterHandler.extractFromInside(heat, 0);
-            matterHandler.extract(ingredient, 1);
+            matterHandler.extractFromInside(ingredient, 1);
         } else if (matterHandler.canReceiveFromInside(recipe.get().getResult(), 2)) {
             matterHandler.receiveFromInside(recipe.get().getResult(), 2);
             matterHandler.extractFromInside(recipe.get().getHeat(), 0);
             matterHandler.extractFromInside(recipe.get().getIngredient(), 1);
+        }
+
+        if (!matterHandler.getStored(2).getTags().hasContent()){
+            return;
         }
     }
 

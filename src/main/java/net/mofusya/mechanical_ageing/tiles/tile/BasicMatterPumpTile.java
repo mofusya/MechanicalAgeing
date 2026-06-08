@@ -49,7 +49,7 @@ public class BasicMatterPumpTile extends MachineTile {
 
     @Override
     public MutableComponent getDisplayName() {
-        return Component.translatable("block.mechanical_ageing.basic_matter_pump.machine_name");
+        return Component.translatable("block.mechanical_ageing.basic_watter_pump.machine_name");
     }
 
     @Override

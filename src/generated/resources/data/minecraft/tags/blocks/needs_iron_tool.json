@@ -74,6 +74,8 @@
     "mechanical_ageing:steel_heat_combining_chamber",
     "mechanical_ageing:steel_heating_chamber",
     "mechanical_ageing:impulse_turbine",
+    "mechanical_ageing:basic_watter_pump",
+    "mechanical_ageing:basic_rotation_generator",
     "mechanical_ageing:reinforced_bricks",
     "mechanical_ageing:drive_shaft",
     "mechanical_ageing:rotor_blade",

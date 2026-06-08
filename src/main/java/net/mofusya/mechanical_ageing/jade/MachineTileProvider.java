@@ -7,7 +7,7 @@ import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterHandler;
 import net.mofusya.mechanical_ageing.matter.MatterType;
-import net.mofusya.mechanical_ageing.util.SeptiLongHelper;
+import net.mofusya.ornatelib.util.SeptiLongHelper;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;

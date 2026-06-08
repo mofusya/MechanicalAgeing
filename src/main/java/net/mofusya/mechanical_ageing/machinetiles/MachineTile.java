@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.registries.RegistryObject;
@@ -46,23 +47,27 @@ import net.mofusya.mechanical_ageing.machinetiles.direction.MachineDirectionHand
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotList;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergySlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.fluid.FluidSlotProperties;
+import net.mofusya.mechanical_ageing.machinetiles.matter.LimitedMatterHandler;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterHandler;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterSlotList;
 import net.mofusya.mechanical_ageing.machinetiles.matter.MatterSlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.render.EnergyDisplayTooltipArea;
 import net.mofusya.mechanical_ageing.machinetiles.render.FluidTankRenderer;
 import net.mofusya.mechanical_ageing.machinetiles.render.MatterDisplayTooltipArea;
+import net.mofusya.mechanical_ageing.machinetiles.render.WattEnergyDisplayTooltipArea;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.machinetiles.util.MouseUtil;
+import net.mofusya.mechanical_ageing.machinetiles.watt.IWattEnergyStorage;
+import net.mofusya.mechanical_ageing.machinetiles.watt.WattEnergyStorage;
 import net.mofusya.mechanical_ageing.machinetiles.watt.WattSlotProperties;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.tag.MAgTags;
 import net.mofusya.mechanical_ageing.tiles.BgTileType;
 import net.mofusya.mechanical_ageing.tiles.MAgCapabilities;
-import net.mofusya.mechanical_ageing.util.annotations.FieldsAreNonNullByDefault;
-import net.mofusya.mechanical_ageing.util.annotations.MethodsReturnNonNullByDefault;
+import net.mofusya.ornatelib.util.annotation.FieldsAreNonNullByDefault;
+import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -93,10 +98,12 @@ public abstract class MachineTile {
 
     /*Overrides*/
     public void tick(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity) {
+        WattEnergyStorage wattEnergyStorage = (WattEnergyStorage) blockEntity.getWattEnergyStorage();
         MatterHandler matterHandler = (MatterHandler) blockEntity.getMatterHandler();
         MachineDirectionHandler directionHandler = blockEntity.getDirectionHandler();
 
         this.energyIOHandler(level, pos, state, blockEntity, directionHandler);
+        this.wattEnergyIOHandler(level, pos, state, wattEnergyStorage, directionHandler);
         this.matterIOHandler(level, pos, state, matterHandler, directionHandler);
     }
 
@@ -126,38 +133,62 @@ public abstract class MachineTile {
         }
     }
 
-    //PULL
+    //PUSH
+    private void wattEnergyIOHandler(Level level, BlockPos pos, BlockState state, WattEnergyStorage wattEnergyStorage, MachineDirectionHandler directionHandler) {
+        if (wattEnergyStorage == null) return;
+        if (wattEnergyStorage.canExtract()) return;
+
+        Direction direction = getCombinedDirection(state.getValue(MachineBlock.FACING), directionHandler.getWattEnergyDirection());
+        if (direction == null) return;
+
+        BlockPos pPop = pos.relative(direction, 1);
+        BlockEntity pBlockEntity = level.getBlockEntity(pPop);
+        if (!(pBlockEntity instanceof MachineBlockEntity pMachine)) return;
+
+        WattEnergyStorage pWattEnergyStorage = (WattEnergyStorage) pMachine.getWattEnergyStorage();
+        if (pWattEnergyStorage == null) return;
+
+        pMachine.getCapability(MAgCapabilities.WATT, direction.getOpposite()).ifPresent(storage -> {
+            if (!storage.canReceive()) return;
+
+            SeptiLong maxReceive = storage.receive(wattEnergyStorage.getStored(), true);
+            if (!maxReceive.isGreaterThan(0)) return;
+
+            wattEnergyStorage.extract(maxReceive, false);
+            storage.receive(maxReceive, false);
+        });
+    }
+
+    //PUSH
     private void matterIOHandler(Level level, BlockPos pos, BlockState state, MatterHandler matterHandler, MachineDirectionHandler directionHandler) {
-        if (matterHandler != null) {
-            for (int i = 0; i < matterHandler.size(); i++) {
-                if (matterHandler.canReceive(i)) {
-                    Direction direction = getCombinedDirection(state.getValue(MachineBlock.FACING), directionHandler.getMatterDirection(i));
-                    if (direction == null) continue;
+        if (matterHandler == null) return;
 
-                    BlockPos pPos = pos.relative(direction, 1);
-                    BlockEntity pBlockEntity = level.getBlockEntity(pPos);
+        for (int i = 0; i < matterHandler.size(); i++) {
+            if (!matterHandler.canExtract(i)) continue;
 
-                    if (pBlockEntity instanceof MachineBlockEntity pMachine) {
-                        MatterHandler pMatterHandler = (MatterHandler) pMachine.getMatterHandler();
-                        if (pMatterHandler == null) continue;
+            Direction direction = getCombinedDirection(state.getValue(MachineBlock.FACING), directionHandler.getMatterDirection(i));
+            if (direction == null) continue;
 
-                        for (int j = 0; j < pMatterHandler.size(); j++) {
-                            int finalI = i;
-                            int finalJ = j;
-                            pMachine.getCapability(MAgCapabilities.MATTER, direction.getOpposite()).ifPresent(handler -> {
-                                SeptiLong space = matterHandler.getSpace(finalI);
+            BlockPos pPos = pos.relative(direction, 1);
+            BlockEntity pBlockEntity = level.getBlockEntity(pPos);
+            if (!(pBlockEntity instanceof MachineBlockEntity pMachine)) continue;
 
-                                if (space.isSmallerOrSameThan(0)) return;
+            MatterHandler pMatterHandler = (MatterHandler) pMachine.getMatterHandler();
+            if (pMatterHandler == null) continue;
 
-                                MatterStack maxExtract = handler.extract(new MatterStack(null, space), finalJ, true);
-                                if (maxExtract.getAmount().isGreaterThan(0)) {
-                                    MatterStack receive = matterHandler.receive(maxExtract, finalI).copy();
-                                    handler.extract(receive, finalJ);
-                                }
-                            });
-                        }
-                    }
-                }
+            for (int j = 0; j < pMatterHandler.size(); j++) {
+                int finalI = i;
+                int finalJ = j;
+                pMachine.getCapability(MAgCapabilities.MATTER, direction.getOpposite()).ifPresent(handler -> {
+                    LimitedMatterHandler limitedHandler = (LimitedMatterHandler) handler;
+                    if (!limitedHandler.canReceive(finalJ)) return;
+
+                    MatterStack maxReceive = limitedHandler.receive(matterHandler.getStored(finalI), finalJ, true);
+                    if (!maxReceive.getAmount().isGreaterThan(0)) return;
+
+                    matterHandler.extract(maxReceive, finalI, false);
+                    limitedHandler.receive(maxReceive, finalJ, false);
+                });
             }
         }
     }
@@ -232,12 +263,18 @@ public abstract class MachineTile {
         return new ResourceLocation(id.getNamespace(), "textures/gui/bg_" + id.getPath() + ".png");
     }
 
+    public <T> CapabilityOverride<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side, CapabilityContext context) {
+        return new CapabilityOverride<>(null, false);
+    }
+
     public static final int FRAME_WIDTH = 304;
     public static final int FRAME_HEIGHT = 182;
     public static final int BG_TILE_WIDTH = 256;
     public static final int BG_TILE_HEIGHT = 256;
 
     private List<EnergyDisplayTooltipArea> energyTooltips;
+    @Nullable
+    private WattEnergyDisplayTooltipArea wattEnergyTooltip;
     private List<MatterDisplayTooltipArea> matterTooltips;
     @Nullable
     private FluidTankRenderer fluidTankRenderer = null;
@@ -250,6 +287,11 @@ public abstract class MachineTile {
         this.energyTooltips = new ArrayList<>();
         for (EnergySlotProperties energy : this.getEnergySlots()) {
             this.energyTooltips.add(new EnergyDisplayTooltipArea(x + energy.x(), y + 6, energy.energyType(), bgTile));
+        }
+
+        var wattProperties = this.getWattSlot();
+        if (wattProperties != null){
+            this.wattEnergyTooltip = new WattEnergyDisplayTooltipArea(x + wattProperties.x(), y + 6, bgTile);
         }
 
         this.matterTooltips = new ArrayList<>();
@@ -302,7 +344,7 @@ public abstract class MachineTile {
             }
 
             //Draw Energy slot I/O Button
-            for (int i = 0; i < this.getEnergySlots().size(); i++) {
+            for (int i = 0; i < this.getEnergySlots().size() + (this.getWattSlot() == null ? 0 : 1); i++) {
                 int finalI = i;
                 screen.addRenderableWidget(new ImageButton(modX + 34, modY + 7 + (i * 14), 12, 12, 24, 0, 0, ioButton, pButton -> this.ioButtonPacket.send2Server(2, finalI, menu.blockEntity.getBlockPos())));
             }
@@ -317,7 +359,7 @@ public abstract class MachineTile {
         this.dummyIOButtonCounts = new int[]{
                 (this.getSlots().size() - this.getNoneIOSlots().size() <= 0 ? Mth.nextInt(RandomSource.create(), 1, 4) : 0),
                 (this.getMatterSlots().isEmpty() ? Mth.nextInt(RandomSource.create(), 1, 4) : 0),
-                (this.getEnergySlots().isEmpty() ? Mth.nextInt(RandomSource.create(), 1, 4) : 0),
+                ((this.getEnergySlots().isEmpty() && this.getWattSlot() == null) ? Mth.nextInt(RandomSource.create(), 1, 4) : 0),
                 (this.getFluidSlot() == null ? Mth.nextInt(RandomSource.create(), 1, 4) : 0)
         };
     }
@@ -327,6 +369,12 @@ public abstract class MachineTile {
         for (int i = 0; i < this.getEnergySlots().size(); i++) {
             EnergyDisplayTooltipArea tooltip = this.energyTooltips.get(i);
             tooltip.renderTooltips(guiGraphics, mouseX, mouseY, x, y, menu.blockEntity.getEnergyStorage(i));
+        }
+
+        var wattProperties = this.getWattSlot();
+        IWattEnergyStorage wattEnergyStorage = menu.blockEntity.getWattEnergyStorage();
+        if (wattEnergyStorage != null && wattProperties != null && this.wattEnergyTooltip != null){
+            this.wattEnergyTooltip.renderTooltips(guiGraphics, mouseX, mouseY, x, y, wattEnergyStorage);
         }
 
         for (int i = 0; i < this.getMatterSlots().size(); i++) {
@@ -414,6 +462,13 @@ public abstract class MachineTile {
         for (int i = 0; i < this.getEnergySlots().size(); i++) {
             EnergyDisplayTooltipArea tooltip = this.energyTooltips.get(i);
             tooltip.render(guiGraphics, menu.blockEntity.getEnergyStorage(i));
+        }
+
+        //Write watt energy slot
+        var wattProperties = this.getWattSlot();
+        IWattEnergyStorage wattEnergyStorage = menu.blockEntity.getWattEnergyStorage();
+        if (wattEnergyStorage != null && this.wattEnergyTooltip != null && wattProperties != null){
+            this.wattEnergyTooltip.render(guiGraphics, wattEnergyStorage);
         }
 
         //Write matter slots
