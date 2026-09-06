@@ -7,6 +7,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.items.item.ToppedMetalAttributedItem;
 import net.mofusya.mechanical_ageing.matter.MatterManager;
+import net.mofusya.mechanical_ageing.matter.MatterRegister;
 import net.mofusya.mechanical_ageing.matter.MatterType;
 import net.mofusya.ornatelib.item.AttributedItem;
 import net.mofusya.ornatelib.registries.OrnateItemDeferredRegister;
@@ -17,6 +18,7 @@ import java.util.List;
 public class AlloySetRegister {
     private final String modId;
     private final OrnateItemDeferredRegister itemRegisters;
+    private final MatterRegister matterRegister;
     private final ArrayList<AlloySet> alloySets = new ArrayList<>();
 
     public AlloySetRegister(String modId) {
@@ -26,6 +28,7 @@ public class AlloySetRegister {
     public AlloySetRegister(String modId, int slot) {
         this.modId = modId;
         this.itemRegisters = OrnateItemDeferredRegister.create(modId, slot);
+        this.matterRegister = new MatterRegister();
     }
 
     public AlloySet register(String id, AlloySet.Builder builder) {
@@ -38,7 +41,7 @@ public class AlloySetRegister {
         RegistryObject<Item> duoCompressedAlloy = this.itemRegisters.register("duo_compressed_" + id, () -> new ToppedMetalAttributedItem(builder.getItemBuild(), createAttribute(builder, 27 * 27)), slot);
         RegistryObject<Item> triCompressedAlloy = this.itemRegisters.register("tri_compressed_" + id, () -> new ToppedMetalAttributedItem(builder.getItemBuild(), createAttribute(builder, 27 * 27 * 27)), slot);
         RegistryObject<Item> quadCompressedAlloy = this.itemRegisters.register("quad_compressed_" + id, () -> new ToppedMetalAttributedItem(builder.getItemBuild(), createAttribute(builder, 27 * 27 * 27 * 27)), slot);
-        MatterType matterType = MatterManager.create(new ResourceLocation(this.modId, id), new MatterType.Builder(builder.getColor()).build());
+        MatterType matterType = this.matterRegister.create(new ResourceLocation(this.modId, id), new MatterType.Builder(builder.getColor()).build());
 
         AlloySet toReturn = new AlloySet(this.modId, id, alloy, compressedAlloy, duoCompressedAlloy, triCompressedAlloy, quadCompressedAlloy, matterType, builder.getColor());
         this.alloySets.add(toReturn);
@@ -62,6 +65,7 @@ public class AlloySetRegister {
 
     public void register(IEventBus eventBus) {
         this.itemRegisters.register(eventBus);
+        this.matterRegister.register();
     }
 
     public DeferredRegister<Item> getItemRegister() {

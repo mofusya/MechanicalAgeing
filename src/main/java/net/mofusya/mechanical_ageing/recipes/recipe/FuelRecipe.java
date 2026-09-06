@@ -12,12 +12,13 @@ import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.MAgRecipe;
 import net.mofusya.ornatelib.lang.SeptiLong;
+import net.mofusya.ornatelib.lang.UnLong;
 
 public class FuelRecipe extends MAgRecipe {
     private final Ingredient ingredient;
-    private final SeptiLong resultAmount;
+    private final UnLong resultAmount;
 
-    public FuelRecipe(ResourceLocation id, Ingredient ingredient, SeptiLong resultAmount) {
+    public FuelRecipe(ResourceLocation id, Ingredient ingredient, UnLong resultAmount) {
         super(id, Serializer.INSTANCE, Type.INSTANCE);
         this.ingredient = ingredient;
         this.resultAmount = resultAmount;
@@ -32,7 +33,7 @@ public class FuelRecipe extends MAgRecipe {
         return this.ingredient;
     }
 
-    public SeptiLong getResultAmount() {
+    public UnLong getResultAmount() {
         return this.resultAmount;
     }
 
@@ -49,7 +50,7 @@ public class FuelRecipe extends MAgRecipe {
         public FuelRecipe fromJson(ResourceLocation id, JsonObject json) {
             return new FuelRecipe(id,
                     readIngredient(json, "fuel"),
-                    readSeptiLong(json, "resultAmount")
+                    readUnLong(json, "resultAmount")
             );
         }
 
@@ -57,7 +58,7 @@ public class FuelRecipe extends MAgRecipe {
         public FuelRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
             return new FuelRecipe(id,
                     readIngredient(buf),
-                    readSeptiLong(buf)
+                    readUnLong(buf)
             );
         }
 

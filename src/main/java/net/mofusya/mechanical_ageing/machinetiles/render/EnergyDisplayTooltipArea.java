@@ -2,7 +2,6 @@ package net.mofusya.mechanical_ageing.machinetiles.render;
 
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.flansflame.flans_star_forge.screens.helper.MouseUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -10,8 +9,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import net.mofusya.mechanical_ageing.machinetiles.energy.EnergyType;
-import net.mofusya.ornatelib.util.SeptiLongHelper;
-import net.mofusya.ornatelib.lang.SeptiLong;
+import net.mofusya.mechanical_ageing.machinetiles.util.MouseUtil;
+import net.mofusya.ornatelib.lang.UnLong;
+import net.mofusya.ornatelib.util.screen.Size;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +28,8 @@ import java.util.Optional;
  */
 public class EnergyDisplayTooltipArea {
 
-    private static final int[] BAR_SIZE = {7, 51};
+    private static final Size SIZE = new Size(8, 72);
+    private static final Size BAR_SIZE = new Size(7, 71);
 
     private final int x;
     private final int y;
@@ -46,8 +47,8 @@ public class EnergyDisplayTooltipArea {
         String storedString;
         String maxStorageString;
 
-        storedString = SeptiLongHelper.convertToStringAndAddSuffix(new SeptiLong(energyStorage.getEnergyStored()));
-        maxStorageString = SeptiLongHelper.convertToStringAndAddSuffix(new SeptiLong(energyStorage.getMaxEnergyStored()));
+        storedString = UnLong.addComma(String.valueOf(energyStorage.getEnergyStored()));
+        maxStorageString = UnLong.addComma(String.valueOf(energyStorage.getMaxEnergyStored()));
 
         return List.of(
                 Component.literal(storedString + this.type.suffix() + " /"),
@@ -56,7 +57,7 @@ public class EnergyDisplayTooltipArea {
     }
 
     public void renderTooltips(GuiGraphics guiGraphics, int mouseX, int mouseY, int x, int y, IEnergyStorage energyStorage) {
-        if (MouseUtil.isMouseOver(mouseX, mouseY, this.x + 1, this.y + 1, BAR_SIZE[0], BAR_SIZE[1]) || MouseUtil.isMouseOver(mouseX, mouseY, this.x + 11, this.y + 1, BAR_SIZE[0], BAR_SIZE[1])) {
+        if (MouseUtil.isMouseOver(mouseX, mouseY, this.x + 1, this.y + 1, BAR_SIZE.x(), BAR_SIZE.y()) || MouseUtil.isMouseOver(mouseX, mouseY, this.x + 11, this.y + 1, BAR_SIZE.x(), BAR_SIZE.y())) {
             guiGraphics.renderTooltip(Minecraft.getInstance().font, this.getTooltips(energyStorage), Optional.empty(), mouseX - x, mouseY - y);
         }
     }
@@ -69,19 +70,19 @@ public class EnergyDisplayTooltipArea {
 
         //Write energy slot
         if (energyStorage.canReceive()) {
-            guiGraphics.blit(this.bgTile, this.x, this.y, 36, 20, 8, 52, MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
-            guiGraphics.blit(this.bgTile, this.x + 10, this.y, 36, 20, 8, 52, MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
+            guiGraphics.blit(this.bgTile, this.x, this.y, 36, 0, SIZE.x(), SIZE.y(), MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
+            guiGraphics.blit(this.bgTile, this.x + 10, this.y, 36, 0, SIZE.x(), SIZE.y(), MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
         } else {
-            guiGraphics.blit(this.bgTile, this.x, this.y, 62, 20, 8, 52, MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
-            guiGraphics.blit(this.bgTile, this.x + 10, this.y, 62, 20, 8, 52, MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
+            guiGraphics.blit(this.bgTile, this.x, this.y, 62, 0, SIZE.x(), SIZE.y(), MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
+            guiGraphics.blit(this.bgTile, this.x + 10, this.y, 62, 0, SIZE.x(), SIZE.y(), MachineTile.BG_TILE_WIDTH, MachineTile.BG_TILE_HEIGHT);
         }
 
         //Write energy bar
         //guiGraphics.fillGradient(this.x + 1, this.y + 1, this.x + BAR_SIZE[0], this.y + BAR_SIZE[1], this.type.getColor(), this.type.getColor());
-        guiGraphics.fillGradient(x + 1, y + 1 + (BAR_SIZE[1] - stored), x + BAR_SIZE[0],
-                y + BAR_SIZE[1], this.type.getColor(), this.type.getGradientColor() == -404 ? this.type.getColor() : this.type.getGradientColor());
-        guiGraphics.fillGradient(x + 11, y + 1 + (BAR_SIZE[1] - stored), x + 10 + BAR_SIZE[0],
-                y + BAR_SIZE[1], this.type.getColor(), this.type.getGradientColor() == -404 ? this.type.getColor() : this.type.getGradientColor());
+        guiGraphics.fillGradient(x + 1, y + 1 + (BAR_SIZE.y() - stored), x + BAR_SIZE.x(),
+                y + BAR_SIZE.y(), this.type.getColor(), this.type.getGradientColor() == -404 ? this.type.getColor() : this.type.getGradientColor());
+        guiGraphics.fillGradient(x + 11, y + 1 + (BAR_SIZE.y() - stored), x + 10 + BAR_SIZE.x(),
+                y + BAR_SIZE.y(), this.type.getColor(), this.type.getGradientColor() == -404 ? this.type.getColor() : this.type.getGradientColor());
     }
 
     private static int getStored(IEnergyStorage energyStorage) {
@@ -89,7 +90,7 @@ public class EnergyDisplayTooltipArea {
         int energyStored = energyStorage.getEnergyStored();
         int maxEnergyStored = energyStorage.getMaxEnergyStored();
 
-        stored = (int) ((energyStored / (float) maxEnergyStored) * BAR_SIZE[1]);
+        stored = (int) ((energyStored / (float) maxEnergyStored) * BAR_SIZE.y());
         return stored;
     }
 }

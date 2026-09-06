@@ -11,8 +11,11 @@ import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.alloyset.AlloySet;
 import net.mofusya.mechanical_ageing.alloyset.MAgAlloySets;
 import net.mofusya.mechanical_ageing.items.MAgItem;
+import net.mofusya.mechanical_ageing.items.item.BatteryCoreItem;
+import net.mofusya.mechanical_ageing.items.item.BatteryItem;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -33,6 +36,13 @@ public class ModItemModelProvider extends ItemModelProvider {
             RegistryObject<Item> archive = MAgItem.ITEMS.getItems(1).get(i);
             machineUpgradeArchiveItem(archive, i + 1);
         }
+        for (RegistryObject<Item> batteryOrCore : MAgItem.ITEMS.getItems(2)) {
+            if (batteryOrCore.get() instanceof BatteryItem){
+                layeredSimpleItem(batteryOrCore, "lithium_battery", "lithium_battery_sublayer");
+            } else {
+                layeredSimpleItem(batteryOrCore, "lithium_battery_core", "lithium_battery_core_sublayer");
+            }
+        }
         for (AlloySet alloySet : MAgAlloySets.ALLOYS.getEntries()) {
             alloySetItem(alloySet);
         }
@@ -45,6 +55,17 @@ public class ModItemModelProvider extends ItemModelProvider {
         this.withExistingParent(item.getId().getPath(),
                         new ResourceLocation("item/generated"))
                 .texture("layer0", new ResourceLocation(MAg.MOD_ID, "item/" + item.getId().getPath()));
+    }
+
+    private void layeredSimpleItem(RegistryObject<Item> item, @Nullable String... textures) {
+        var model = this.withExistingParent(item.getId().getPath(), new ResourceLocation("item/generated"));
+        for (int i = 0; i < textures.length; i++) {
+            model.texture("layer" + i, new ResourceLocation(MAg.MOD_ID, "item/" + (textures[i] == null ? item.getId().getPath() : textures[i])));
+        }
+    }
+
+    private void simpleItemWithSublayer(RegistryObject<Item> item, String prefix) {
+        this.layeredSimpleItem(item, item.getId().getPath(), item.getId().getPath() + prefix);
     }
 
     private void machineUpgradeArchiveItem(RegistryObject<Item> archive, int value) {

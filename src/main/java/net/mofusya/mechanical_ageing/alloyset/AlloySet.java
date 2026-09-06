@@ -3,8 +3,9 @@ package net.mofusya.mechanical_ageing.alloyset;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.matter.MatterType;
+import net.mofusya.mechanical_ageing.metalset.IMetalLike;
 
-public final class AlloySet {
+public final class AlloySet implements IMetalLike {
     private final RegistryObject<Item> alloy;
     private final RegistryObject<Item> compressed;
     private final RegistryObject<Item> duoCompressed;

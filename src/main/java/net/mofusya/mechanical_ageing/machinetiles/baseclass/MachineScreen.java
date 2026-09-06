@@ -28,7 +28,17 @@ public class MachineScreen extends AbstractContainerScreen<MachineMenu> {
     }
 
     @Override
+    protected void renderTooltip(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        super.renderTooltip(guiGraphics, mouseX, mouseY);
+        int x = 0;
+        int y = 0;
+
+        this.tile.renderTooltips(guiGraphics, x, y, mouseX, mouseY, this.getMenu(), this);
+    }
+
+    @Override
     protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+        guiGraphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY, 4210752, false);
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
 

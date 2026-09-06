@@ -16,6 +16,7 @@ import net.mofusya.mechanical_ageing.jei.ingredient.MatterRenderer;
 import net.mofusya.mechanical_ageing.matter.MatterManager;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
+import net.mofusya.ornatelib.lang.UnLong;
 
 import java.util.ArrayList;
 
@@ -54,7 +55,7 @@ public class JeiMAgPlugin implements IModPlugin {
     public void registerIngredients(IModIngredientRegistration registration) {
         ArrayList<MatterStack> matterStackList = new ArrayList<>();
         for (var type : MatterManager.get().values()){
-            matterStackList.add(new MatterStack(type, SeptiLongValue.HUNDRED.get().multiply(5)));
+            matterStackList.add(new MatterStack(type, UnLong.hundred().multi(5)));
         }
 
         registration.register(MAgIngredient.MATTER_TYPE, matterStackList, new MatterHelper(), new MatterRenderer());

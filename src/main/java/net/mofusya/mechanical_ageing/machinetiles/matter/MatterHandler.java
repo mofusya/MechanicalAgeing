@@ -2,10 +2,14 @@ package net.mofusya.mechanical_ageing.machinetiles.matter;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.matter.MatterManager;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
+import net.mofusya.mechanical_ageing.matter.MatterType;
 import net.mofusya.ornatelib.lang.SeptiLong;
+import net.mofusya.ornatelib.lang.UnLong;
+
+import java.util.Arrays;
+import java.util.Map;
 
 public abstract class MatterHandler implements IMatterHandler {
     private final MatterStack[] storage;
@@ -32,7 +36,8 @@ public abstract class MatterHandler implements IMatterHandler {
 
         if (receiveAmount.getNoneTypeAmount().isGreaterThan(this.getMaxReceive(slot)))
             receiveAmount.setAmount(this.getMaxReceive(slot));
-        if (receiveAmount.getNoneTypeAmount().isGreaterThan(this.getSpace(slot))) receiveAmount.setAmount(this.getSpace(slot));
+        if (receiveAmount.getNoneTypeAmount().isGreaterThan(this.getSpace(slot)))
+            receiveAmount.setAmount(this.getSpace(slot));
         if (receiveAmount.getType() == null) receiveAmount.setType(this.getStored(slot).getType());
 
         if (simulate) return receiveAmount.copy();
@@ -78,7 +83,8 @@ public abstract class MatterHandler implements IMatterHandler {
             return MatterStack.empty();
         if (!MatterStack.checkTags(this.getStored(slot), receiveAmount)) return MatterStack.empty();
 
-        if (receiveAmount.getNoneTypeAmount().isGreaterThan(this.getSpace(slot))) receiveAmount.setAmount(this.getSpace(slot));
+        if (receiveAmount.getNoneTypeAmount().isGreaterThan(this.getSpace(slot)))
+            receiveAmount.setAmount(this.getSpace(slot));
 
         if (simulate) return receiveAmount.copy();
 
@@ -119,7 +125,7 @@ public abstract class MatterHandler implements IMatterHandler {
     }
 
     @Override
-    public SeptiLong getMaxStored(int slot) {
+    public UnLong getMaxStored(int slot) {
         MatterSlotProperties matterSlot = this.slots.get(slot);
         return matterSlot.capacity().copy();
     }
@@ -138,7 +144,7 @@ public abstract class MatterHandler implements IMatterHandler {
 
     public boolean canReceive(MatterStack amount, int slot) {
         MatterSlotProperties matterSlot = this.slots.get(slot);
-        SeptiLong receiveAmount = amount.getAmount();
+        UnLong receiveAmount = amount.getAmount();
 
         if (!this.canReceive(slot)) return false;
         if (!MatterStack.checkTags(this.storage[slot], amount)) return false;
@@ -152,7 +158,7 @@ public abstract class MatterHandler implements IMatterHandler {
 
     public boolean canExtract(MatterStack amount, int slot) {
         MatterSlotProperties matterSlot = this.slots.get(slot);
-        SeptiLong extractAmount = amount.getAmount();
+        UnLong extractAmount = amount.getAmount();
 
         if (!this.canExtract(slot)) return false;
         if (!MatterStack.checkTags(this.storage[slot], amount)) return false;
@@ -166,7 +172,7 @@ public abstract class MatterHandler implements IMatterHandler {
 
     public boolean canReceiveFromInside(MatterStack amount, int slot) {
         MatterSlotProperties matterSlot = this.slots.get(slot);
-        SeptiLong receiveAmount = amount.getAmount();
+        UnLong receiveAmount = amount.getAmount();
 
         if (!MatterStack.checkTags(this.storage[slot], amount)) return false;
         if (amount.getType() != null && !matterSlot.isValid(amount.getType(), amount.getTags())) return false;
@@ -177,7 +183,7 @@ public abstract class MatterHandler implements IMatterHandler {
 
     public boolean canExtractFromInside(MatterStack amount, int slot) {
         MatterSlotProperties matterSlot = this.slots.get(slot);
-        SeptiLong extractAmount = amount.getAmount();
+        UnLong extractAmount = amount.getAmount();
 
         if (!MatterStack.checkTags(this.storage[slot], amount)) return false;
         if (amount.getType() != null && !matterSlot.isValid(amount.getType(), amount.getTags())) return false;
@@ -189,10 +195,11 @@ public abstract class MatterHandler implements IMatterHandler {
     public boolean setStored(MatterStack matterStack, int slot) {
         MatterSlotProperties matterSlot = this.slots.get(slot);
         MatterStack matterStorage = this.storage[slot];
-        if (matterStack.getType() != null && matterSlot.isValid(matterStack.getType(), matterStack.getTags())) return false;
-        SeptiLong amount = matterStack.getAmount();
+        if (matterStack.getType() != null && matterSlot.isValid(matterStack.getType(), matterStack.getTags()))
+            return false;
+        UnLong amount = matterStack.getAmount();
 
-        if (amount.isGreaterThan(this.getSpace(slot))) amount.set(this.getSpace(slot));
+        if (amount.isGreaterThan(this.getSpace(slot))) amount.setTo(this.getSpace(slot));
 
         matterStorage.set(matterStack.getType(), amount);
         this.onChanged();
@@ -202,8 +209,10 @@ public abstract class MatterHandler implements IMatterHandler {
     public CompoundTag serializeNBT(CompoundTag tag) {
         for (int i = 0; i < this.storage.length; i++) {
             MatterStack storage = this.storage[i];
-            tag.putString("matterStorageType_" + i, storage.getType() == null ? "404" : storage.getType().getId().toString());
-            tag.putLongArray("matterStorageAmount_" + i, storage.getAmount().getLayer());
+            if (storage.isEmpty()) continue;
+
+            tag.putString("matterStorageType_" + i, storage.getType().getId().toString());
+            tag.putLongArray("matterStorageAmount_" + i, storage.getAmount().getValues());
             CompoundTag matterStorageTags = new CompoundTag();
             for (int j = 0; j < storage.getTags().size(); j++) {
                 matterStorageTags.putString("key_" + j, storage.getTags().getKeys().get(j));
@@ -216,7 +225,19 @@ public abstract class MatterHandler implements IMatterHandler {
 
     public void deserializeNBT(CompoundTag tag) {
         for (int i = 0; i < this.storage.length; i++) {
-            MatterStack matterStack = new MatterStack(tag.getString("matterStorageType_" + i).equals("404") ? null : MatterManager.get().get(new ResourceLocation(tag.getString("matterStorageType_" + i))), SeptiLong.createFromList(tag.getLongArray("matterStorageAmount_" + i)));
+            if (!tag.contains("matterStorageType_" + i) || !tag.contains("matterStorageAmount_" + i) || !tag.contains("matterStorageTags_" + i))
+                continue;
+
+            Map<ResourceLocation, MatterType> matterManager = MatterManager.get();
+
+            ResourceLocation typeId = new ResourceLocation(tag.getString("matterStorageType_" + i));
+            long[] amount = tag.getLongArray("matterStorageAmount_" + i);
+            MatterType type = matterManager.get(typeId);
+            if (type == null) {
+                continue;
+            }
+
+            MatterStack matterStack = new MatterStack(type, UnLong.createWithoutReverse(Arrays.stream(amount).boxed().toList()));
             CompoundTag matterStorageTags = tag.getCompound("matterStorageTags_" + i);
             for (int j = 0; matterStorageTags.contains("key_" + j) && matterStorageTags.contains("value_" + j); j++) {
                 matterStack.getTags().put(matterStorageTags.getString("key_" + j), matterStorageTags.getString("value_" + j));
@@ -225,12 +246,12 @@ public abstract class MatterHandler implements IMatterHandler {
         }
     }
 
-    public SeptiLong getMaxReceive(int slot) {
+    public UnLong getMaxReceive(int slot) {
         MatterSlotProperties matterSlot = this.slots.get(slot);
         return matterSlot.maxReceive().copy();
     }
 
-    public SeptiLong getMaxExtract(int slot) {
+    public UnLong getMaxExtract(int slot) {
         MatterSlotProperties matterSlot = this.slots.get(slot);
         return matterSlot.maxExtract().copy();
     }

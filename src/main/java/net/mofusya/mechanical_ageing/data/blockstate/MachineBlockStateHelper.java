@@ -3,6 +3,7 @@ package net.mofusya.mechanical_ageing.data.blockstate;
 import net.minecraft.resources.ResourceLocation;
 import net.mofusya.mechanical_ageing.alloyset.MAgAlloySets;
 import net.mofusya.mechanical_ageing.machinetiles.MachineObject;
+import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
 import net.mofusya.mechanical_ageing.tiles.MAgMachines;
 import org.jetbrains.annotations.NotNull;
@@ -109,9 +110,8 @@ public class MachineBlockStateHelper {
         );
 
         builderList.add(builder(MAgMachines.BASIC_WATTER_PUMP)
-                .background("block/compressed_block", false)
-                .backgroundColor(MAgAlloySets.STEEL.color())
-                .baseTexture("minecraft", "block/water_still", false)
+                .background("minecraft", "block/water_still", false)
+                .backgroundColor(MAgMatterTypes.WATER.getColor())
                 .frameColor(MAgAlloySets.STEEL.color())
                 .sideColor(MAgAlloySets.STEEL.color() - 0x202020)
                 .upperCrystalColor(MAgMetalSets.ALUMINUM.color())

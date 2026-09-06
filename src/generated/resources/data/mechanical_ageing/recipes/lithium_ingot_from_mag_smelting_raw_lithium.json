@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "ONE",
+    "multiplier": 453
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:raw_lithium"
+  },
+  "result": {
+    "item": "mechanical_ageing:lithium_ingot"
+  },
+  "smeltTime": 200
+}

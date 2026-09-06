@@ -15,6 +15,7 @@ import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.recipe.TurbineRotatingRecipe;
+import net.mofusya.ornatelib.lang.UnLong;
 import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import org.jetbrains.annotations.Nullable;
@@ -25,27 +26,27 @@ import java.util.Optional;
 public class ImpulseTurbineChamber extends MachineTile {
     @Nullable
     protected final MutableComponent displayName;
-    protected final SeptiLong vaporTankCapacity;
-    protected final SeptiLong vaporTankMaxReceive;
-    protected final SeptiLong vaporTankMaxExtract;
-    protected final SeptiLong rotationTankCapacity;
-    protected final SeptiLong rotationTankMaxReceive;
-    protected final SeptiLong rotationTankMaxExtract;
+    protected final UnLong vaporTankCapacity;
+    protected final UnLong vaporTankMaxReceive;
+    protected final UnLong vaporTankMaxExtract;
+    protected final UnLong rotationTankCapacity;
+    protected final UnLong rotationTankMaxReceive;
+    protected final UnLong rotationTankMaxExtract;
     protected final double upgradeMultiplier;
 
-    public ImpulseTurbineChamber(ResourceLocation id, SeptiLong vaporTankCapacity, SeptiLong vaporTankMaxReceive, SeptiLong vaporTankMaxExtract, SeptiLong rotationTankCapacity, SeptiLong rotationTankMaxReceive, SeptiLong rotationTankMaxExtract) {
+    public ImpulseTurbineChamber(ResourceLocation id, UnLong vaporTankCapacity, UnLong vaporTankMaxReceive, UnLong vaporTankMaxExtract, UnLong rotationTankCapacity, UnLong rotationTankMaxReceive, UnLong rotationTankMaxExtract) {
         this(id, null, vaporTankCapacity, vaporTankMaxReceive, vaporTankMaxExtract, rotationTankCapacity, rotationTankMaxReceive, rotationTankMaxExtract, 1);
     }
 
-    public ImpulseTurbineChamber(ResourceLocation id, @Nullable MutableComponent displayName, SeptiLong vaporTankCapacity, SeptiLong vaporTankMaxReceive, SeptiLong vaporTankMaxExtract, SeptiLong rotationTankCapacity, SeptiLong rotationTankMaxReceive, SeptiLong rotationTankMaxExtract) {
+    public ImpulseTurbineChamber(ResourceLocation id, @Nullable MutableComponent displayName, UnLong vaporTankCapacity, UnLong vaporTankMaxReceive, UnLong vaporTankMaxExtract, UnLong rotationTankCapacity, UnLong rotationTankMaxReceive, UnLong rotationTankMaxExtract) {
         this(id, displayName, vaporTankCapacity, vaporTankMaxReceive, vaporTankMaxExtract, rotationTankCapacity, rotationTankMaxReceive, rotationTankMaxExtract, 1);
     }
 
-    public ImpulseTurbineChamber(ResourceLocation id, SeptiLong vaporTankCapacity, SeptiLong vaporTankMaxReceive, SeptiLong vaporTankMaxExtract, SeptiLong rotationTankCapacity, SeptiLong rotationTankMaxReceive, SeptiLong rotationTankMaxExtract, double upgradeMultiplier) {
+    public ImpulseTurbineChamber(ResourceLocation id, UnLong vaporTankCapacity, UnLong vaporTankMaxReceive, UnLong vaporTankMaxExtract, UnLong rotationTankCapacity, UnLong rotationTankMaxReceive, UnLong rotationTankMaxExtract, double upgradeMultiplier) {
         this(id, null, vaporTankCapacity, vaporTankMaxReceive, vaporTankMaxExtract, rotationTankCapacity, rotationTankMaxReceive, rotationTankMaxExtract, upgradeMultiplier);
     }
 
-    public ImpulseTurbineChamber(ResourceLocation id, @Nullable MutableComponent displayName, SeptiLong vaporTankCapacity, SeptiLong vaporTankMaxReceive, SeptiLong vaporTankMaxExtract, SeptiLong rotationTankCapacity, SeptiLong rotationTankMaxReceive, SeptiLong rotationTankMaxExtract, double upgradeMultiplier) {
+    public ImpulseTurbineChamber(ResourceLocation id, @Nullable MutableComponent displayName, UnLong vaporTankCapacity, UnLong vaporTankMaxReceive, UnLong vaporTankMaxExtract, UnLong rotationTankCapacity, UnLong rotationTankMaxReceive, UnLong rotationTankMaxExtract, double upgradeMultiplier) {
         super(id);
         this.displayName = displayName;
         this.vaporTankCapacity = vaporTankCapacity;
@@ -104,7 +105,7 @@ public class ImpulseTurbineChamber extends MachineTile {
         }
     }
 
-    public SeptiLong modifyByUpgrades(SeptiLong amount, MachineBlockEntity blockEntity) {
-        return amount.multiply((float) (getUpgradeMultiplier(blockEntity, 4) * this.upgradeMultiplier));
+    public UnLong modifyByUpgrades(UnLong amount, MachineBlockEntity blockEntity) {
+        return amount.multi((float) (getUpgradeMultiplier(blockEntity, 4) * this.upgradeMultiplier));
     }
 }

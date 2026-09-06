@@ -10,14 +10,19 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
+import net.mofusya.mechanical_ageing.C;
 import net.mofusya.mechanical_ageing.matter.LazyMatterStack;
 import net.mofusya.mechanical_ageing.matter.LazyMatterType;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
+import net.mofusya.ornatelib.lang.UnLong;
 import net.mofusya.ornatelib.util.ArrayMap;
 import net.mofusya.ornatelib.lang.SeptiLong;
-import net.mofusya.ornatelib.lang.SeptiLongValue;
+
+import java.util.Arrays;
 
 public abstract class MAgRecipe implements Recipe<MAgContainer> {
+    private static final UnLongJsonReader unLongJsonReader = new UnLongJsonReader(C.DIGIT, C.MULTIPLIER);
+
     private final ResourceLocation id;
     private final RecipeSerializer<?> serializer;
     private final RecipeType<?> type;
@@ -64,15 +69,13 @@ public abstract class MAgRecipe implements Recipe<MAgContainer> {
     }
 
     //Json Helpers
-    protected static SeptiLong readSeptiLong(JsonObject json, String id) {
-        var septiLong = GsonHelper.getAsJsonObject(json, id);
-        SeptiLong digit = SeptiLongValue.valueOf(GsonHelper.getAsString(septiLong, "digit")).get();
-        int multiplier = GsonHelper.getAsInt(septiLong, "multiplier");
-        return digit.multiply(multiplier);
+    protected static UnLong readUnLong(JsonObject json, String id) {
+        var unLong = GsonHelper.getAsJsonObject(json, id);
+        return unLongJsonReader.get(unLong);
     }
 
-    protected static SeptiLong readSeptiLong(FriendlyByteBuf buf) {
-        return SeptiLong.createFromList(buf.readLongArray());
+    protected static UnLong readUnLong(FriendlyByteBuf buf) {
+        return UnLong.createWithoutReverse(Arrays.stream(buf.readLongArray()).boxed().toList());
     }
 
     protected static ItemStack readItem(JsonObject json, String id) {
@@ -112,7 +115,7 @@ public abstract class MAgRecipe implements Recipe<MAgContainer> {
     protected static LazyMatterStack readMatter(JsonObject json, String id) {
         JsonObject matter = GsonHelper.getAsJsonObject(json, id);
         ResourceLocation type = new ResourceLocation(GsonHelper.getAsString(matter, "type"));
-        SeptiLong amount = readSeptiLong(matter, "amount");
+        UnLong amount = readUnLong(matter, "amount");
 
         ArrayMap<String, String> tags = new ArrayMap<>();
         JsonArray tagsJson = matter.getAsJsonArray("tags");
@@ -128,7 +131,7 @@ public abstract class MAgRecipe implements Recipe<MAgContainer> {
 
     protected static LazyMatterStack readMatter(FriendlyByteBuf buf) {
         ResourceLocation type = buf.readResourceLocation();
-        SeptiLong amount = readSeptiLong(buf);
+        UnLong amount = readUnLong(buf);
         int tagsSize = buf.readInt();
         ArrayMap<String, String> tags = new ArrayMap<>();
         for (int i = 0; i < tagsSize; i++) {
@@ -184,8 +187,12 @@ public abstract class MAgRecipe implements Recipe<MAgContainer> {
         }
     }
 
-    protected static void writeToBuf(FriendlyByteBuf buf, SeptiLong septiLong) {
-        buf.writeLongArray(septiLong.getLayer());
+    protected static void writeToBuf(FriendlyByteBuf buf, UnLong unLong) {
+        long[] unLongValues = new long[unLong.getLayerSize()];
+        unLong.forEachI((value, index) -> {
+            unLongValues[index] = value;
+        });
+        buf.writeLongArray(unLongValues);
     }
 
     protected static void writeToBuf(FriendlyByteBuf buf, LazyMatterStack matterStack) {
@@ -215,6 +222,6 @@ public abstract class MAgRecipe implements Recipe<MAgContainer> {
     public static boolean test(MatterStack ingredient, MatterStack matterStack) {
         if (matterStack.getType() == null) return false;
 
-        return ingredient.getType() == null || (matterStack.getType().is(ingredient.getType()) && matterStack.getAmount().isGreaterOrSameThan(ingredient.getAmount()) && MatterStack.checkTags(ingredient, matterStack));
+        return ingredient.getType() == null || (matterStack.getType().is(ingredient.getType()) && matterStack.getAmount().isGreaterOrSameAs(ingredient.getAmount()) && MatterStack.checkTags(ingredient, matterStack));
     }
 }

@@ -21,6 +21,7 @@ public class MAgMetalSets {
     public static final MetalSet TUNGSTEN = METAL_SET.register("tungsten", MetalSet.builder(10.59, 326.5, 3369, 6203).color(0x7A7A7A));
     public static final MetalSet CHROMIUM = METAL_SET.register("chromium", MetalSet.builder(7.192, -1, 2180, 2945).color(0x333B3D));
     public static final MetalSet TITANIUM = METAL_SET.register("titanium", MetalSet.builder(4.508, 326.5, 1941, 3560).color(0x4F4F4F));
+    public static final MetalSet LITHIUM = METAL_SET.register("lithium", MetalSet.builder(0.534, 150, 453, 1615).color(0xF2B83B).oreColor(0xFFCCF9));
 
     //検索用めも
     /*

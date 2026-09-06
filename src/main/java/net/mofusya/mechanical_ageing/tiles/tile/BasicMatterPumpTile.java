@@ -22,6 +22,7 @@ import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
+import net.mofusya.ornatelib.lang.UnLong;
 
 public class BasicMatterPumpTile extends MachineTile {
     public BasicMatterPumpTile(ResourceLocation id) {
@@ -31,8 +32,8 @@ public class BasicMatterPumpTile extends MachineTile {
     @Override
     public MatterSlotList getMatterSlots(MatterSlotList slots) {
         return super.getMatterSlots(slots)
-                .create(25, 25, matterType -> matterType.is(MAgMatterTypes.ROTATION), new SeptiLong(1048576), new SeptiLong(1048576), new SeptiLong())
-                .create(next(16, 6) + 9, 25, matterType -> matterType.is(MAgMatterTypes.WATER), SeptiLongValue.BILLION.get(), SeptiLongValue.ZERO.get(), SeptiLongValue.MILLION.get().multiply(10));
+                .create(25, 25, matterType -> matterType.is(MAgMatterTypes.ROTATION), new UnLong(1048576), new UnLong(1048576), UnLong.zero())
+                .create(next(16, 6) + 9, 25, matterType -> matterType.is(MAgMatterTypes.WATER), UnLong.billion(), UnLong.zero(), UnLong.million().multi(10));
     }
 
     @Override

@@ -12,12 +12,13 @@ import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.MAgRecipe;
 import net.mofusya.ornatelib.lang.SeptiLong;
+import net.mofusya.ornatelib.lang.UnLong;
 
 public class TurbineRotatingRecipe extends MAgRecipe {
     protected final LazyMatterType ingredient;
-    protected final SeptiLong result;
+    protected final UnLong result;
 
-    public TurbineRotatingRecipe(ResourceLocation id, LazyMatterType ingredient, SeptiLong result) {
+    public TurbineRotatingRecipe(ResourceLocation id, LazyMatterType ingredient, UnLong result) {
         super(id, Serializer.INSTANCE, Type.INSTANCE);
         this.ingredient = ingredient;
         this.result = result;
@@ -50,7 +51,7 @@ public class TurbineRotatingRecipe extends MAgRecipe {
         public TurbineRotatingRecipe fromJson(ResourceLocation id, JsonObject json) {
             return new TurbineRotatingRecipe(id,
                     readMatterType(json, "ingredient"),
-                    readSeptiLong(json, "result")
+                    readUnLong(json, "result")
             );
         }
 
@@ -58,7 +59,7 @@ public class TurbineRotatingRecipe extends MAgRecipe {
         public TurbineRotatingRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
             return new TurbineRotatingRecipe(id,
                     readMatterType(buf),
-                    readSeptiLong(buf)
+                    readUnLong(buf)
             );
         }
 

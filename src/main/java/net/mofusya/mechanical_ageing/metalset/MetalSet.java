@@ -14,9 +14,8 @@ import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.world_generation.ModBiomeModifiers;
 import net.mofusya.mechanical_ageing.world_generation.ModConfiguredFeatures;
 import net.mofusya.mechanical_ageing.world_generation.ModPlacedFeatures;
-import net.mofusya.ornatelib.lang.SeptiLong;
 
-public final class MetalSet {
+public final class MetalSet implements IMetalLike{
     private final ResourceKey<ConfiguredFeature<?, ?>> oreKey;
     private final ResourceKey<PlacedFeature> orePlacedKey;
     private final ResourceKey<BiomeModifier> oreBiomeKey;
@@ -120,6 +119,27 @@ public final class MetalSet {
         return this.mineableWith;
     }
 
+    public RegistryObject<Item> getRegistryObject(ItemType type){
+        return switch (type){
+            case INGOT -> this.ingot;
+            case CHUNK -> this.chunk;
+            case PURE_DUST -> this.pureDust;
+            case DUSt -> this.dust;
+            case DIRTY_DUST -> this.dirtyDust;
+            case PARTICLE -> this.particle;
+            case NUGGET -> this.nugget;
+        };
+    }
+
+    public RegistryObject<Block> getRegistryObject(BlockType type){
+        return switch (type){
+            case ORE -> this.ore;
+            case DEEPSLATE_ORE -> this.deepslateOre;
+            case BLOCK -> this.block;
+            case COMPRESSED_BLOCk -> this.compressedBlock;
+        };
+    }
+
     public int color() {
         return this.color;
     }
@@ -154,6 +174,23 @@ public final class MetalSet {
 
     public static Builder builder(double density, double hardness, int meltingPoint, int boilingPoint){
         return new Builder(density, hardness, meltingPoint, boilingPoint);
+    }
+
+    public enum ItemType {
+        INGOT,
+        CHUNK,
+        PURE_DUST,
+        DUSt,
+        DIRTY_DUST,
+        PARTICLE,
+        NUGGET
+    }
+
+    public enum BlockType {
+        ORE,
+        DEEPSLATE_ORE,
+        BLOCK,
+        COMPRESSED_BLOCk
     }
 
     public static class Builder {

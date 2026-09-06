@@ -57,6 +57,11 @@
   "advancements.mechanical_ageing.root": "Mechanical Ageing",
   "advancements.mechanical_ageing.root.desc": "Chapter.I-The Brick Age",
 
+  "item.mechanical_ageing.cobalt_lithium_battery_core": "Cobalt Lithium Battery Core",
+  "item.mechanical_ageing.cobalt_lithium_battery": "Cobalt Lithium Battery",
+  "item.mechanical_ageing.nickel_lithium_battery_core": "Nickel Lithium Battery Core",
+  "item.mechanical_ageing.nickel_lithium_battery": "Nickel Lithium Battery",
+
   "item.mechanical_ageing.machine_upgrade_archive_tier_1": "Machine Upgrade Archive [I]",
   "item.mechanical_ageing.machine_upgrade_archive_tier_2": "Machine Upgrade Archive [II]",
   "item.mechanical_ageing.machine_upgrade_archive_tier_3": "Machine Upgrade Archive [III]",
@@ -297,6 +302,19 @@
   "item.mechanical_ageing.titanium_particle": "Titanium Particle",
   "item.mechanical_ageing.raw_titanium": "Raw Titanium",
   "item.mechanical_ageing.titanium_nugget": "Titanium Nugget",
+
+  "block.mechanical_ageing.compressed_lithium_block": "Compressed Lithium Block",
+  "block.mechanical_ageing.lithium_block": "Lithium Block",
+  "block.mechanical_ageing.lithium_ore": "Kunzite Ore",
+  "block.mechanical_ageing.deepslate_lithium_ore": "Deepslate Kunzite Ore",
+  "item.mechanical_ageing.lithium_ingot": "Lithium Ingots",
+  "item.mechanical_ageing.lithium_chunk": "Lithium Chunk",
+  "item.mechanical_ageing.pure_lithium_dust": "Pure Lithium Dust",
+  "item.mechanical_ageing.lithium_dust": "Kunzite Dust",
+  "item.mechanical_ageing.dirty_lithium_dust": "Dirty Kunzite Dust",
+  "item.mechanical_ageing.lithium_particle": "Kunzite Particle",
+  "item.mechanical_ageing.raw_lithium": "Raw Kunzite",
+  "item.mechanical_ageing.lithium_nugget": "Lithium Nugget",
 
   "item.mechanical_ageing.attributed_item.density": "§7Density§8(g/cm³)",
   "item.mechanical_ageing.attributed_item.hardness": "§7Hardness§8(MPa)",

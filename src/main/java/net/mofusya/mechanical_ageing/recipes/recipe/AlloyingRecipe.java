@@ -13,15 +13,16 @@ import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.MAgRecipe;
 import net.mofusya.ornatelib.lang.SeptiLong;
+import net.mofusya.ornatelib.lang.UnLong;
 
 public class AlloyingRecipe extends MAgRecipe {
     private final Ingredient ingredient;
     private final Ingredient subIngredient;
-    private final SeptiLong heatAmount;
+    private final UnLong heatAmount;
     private final int smeltTime;
     private final ItemStack result;
 
-    public AlloyingRecipe(ResourceLocation id, Ingredient ingredient, Ingredient subIngredient, SeptiLong heatAmount, int smeltTime, ItemStack result) {
+    public AlloyingRecipe(ResourceLocation id, Ingredient ingredient, Ingredient subIngredient, UnLong heatAmount, int smeltTime, ItemStack result) {
         super(id, Serializer.INSTANCE, Type.INSTANCE);
         this.ingredient = ingredient;
         this.subIngredient = subIngredient;
@@ -70,7 +71,7 @@ public class AlloyingRecipe extends MAgRecipe {
             return new AlloyingRecipe(id,
                     readIngredient(json, "ingredient"),
                     readIngredient(json, "subIngredient"),
-                    readSeptiLong(json, "heatAmount"),
+                    readUnLong(json, "heatAmount"),
                     readInt(json, "smeltTime"),
                     readItem(json, "result")
             );
@@ -81,7 +82,7 @@ public class AlloyingRecipe extends MAgRecipe {
             return new AlloyingRecipe(id,
                     readIngredient(buf),
                     readIngredient(buf),
-                    readSeptiLong(buf),
+                    readUnLong(buf),
                     buf.readInt(),
                     readItem(buf)
             );

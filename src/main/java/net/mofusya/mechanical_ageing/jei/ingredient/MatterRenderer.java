@@ -46,7 +46,7 @@ public class MatterRenderer implements IIngredientRenderer<MatterStack> {
 
         ArrayList<Component> components = new ArrayList<>();
         components.add(Component.translatable(type.getTranslationId()));
-        components.add(Component.literal(SeptiLongHelper.convertToStringAndAddSuffix(matterStack.getAmount()) + type.getSuffix()).withStyle(ChatFormatting.DARK_GRAY));
+        components.add(matterStack.getAmount().toComponent(true, true).append(type.getSuffix()).withStyle(ChatFormatting.DARK_GRAY));
 
         matterStack.getTags().forEach((key, value) -> components.add(Component.translatable("matter_attribute." + key).append(": " + value).withStyle(ChatFormatting.DARK_GRAY)));
 

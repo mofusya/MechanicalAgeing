@@ -15,6 +15,7 @@ import net.mofusya.mechanical_ageing.machinetiles.watt.WattEnergyStorage;
 import net.mofusya.mechanical_ageing.machinetiles.watt.WattSlotProperties;
 import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
+import net.mofusya.ornatelib.lang.UnLong;
 import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
@@ -43,13 +44,13 @@ public class RotationGeneratorTile extends MachineTile {
 
     @Override
     public @Nullable WattSlotProperties getWattSlot() {
-        return new WattSlotProperties(151, SeptiLongValue.THOUSAND.get().multiply(48), new SeptiLong(), SeptiLongValue.THOUSAND.get().multiply(48));
+        return new WattSlotProperties(151, UnLong.thousand().multi(48), UnLong.zero(), UnLong.thousand().multi(48));
     }
 
     @Override
     public MatterSlotList getMatterSlots(MatterSlotList slots) {
         return super.getMatterSlots(slots)
-                .create(176 / 2 - 9, 23, matterType -> matterType.is(MAgMatterTypes.ROTATION), new SeptiLong(1048576), new SeptiLong(1048576), new SeptiLong());
+                .create(176 / 2 - 9, 23, matterType -> matterType.is(MAgMatterTypes.ROTATION), new UnLong(1048576), new UnLong(1048576), UnLong.zero());
     }
 
     @Override
@@ -62,15 +63,15 @@ public class RotationGeneratorTile extends MachineTile {
         if (wattEnergyStorage == null) return;
 
         MatterStack ingredient = new MatterStack(MAgMatterTypes.ROTATION, 100);
-        SeptiLong result = new SeptiLong(8);
+        UnLong result = new UnLong(8);
 
         if (matterHandler.canExtractFromInside(ingredient, 0) && wattEnergyStorage.canReceiveFromInside(result)){
-            int ingredientCount = (int) matterHandler.getStored(0).getAmount().divideAndGetFloat(100);
-            int resultCount = (int) wattEnergyStorage.getSpace().divideAndGetFloat(8);
+            int ingredientCount = matterHandler.getStored(0).getAmount().simulateDivAndGetFloat(new UnLong(100f)).intValue();
+            int resultCount = wattEnergyStorage.getSpace().simulateDivAndGetFloat(new UnLong(8f)).intValue();
             int count = Math.min(ingredientCount, resultCount);
 
-            ingredient.modifyAmount(amount -> amount.multiply(count));
-            result.multiply(count);
+            ingredient.modifyAmount(amount -> amount.multi(count));
+            result.multi(count);
 
             matterHandler.extractFromInside(ingredient, 0);
             wattEnergyStorage.receiveFromInside(result, false);

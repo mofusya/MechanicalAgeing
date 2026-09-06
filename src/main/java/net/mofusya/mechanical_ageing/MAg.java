@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.alloyset.AlloySet;
 import net.mofusya.mechanical_ageing.alloyset.MAgAlloySets;
 import net.mofusya.mechanical_ageing.blocks.MAgBlocks;
@@ -21,6 +22,8 @@ import net.mofusya.mechanical_ageing.data.blockstate.MachineBlockStateBuilder;
 import net.mofusya.mechanical_ageing.data.blockstate.MachineBlockStateHelper;
 import net.mofusya.mechanical_ageing.items.MAgItem;
 import net.mofusya.mechanical_ageing.items.MAgTabs;
+import net.mofusya.mechanical_ageing.items.item.BatteryCoreItem;
+import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
 import net.mofusya.mechanical_ageing.recipes.MAgRecipes;
@@ -44,6 +47,7 @@ public class MAg {
         MAgMachines.MACHINES.register(modEventBus);
         MAgRecipes.SERIALIZERS.register(modEventBus);
         MAgAlloySets.ALLOYS.register(modEventBus);
+        MAgMatterTypes.MATTERS.register();
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
@@ -126,6 +130,17 @@ public class MAg {
 
         @SubscribeEvent
         public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
+            for (RegistryObject<Item> item : MAgItem.ITEMS.getItems(2)) {
+                if (item.get() instanceof BatteryCoreItem batteryOrCore) {
+                    event.register((itemStack, tintIndex) -> {
+                        if (tintIndex == 1) {
+                            return batteryOrCore.getColor();
+                        }
+                        return 0xFFFFFF;
+                    }, item.get());
+                }
+            }
+
             for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST) {
                 event.register((itemStack, tintIndex) -> switch (tintIndex) {
                     case 0 -> builder.getFrameColor() == -404 ? 0xFFFFFF : builder.getFrameColor();
@@ -152,9 +167,6 @@ public class MAg {
                 items.add(metalSet.ingot());
                 items.add(metalSet.chunk());
                 items.add(metalSet.pureDust());
-                items.add(metalSet.dust());
-                items.add(metalSet.dirtyDust());
-                items.add(metalSet.particle());
                 items.add(metalSet.nugget());
                 items.add(metalSet.compressedBlock().asItem());
                 items.add(metalSet.block().asItem());
@@ -172,6 +184,9 @@ public class MAg {
                 oreItems.add(metalSet.raw());
                 oreItems.add(metalSet.ore().asItem());
                 oreItems.add(metalSet.deepslateOre().asItem());
+                oreItems.add(metalSet.dust());
+                oreItems.add(metalSet.dirtyDust());
+                oreItems.add(metalSet.particle());
 
                 for (Item item : oreItems) {
                     event.register((itemStack, tintIndex) -> {

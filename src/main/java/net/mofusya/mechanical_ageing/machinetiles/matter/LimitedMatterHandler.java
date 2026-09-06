@@ -2,6 +2,7 @@ package net.mofusya.mechanical_ageing.machinetiles.matter;
 
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.ornatelib.lang.SeptiLong;
+import net.mofusya.ornatelib.lang.UnLong;
 
 import java.util.List;
 
@@ -47,8 +48,8 @@ public class LimitedMatterHandler implements IMatterHandler {
     }
 
     @Override
-    public SeptiLong getMaxStored(int slot) {
-        if (!this.allowedSlots.contains(slot)) return new SeptiLong();
+    public UnLong getMaxStored(int slot) {
+        if (!this.allowedSlots.contains(slot)) return UnLong.zero();
         return this.handler.getMaxStored(slot);
     }
 
@@ -89,13 +90,13 @@ public class LimitedMatterHandler implements IMatterHandler {
         return this.handler.setStored(matterStack, slot);
     }
 
-    public SeptiLong getMaxReceive(int slot) {
-        if (!this.allowedSlots.contains(slot)) return new SeptiLong();
+    public UnLong getMaxReceive(int slot) {
+        if (!this.allowedSlots.contains(slot)) return UnLong.zero();
         return this.handler.getMaxReceive(slot);
     }
 
-    public SeptiLong getMaxExtract(int slot) {
-        if (!this.allowedSlots.contains(slot)) return new SeptiLong();
+    public UnLong getMaxExtract(int slot) {
+        if (!this.allowedSlots.contains(slot)) return UnLong.zero();
         return this.handler.getMaxExtract(slot);
     }
 

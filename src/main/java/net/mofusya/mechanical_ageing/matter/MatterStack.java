@@ -1,8 +1,10 @@
 package net.mofusya.mechanical_ageing.matter;
 
+import net.mofusya.ornatelib.lang.UnLong;
 import net.mofusya.ornatelib.util.ArrayMap;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
+import net.mofusya.ornatelib.util.function.Modification;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +14,7 @@ public final class MatterStack {
     @Nullable
     private MatterType type;
     @NotNull
-    private SeptiLong amount;
+    private UnLong amount;
     @NotNull
     private ArrayMap<String, String> tags;
 
@@ -21,14 +23,14 @@ public final class MatterStack {
     }
 
     public MatterStack(@Nullable MatterType type, long amount) {
-        this(type, new SeptiLong(amount));
+        this(type, new UnLong(amount));
     }
 
-    public MatterStack(@Nullable MatterType type, @NotNull SeptiLong amount) {
+    public MatterStack(@Nullable MatterType type, @NotNull UnLong amount) {
         this(type, amount, null);
     }
 
-    public MatterStack(@Nullable MatterType type, @NotNull SeptiLong amount, @Nullable ArrayMap<String, String> tags) {
+    public MatterStack(@Nullable MatterType type, @NotNull UnLong amount, @Nullable ArrayMap<String, String> tags) {
         this.type = type;
         this.amount = amount.copy();
         this.tags = tags == null ? new ArrayMap<>() : tags;
@@ -58,19 +60,23 @@ public final class MatterStack {
     }
 
     public boolean extract(MatterStack matterStack, boolean simulate) {
-        if (matterStack == null || this.type == null || this.amount.isSmallerOrSameThan(0)) return false;
+        if (matterStack == null || this.type == null || this.amount.isSmallerOrSameAs(0)) return false;
         if (!checkTags(this, matterStack)) return false;
 
         if (matterStack.getType() == null || (this.type.is(matterStack.getType()) && this.tags.matches(matterStack.getTags()))) {
             if (!simulate) {
-                this.modifyAmount(matterAmount -> matterAmount.remove(matterStack.getAmount()));
-                if (this.getNoneTypeAmount().isSmallerOrSameThan(0)){
+                this.modifyAmount(matterAmount -> matterAmount.min(matterStack.getAmount()));
+                if (this.getNoneTypeAmount().isSmallerOrSameAs(0)){
                     this.type = null;
                 }
             }
             return true;
         }
         return false;
+    }
+
+    public boolean isEmpty(){
+        return this.type == null || this.amount.equals(UnLong.zero());
     }
 
     public MatterStack copy() {
@@ -85,26 +91,26 @@ public final class MatterStack {
     public void setType(@Nullable MatterType type) {
         this.type = type;
         if (type == null) {
-            this.amount = SeptiLongValue.ZERO.get();
+            this.amount = UnLong.zero();
         }
     }
 
     public void setAmount(long amount) {
-        this.setAmount(new SeptiLong(amount));
+        this.setAmount(new UnLong(amount));
     }
 
-    public void setAmount(@NotNull SeptiLong amount) {
+    public void setAmount(@NotNull UnLong amount) {
         this.amount = amount;
     }
 
     public void set(@Nullable MatterType type, long amount) {
-        this.set(type, new SeptiLong(amount));
+        this.set(type, new UnLong(amount));
     }
 
-    public void set(@Nullable MatterType type, @NotNull SeptiLong amount) {
+    public void set(@Nullable MatterType type, @NotNull UnLong amount) {
         this.type = type;
         if (type == null) {
-            this.amount = SeptiLongValue.ZERO.get();
+            this.amount = UnLong.zero();
         } else {
             this.amount = amount;
         }
@@ -114,11 +120,11 @@ public final class MatterStack {
         this.modify(matterFunc, null);
     }
 
-    public void modifyAmount(@NotNull Function<SeptiLong, @NotNull SeptiLong> amountFunc) {
+    public void modifyAmount(@NotNull Modification<UnLong> amountFunc) {
         this.modify(null, amountFunc);
     }
 
-    public void modify(@Nullable Function<MatterType, MatterType> matterFunc, @Nullable Function<SeptiLong, @NotNull SeptiLong> amountFunc) {
+    public void modify(@Nullable Function<MatterType, MatterType> matterFunc, @Nullable Modification<UnLong> amountFunc) {
         if (matterFunc != null) this.type = matterFunc.apply(this.type);
         if (amountFunc != null) this.amount = amountFunc.apply(this.amount);
     }
@@ -132,11 +138,11 @@ public final class MatterStack {
         return this.amount.isGreaterThan(0) ? this.type : null;
     }
 
-    public @NotNull SeptiLong getAmount() {
-        return this.type != null ? this.amount.copy() : SeptiLongValue.ZERO.get();
+    public @NotNull UnLong getAmount() {
+        return this.type != null ? this.amount.copy() : UnLong.zero();
     }
 
-    public @NotNull SeptiLong getNoneTypeAmount() {
+    public @NotNull UnLong getNoneTypeAmount() {
         return this.amount.copy();
     }
 
@@ -151,5 +157,10 @@ public final class MatterStack {
         if (matterStackA.getType() == null || matterStackB.getType() == null) return true;
 
         return matterStackA.getTags().matches(matterStackB.getTags());
+    }
+
+    @Override
+    public String toString() {
+        return (this.type == null? "Air" : this.type.getId()) + ": " + this.amount;
     }
 }

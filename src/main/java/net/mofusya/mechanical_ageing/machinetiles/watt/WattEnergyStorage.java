@@ -3,29 +3,35 @@ package net.mofusya.mechanical_ageing.machinetiles.watt;
 import net.minecraft.nbt.CompoundTag;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
+import net.mofusya.ornatelib.lang.UnLong;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
 public class WattEnergyStorage implements IWattEnergyStorage {
-    protected final SeptiLong stored;
-    protected final SeptiLong capacity;
-    protected final @Nullable SeptiLong maxReceive;
-    protected final @Nullable SeptiLong maxExtract;
+    protected final UnLong stored;
+    protected final UnLong capacity;
+    protected final @Nullable UnLong maxReceive;
+    protected final @Nullable UnLong maxExtract;
 
     protected final Runnable changeFunc;
 
-    public WattEnergyStorage(SeptiLong capacity, Runnable changeFunc) {
-        this(capacity, new SeptiLong(), capacity, capacity, changeFunc);
+    public WattEnergyStorage(UnLong capacity, Runnable changeFunc) {
+        this(capacity, UnLong.zero(), capacity, capacity, changeFunc);
     }
 
-    public WattEnergyStorage(SeptiLong capacity, SeptiLong stored, Runnable changeFunc) {
+    public WattEnergyStorage(UnLong capacity, UnLong stored, Runnable changeFunc) {
         this(capacity, stored, capacity, capacity, changeFunc);
     }
 
-    public WattEnergyStorage(SeptiLong capacity, SeptiLong stored, @Nullable SeptiLong maxTransfer, Runnable changeFunc) {
+    public WattEnergyStorage(UnLong capacity, UnLong stored, @Nullable UnLong maxTransfer, Runnable changeFunc) {
         this(capacity, stored, maxTransfer, maxTransfer, changeFunc);
     }
 
-    public WattEnergyStorage(SeptiLong capacity, SeptiLong stored, @Nullable SeptiLong maxReceive, @Nullable SeptiLong maxExtract, Runnable changeFunc) {
+    public WattEnergyStorage(UnLong capacity, UnLong stored, @Nullable UnLong maxReceive, @Nullable UnLong maxExtract, Runnable changeFunc) {
         this.capacity = capacity.copy();
         this.stored = stored.copy();
         this.maxReceive = maxReceive == null ? null : maxReceive.copy();
@@ -33,41 +39,12 @@ public class WattEnergyStorage implements IWattEnergyStorage {
         this.changeFunc = changeFunc;
     }
 
-    public SeptiLong receive(SeptiLong maxReceive, boolean simulate) {
-        if (maxReceive.isSmallerThan(0) || !this.canReceive()) return new SeptiLong();
+    public UnLong receive(UnLong maxReceive, boolean simulate) {
+        if (maxReceive.isSmallerThan(0) || !this.canReceive()) return UnLong.zero();
 
-        SeptiLong receive = maxReceive.copy();
-        if (receive.isGreaterThan(this.getSpace())) receive.set(this.getSpace());
-        if (receive.isGreaterThan(this.getMaxReceive())) receive.set(this.getMaxReceive());
-
-        if (!simulate) {
-            this.stored.add(receive);
-            this.onChanged();
-        }
-
-        return receive;
-    }
-
-    public SeptiLong extract(SeptiLong maxExtract, boolean simulate) {
-        if (maxExtract.isSmallerThan(0) || !this.canExtract()) return new SeptiLong();
-
-        SeptiLong extract = maxExtract.copy();
-        if (extract.isGreaterThan(this.getStored())) extract.set(this.getStored());
-        if (extract.isGreaterThan(this.getMaxExtract())) extract.set(this.getMaxExtract());
-
-        if (!simulate) {
-            this.stored.add(extract);
-            this.onChanged();
-        }
-
-        return extract;
-    }
-
-    public SeptiLong receiveFromInside(SeptiLong maxReceive, boolean simulate) {
-        if (maxReceive.isSmallerThan(0)) return new SeptiLong();
-
-        SeptiLong receive = maxReceive.copy();
-        if (receive.isGreaterThan(this.getSpace())) receive.set(this.getSpace());
+        UnLong receive = maxReceive.copy();
+        if (receive.isGreaterThan(this.getSpace())) receive.setTo(this.getSpace());
+        if (receive.isGreaterThan(this.getMaxReceive())) receive.setTo(this.getMaxReceive());
 
         if (!simulate) {
             this.stored.add(receive);
@@ -77,11 +54,12 @@ public class WattEnergyStorage implements IWattEnergyStorage {
         return receive;
     }
 
-    public SeptiLong extractFromInside(SeptiLong maxExtract, boolean simulate) {
-        if (maxExtract.isSmallerThan(0)) return new SeptiLong();
+    public UnLong extract(UnLong maxExtract, boolean simulate) {
+        if (maxExtract.isSmallerThan(0) || !this.canExtract()) return UnLong.zero();
 
-        SeptiLong extract = maxExtract.copy();
-        if (extract.isGreaterThan(this.getStored())) extract.set(this.getStored());
+        UnLong extract = maxExtract.copy();
+        if (extract.isGreaterThan(this.getStored())) extract.setTo(this.getStored());
+        if (extract.isGreaterThan(this.getMaxExtract())) extract.setTo(this.getMaxExtract());
 
         if (!simulate) {
             this.stored.add(extract);
@@ -91,13 +69,41 @@ public class WattEnergyStorage implements IWattEnergyStorage {
         return extract;
     }
 
-    public SeptiLong getMaxReceive() {
-        if (this.maxReceive == null) return new SeptiLong();
+    public UnLong receiveFromInside(UnLong maxReceive, boolean simulate) {
+        if (maxReceive.isSmallerThan(0)) return UnLong.zero();
+
+        UnLong receive = maxReceive.copy();
+        if (receive.isGreaterThan(this.getSpace())) receive.setTo(this.getSpace());
+
+        if (!simulate) {
+            this.stored.add(receive);
+            this.onChanged();
+        }
+
+        return receive;
+    }
+
+    public UnLong extractFromInside(UnLong maxExtract, boolean simulate) {
+        if (maxExtract.isSmallerThan(0)) return UnLong.zero();
+
+        UnLong extract = maxExtract.copy();
+        if (extract.isGreaterThan(this.getStored())) extract.setTo(this.getStored());
+
+        if (!simulate) {
+            this.stored.add(extract);
+            this.onChanged();
+        }
+
+        return extract;
+    }
+
+    public UnLong getMaxReceive() {
+        if (this.maxReceive == null) return UnLong.zero();
         return this.maxReceive.copy();
     }
 
-    public SeptiLong getMaxExtract() {
-        if (this.maxExtract == null) return new SeptiLong();
+    public UnLong getMaxExtract() {
+        if (this.maxExtract == null) return UnLong.zero();
         return this.maxExtract.copy();
     }
 
@@ -109,45 +115,45 @@ public class WattEnergyStorage implements IWattEnergyStorage {
         return this.getMaxExtract().isGreaterThan(0);
     }
 
-    public boolean canReceive(SeptiLong receive) {
-        return receive.is(SeptiLongValue.ZERO.get()) || (!receive.isGreaterThan(this.getSpace()) && !receive.isGreaterThan(this.getMaxReceive()));
+    public boolean canReceive(UnLong receive) {
+        return receive.equals(UnLong.zero()) || (!receive.isGreaterThan(this.getSpace()) && !receive.isGreaterThan(this.getMaxReceive()));
     }
 
-    public boolean canExtract(SeptiLong extract) {
-        return extract.is(SeptiLongValue.ZERO.get()) || (!extract.isGreaterThan(this.getStored()) && !extract.isGreaterThan(this.getMaxExtract()));
+    public boolean canExtract(UnLong extract) {
+        return extract.equals(UnLong.zero()) || (!extract.isGreaterThan(this.getStored()) && !extract.isGreaterThan(this.getMaxExtract()));
     }
 
-    public boolean canReceiveFromInside(SeptiLong receive) {
-        return receive.is(SeptiLongValue.ZERO.get()) || !receive.isGreaterThan(this.getSpace());
+    public boolean canReceiveFromInside(UnLong receive) {
+        return receive.equals(UnLong.zero()) || !receive.isGreaterThan(this.getSpace());
     }
 
-    public boolean canExtractFromInside(SeptiLong extract) {
-        return extract.is(SeptiLongValue.ZERO.get()) || !extract.isGreaterThan(this.getStored());
+    public boolean canExtractFromInside(UnLong extract) {
+        return extract.equals(UnLong.zero()) || !extract.isGreaterThan(this.getStored());
     }
 
-    public void setStored(SeptiLong stored) {
-        this.stored.set(stored);
+    public void setStored(UnLong stored) {
+        this.stored.setTo(stored);
         this.onChanged();
     }
 
-    public SeptiLong getStored() {
+    public UnLong getStored() {
         return this.stored.copy();
     }
 
-    public SeptiLong getCapacity() {
+    public UnLong getCapacity() {
         return this.capacity.copy();
     }
 
-    public SeptiLong getSpace() {
-        return this.getCapacity().remove(this.getStored()).copy();
+    public UnLong getSpace() {
+        return this.getCapacity().min(this.getStored()).copy();
     }
 
     public void serializeNBT(CompoundTag tag){
-        tag.putLongArray("wattEnergyStorage", this.getStored().getLayer());
+        tag.putLongArray("wattEnergyStorage", this.getStored().getValues());
     }
 
     public void deSerializeNBT(CompoundTag tag){
-        this.stored.set(SeptiLong.createFromList(tag.getLongArray("wattEnergyStorage")));
+        this.stored.setTo(UnLong.createWithoutReverse(Arrays.stream(tag.getLongArray("wattEnergyStorage")).boxed().toList()));
     }
 
     public void onChanged(){

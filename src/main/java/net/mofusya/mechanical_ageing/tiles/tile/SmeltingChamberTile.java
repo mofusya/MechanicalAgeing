@@ -17,6 +17,7 @@ import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.recipe.SmeltingRecipe;
+import net.mofusya.ornatelib.lang.UnLong;
 import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import org.jetbrains.annotations.Nullable;
@@ -27,24 +28,24 @@ import java.util.Optional;
 public class SmeltingChamberTile extends MachineTile {
     @Nullable
     protected final MutableComponent displayName;
-    protected final SeptiLong heatTankCapacity;
-    protected final SeptiLong heatTankMaxReceive;
-    protected final SeptiLong heatTankMaxExtract;
+    protected final UnLong heatTankCapacity;
+    protected final UnLong heatTankMaxReceive;
+    protected final UnLong heatTankMaxExtract;
     protected final double speedMultiplier;
 
-    public SmeltingChamberTile(ResourceLocation id, SeptiLong heatTankCapacity, SeptiLong heatTankMaxReceive, SeptiLong heatTankMaxExtract) {
+    public SmeltingChamberTile(ResourceLocation id, UnLong heatTankCapacity, UnLong heatTankMaxReceive, UnLong heatTankMaxExtract) {
         this(id, null, heatTankCapacity, heatTankMaxReceive, heatTankMaxExtract, 1);
     }
 
-    public SmeltingChamberTile(ResourceLocation id, @Nullable MutableComponent displayName, SeptiLong heatTankCapacity, SeptiLong heatTankMaxReceive, SeptiLong heatTankMaxExtract) {
+    public SmeltingChamberTile(ResourceLocation id, @Nullable MutableComponent displayName, UnLong heatTankCapacity, UnLong heatTankMaxReceive, UnLong heatTankMaxExtract) {
         this(id, displayName, heatTankCapacity, heatTankMaxReceive, heatTankMaxExtract, 1);
     }
 
-    public SmeltingChamberTile(ResourceLocation id, SeptiLong heatTankCapacity, SeptiLong heatTankMaxReceive, SeptiLong heatTankMaxExtract, double speedMultiplier) {
+    public SmeltingChamberTile(ResourceLocation id, UnLong heatTankCapacity, UnLong heatTankMaxReceive, UnLong heatTankMaxExtract, double speedMultiplier) {
         this(id, null, heatTankCapacity, heatTankMaxReceive, heatTankMaxExtract, speedMultiplier);
     }
 
-    public SmeltingChamberTile(ResourceLocation id, @Nullable MutableComponent displayName, SeptiLong heatTankCapacity, SeptiLong heatTankMaxReceive, SeptiLong heatTankMaxExtract, double speedMultiplier) {
+    public SmeltingChamberTile(ResourceLocation id, @Nullable MutableComponent displayName, UnLong heatTankCapacity, UnLong heatTankMaxReceive, UnLong heatTankMaxExtract, double speedMultiplier) {
         super(id);
         this.displayName = displayName;
         this.heatTankCapacity = heatTankCapacity;

@@ -12,13 +12,14 @@ import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.MAgRecipe;
 import net.mofusya.ornatelib.lang.SeptiLong;
+import net.mofusya.ornatelib.lang.UnLong;
 
 public class HeatingRecipe extends MAgRecipe {
     private final LazyMatterStack ingredient;
-    private final SeptiLong heatAmount;
+    private final UnLong heatAmount;
     private final LazyMatterStack result;
 
-    public HeatingRecipe(ResourceLocation id, LazyMatterStack ingredient, SeptiLong heatAmount, LazyMatterStack result) {
+    public HeatingRecipe(ResourceLocation id, LazyMatterStack ingredient, UnLong heatAmount, LazyMatterStack result) {
         super(id, Serializer.INSTANCE, Type.INSTANCE);
         this.ingredient = ingredient;
         this.heatAmount = heatAmount;
@@ -56,7 +57,7 @@ public class HeatingRecipe extends MAgRecipe {
         public HeatingRecipe fromJson(ResourceLocation id, JsonObject json) {
             return new HeatingRecipe(id,
                     readMatter(json, "ingredient"),
-                    readSeptiLong(json, "heatAmount"),
+                    readUnLong(json, "heatAmount"),
                     readMatter(json, "result")
             );
         }
@@ -65,7 +66,7 @@ public class HeatingRecipe extends MAgRecipe {
         public HeatingRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
             return new HeatingRecipe(id,
                     readMatter(buf),
-                    readSeptiLong(buf),
+                    readUnLong(buf),
                     readMatter(buf)
             );
         }

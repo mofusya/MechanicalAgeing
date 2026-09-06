@@ -20,6 +20,7 @@ import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.recipe.FuelRecipe;
 import net.mofusya.mechanical_ageing.recipes.recipe.MatterBurningRecipe;
+import net.mofusya.ornatelib.lang.UnLong;
 import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import org.jetbrains.annotations.Nullable;
@@ -30,27 +31,27 @@ import java.util.Optional;
 public class BurningChamberTile extends MachineTile {
     @Nullable
     protected final MutableComponent displayName;
-    protected final SeptiLong fuelTankCapacity;
-    protected final SeptiLong fuelTankMaxReceive;
-    protected final SeptiLong fuelTankMaxExtract;
-    protected final SeptiLong heatTankCapacity;
-    protected final SeptiLong heatTankMaxReceive;
-    protected final SeptiLong heatTankMaxExtract;
+    protected final UnLong fuelTankCapacity;
+    protected final UnLong fuelTankMaxReceive;
+    protected final UnLong fuelTankMaxExtract;
+    protected final UnLong heatTankCapacity;
+    protected final UnLong heatTankMaxReceive;
+    protected final UnLong heatTankMaxExtract;
     protected final double upgradeMultiplier;
 
-    public BurningChamberTile(ResourceLocation id, SeptiLong fuelTankCapacity, SeptiLong fuelTankMaxReceive, SeptiLong fuelTankMaxExtract, SeptiLong heatTankCapacity, SeptiLong heatTankMaxReceive, SeptiLong heatTankMaxExtract) {
+    public BurningChamberTile(ResourceLocation id, UnLong fuelTankCapacity, UnLong fuelTankMaxReceive, UnLong fuelTankMaxExtract, UnLong heatTankCapacity, UnLong heatTankMaxReceive, UnLong heatTankMaxExtract) {
         this(id, null, fuelTankCapacity, fuelTankMaxReceive, fuelTankMaxExtract, heatTankCapacity, heatTankMaxReceive, heatTankMaxExtract, 1);
     }
 
-    public BurningChamberTile(ResourceLocation id, @Nullable MutableComponent displayName, SeptiLong fuelTankCapacity, SeptiLong fuelTankMaxReceive, SeptiLong fuelTankMaxExtract, SeptiLong heatTankCapacity, SeptiLong heatTankMaxReceive, SeptiLong heatTankMaxExtract) {
+    public BurningChamberTile(ResourceLocation id, @Nullable MutableComponent displayName, UnLong fuelTankCapacity, UnLong fuelTankMaxReceive, UnLong fuelTankMaxExtract, UnLong heatTankCapacity, UnLong heatTankMaxReceive, UnLong heatTankMaxExtract) {
         this(id, displayName, fuelTankCapacity, fuelTankMaxReceive, fuelTankMaxExtract, heatTankCapacity, heatTankMaxReceive, heatTankMaxExtract, 1);
     }
 
-    public BurningChamberTile(ResourceLocation id, SeptiLong fuelTankCapacity, SeptiLong fuelTankMaxReceive, SeptiLong fuelTankMaxExtract, SeptiLong heatTankCapacity, SeptiLong heatTankMaxReceive, SeptiLong heatTankMaxExtract, double upgradeMultiplier) {
+    public BurningChamberTile(ResourceLocation id, UnLong fuelTankCapacity, UnLong fuelTankMaxReceive, UnLong fuelTankMaxExtract, UnLong heatTankCapacity, UnLong heatTankMaxReceive, UnLong heatTankMaxExtract, double upgradeMultiplier) {
         this(id, null, fuelTankCapacity, fuelTankMaxReceive, fuelTankMaxExtract, heatTankCapacity, heatTankMaxReceive, heatTankMaxExtract, upgradeMultiplier);
     }
 
-    public BurningChamberTile(ResourceLocation id, @Nullable MutableComponent displayName, SeptiLong fuelTankCapacity, SeptiLong fuelTankMaxReceive, SeptiLong fuelTankMaxExtract, SeptiLong heatTankCapacity, SeptiLong heatTankMaxReceive, SeptiLong heatTankMaxExtract, double upgradeMultiplier) {
+    public BurningChamberTile(ResourceLocation id, @Nullable MutableComponent displayName, UnLong fuelTankCapacity, UnLong fuelTankMaxReceive, UnLong fuelTankMaxExtract, UnLong heatTankCapacity, UnLong heatTankMaxReceive, UnLong heatTankMaxExtract, double upgradeMultiplier) {
         super(id);
         this.displayName = displayName;
         this.fuelTankCapacity = fuelTankCapacity;
@@ -125,9 +126,9 @@ public class BurningChamberTile extends MachineTile {
         if (recipe.isEmpty()) return;
 
         MatterStack ingredient = recipe.get().getIngredient();
-        ingredient.modifyAmount(amount -> amount.multiply((float) (getUpgradeMultiplier(blockEntity, 4) * this.upgradeMultiplier)));
+        ingredient.modifyAmount(amount -> amount.multi((float) (getUpgradeMultiplier(blockEntity, 4) * this.upgradeMultiplier)));
         MatterStack result = recipe.get().getResult();
-        result.modifyAmount(amount -> amount.multiply((float) (getUpgradeMultiplier(blockEntity, 4) * this.upgradeMultiplier)));
+        result.modifyAmount(amount -> amount.multi((float) (getUpgradeMultiplier(blockEntity, 4) * this.upgradeMultiplier)));
 
         if (matterHandler.canExtractFromInside(ingredient, 0) &&
                 matterHandler.canReceiveFromInside(result, 1)) {

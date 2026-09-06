@@ -8,6 +8,7 @@ import net.mofusya.mechanical_ageing.tiles.tile.HeatingChamberTile;
 import net.mofusya.mechanical_ageing.tiles.tile.*;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
+import net.mofusya.ornatelib.lang.UnLong;
 
 public class MAgMachines {
     public static final MachineRegister MACHINES = new MachineRegister(MAg.MOD_ID);
@@ -21,23 +22,23 @@ public class MAgMachines {
 
     public static final MachineObject STEEL_BURNING_CHAMBER = MACHINES.register("steel_burning_chamber",
             id -> new BurningChamberTile(id, Component.translatable("block.mechanical_ageing.steel_burning_chamber.machine_name"),
-                    SeptiLongValue.BILLION.get(), SeptiLongValue.MILLION.get().multiply(10), SeptiLongValue.ZERO.get(),
-                    new SeptiLong(3350), new SeptiLong(), new SeptiLong(425), 1.2));
+                    UnLong.billion(), UnLong.million().multi(10), UnLong.zero(),
+                    new UnLong(3350), UnLong.zero(), new UnLong(425), 1.2));
     public static final MachineObject STEEL_SMELTING_CHAMBER = MACHINES.register("steel_smelting_chamber",
             id -> new SmeltingChamberTile(id, Component.translatable("block.mechanical_ageing.steel_smelting_chamber.machine_name"),
-                    new SeptiLong(3350), new SeptiLong(425), new SeptiLong(), 1.2));
+                    new UnLong(3350), new UnLong(425), UnLong.zero(), 1.2));
     public static final MachineObject STEEL_HEAT_COMBINING_CHAMBER = MACHINES.register("steel_heat_combining_chamber",
             id -> new HeatCombingChamberTile(id, Component.translatable("block.mechanical_ageing.steel_heat_combining_chamber.machine_name"),
-                    new SeptiLong(3350), new SeptiLong(425), new SeptiLong(), 1.2));
+                    new UnLong(3350), new UnLong(425), UnLong.zero(), 1.2));
     public static final MachineObject STEEL_HEATING_CHAMBER = MACHINES.register("steel_heating_chamber",
             id -> new HeatingChamberTile(id, Component.translatable("block.mechanical_ageing.steel_heating_chamber.machine_name"),
-                    SeptiLongValue.BILLION.get(), SeptiLongValue.MILLION.get().multiply(10), SeptiLongValue.ZERO.get(),
-                    new SeptiLong(3350), new SeptiLong(425), new SeptiLong(),
-                    SeptiLongValue.BILLION.get(), SeptiLongValue.ZERO.get(), SeptiLongValue.MILLION.get().multiply(10)));
+                    UnLong.billion(), UnLong.million().multi(10), UnLong.zero(),
+                    new UnLong(3350), new UnLong(425), UnLong.zero(),
+                    UnLong.billion(), UnLong.zero(), UnLong.million().multi(10)));
     public static final MachineObject IMPULSE_TURBINE = MACHINES.register("impulse_turbine",
             id -> new ImpulseTurbineChamber(id,
-                    SeptiLongValue.BILLION.get(), SeptiLongValue.BILLION.get(), SeptiLongValue.ZERO.get(),
-                    new SeptiLong(1048576), new SeptiLong(), new SeptiLong(1048576)));
+                    UnLong.billion(), UnLong.billion(), UnLong.zero(),
+                    new UnLong(1048576), UnLong.zero(), new UnLong(1048576)));
     public static final MachineObject BASIC_WATTER_PUMP = MACHINES.register("basic_watter_pump", BasicMatterPumpTile::new);
     public static final MachineObject BASIC_ROTATION_GENERATOR = MACHINES.register("basic_rotation_generator", RotationGeneratorTile::new);
 }

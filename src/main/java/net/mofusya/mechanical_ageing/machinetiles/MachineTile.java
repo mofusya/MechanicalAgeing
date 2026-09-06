@@ -28,8 +28,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.items.implemts.IMachineUpgradeArchive;
@@ -66,13 +68,14 @@ import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.tag.MAgTags;
 import net.mofusya.mechanical_ageing.tiles.BgTileType;
 import net.mofusya.mechanical_ageing.tiles.MAgCapabilities;
+import net.mofusya.ornatelib.lang.UnLong;
 import net.mofusya.ornatelib.util.annotation.FieldsAreNonNullByDefault;
 import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
-import net.mofusya.ornatelib.lang.SeptiLong;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -105,6 +108,25 @@ public abstract class MachineTile {
         this.energyIOHandler(level, pos, state, blockEntity, directionHandler);
         this.wattEnergyIOHandler(level, pos, state, wattEnergyStorage, directionHandler);
         this.matterIOHandler(level, pos, state, matterHandler, directionHandler);
+    }
+
+    //PUSH [NOT FINISHED. DO NOT USE. PLEASE.]
+    private void itemIOHandler(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity, MachineDirectionHandler directionHandler) {
+        for (int i = 0; i < this.getSlots().size(); i++) {
+            IItemHandler itemHandler = blockEntity.getItemHandler();
+            if (itemHandler == null) continue;
+
+            Direction direction = getCombinedDirection(state.getValue(MachineBlock.FACING), directionHandler.getItemDirection(i));
+            if (direction == null) continue;
+
+            BlockPos pPos = pos.relative(direction, 1);
+            BlockEntity pBlockEntity = level.getBlockEntity(pPos);
+            if (pBlockEntity == null) continue;
+
+            pBlockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, direction.getOpposite()).ifPresent(handler -> {
+
+            });
+        }
     }
 
     //PUSH
@@ -151,7 +173,7 @@ public abstract class MachineTile {
         pMachine.getCapability(MAgCapabilities.WATT, direction.getOpposite()).ifPresent(storage -> {
             if (!storage.canReceive()) return;
 
-            SeptiLong maxReceive = storage.receive(wattEnergyStorage.getStored(), true);
+            UnLong maxReceive = storage.receive(wattEnergyStorage.getStored(), true);
             if (!maxReceive.isGreaterThan(0)) return;
 
             wattEnergyStorage.extract(maxReceive, false);
@@ -290,7 +312,7 @@ public abstract class MachineTile {
         }
 
         var wattProperties = this.getWattSlot();
-        if (wattProperties != null){
+        if (wattProperties != null) {
             this.wattEnergyTooltip = new WattEnergyDisplayTooltipArea(x + wattProperties.x(), y + 6, bgTile);
         }
 
@@ -346,7 +368,14 @@ public abstract class MachineTile {
             //Draw Energy slot I/O Button
             for (int i = 0; i < this.getEnergySlots().size() + (this.getWattSlot() == null ? 0 : 1); i++) {
                 int finalI = i;
-                screen.addRenderableWidget(new ImageButton(modX + 34, modY + 7 + (i * 14), 12, 12, 24, 0, 0, ioButton, pButton -> this.ioButtonPacket.send2Server(2, finalI, menu.blockEntity.getBlockPos())));
+
+                if (i == this.getEnergySlots().size()) {
+                    if (this.getWattSlot() != null) {
+                        screen.addRenderableWidget(new ImageButton(modX + 34, modY + 7 + (i * 14), 12, 12, 24, 0, 0, ioButton, pButton -> this.ioButtonPacket.send2Server(4, finalI, menu.blockEntity.getBlockPos())));
+                    }
+                } else {
+                    screen.addRenderableWidget(new ImageButton(modX + 34, modY + 7 + (i * 14), 12, 12, 24, 0, 0, ioButton, pButton -> this.ioButtonPacket.send2Server(2, finalI, menu.blockEntity.getBlockPos())));
+                }
             }
 
             //Draws Fluid slot I/O Button
@@ -364,8 +393,7 @@ public abstract class MachineTile {
         };
     }
 
-    public void renderLabels(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY, MachineMenu
-            menu, MachineScreen screen) {
+    public void renderTooltips(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY, MachineMenu menu, MachineScreen screen) {
         for (int i = 0; i < this.getEnergySlots().size(); i++) {
             EnergyDisplayTooltipArea tooltip = this.energyTooltips.get(i);
             tooltip.renderTooltips(guiGraphics, mouseX, mouseY, x, y, menu.blockEntity.getEnergyStorage(i));
@@ -373,7 +401,7 @@ public abstract class MachineTile {
 
         var wattProperties = this.getWattSlot();
         IWattEnergyStorage wattEnergyStorage = menu.blockEntity.getWattEnergyStorage();
-        if (wattEnergyStorage != null && wattProperties != null && this.wattEnergyTooltip != null){
+        if (wattEnergyStorage != null && wattProperties != null && this.wattEnergyTooltip != null) {
             this.wattEnergyTooltip.renderTooltips(guiGraphics, mouseX, mouseY, x, y, wattEnergyStorage);
         }
 
@@ -397,6 +425,60 @@ public abstract class MachineTile {
             if (!MouseUtil.isMouseOver(mouseX, mouseY, x, y, button.x(), button.y(), 16, 16) || label == null) return;
 
             guiGraphics.renderTooltip(screen.getMinecraft().font, label.apply(screen, menu), Optional.empty(), mouseX - x, mouseY - y);
+        }
+    }
+
+    public void renderLabels(GuiGraphics guiGraphics, int x, int y, int mouseX, int mouseY, MachineMenu
+            menu, MachineScreen screen) {
+
+        //Draw I/O Button tooltip.
+        if (this.ioButtonPacket != null) {
+            int modX = x - 64;
+            int modY = y + 16;
+
+            MachineDirectionHandler directionHandler = menu.blockEntity.getDirectionHandler();
+
+            //Draw Item slot I/O Button tooltip.
+            int offset = 0;
+            for (int i = 0; i < this.getSlots().size(); i++) {
+                if (this.getNoneIOSlots().contains(i)) {
+                    offset++;
+                    continue;
+                }
+
+                if (MouseUtil.isMouseOver(mouseX, mouseY, modX + 6, modY + 7 + ((i - offset) * 14), 12, 12)) {
+                    guiGraphics.renderTooltip(screen.getMinecraft().font, getDirectionTooltip(directionHandler.getItemDirection(i)), Optional.empty(), mouseX - x, mouseY - y);
+                    break;
+                }
+            }
+
+            //Draw Matter slot I/O Button tooltip.
+            for (int i = 0; i < this.getMatterSlots().size(); i++) {
+                if (MouseUtil.isMouseOver(mouseX, mouseY, modX + 20, modY + 7 + (i * 14), 12, 12)) {
+                    guiGraphics.renderTooltip(screen.getMinecraft().font, getDirectionTooltip(directionHandler.getMatterDirection(i)), Optional.empty(), mouseX - x, mouseY - y);
+                    break;
+                }
+            }
+
+            //Draw Energy slot I/O Button tooltip.
+            for (int i = 0; i < this.getEnergySlots().size() + (this.getWattSlot() == null ? 0 : 1); i++) {
+                if (i == this.getEnergySlots().size()) {
+                    if (this.getWattSlot() != null && MouseUtil.isMouseOver(mouseX, mouseY, modX + 34, modY + 7 + (i * 14), 12, 12)) {
+                        guiGraphics.renderTooltip(screen.getMinecraft().font, getDirectionTooltip(directionHandler.getWattEnergyDirection()), Optional.empty(), mouseX - x, mouseY - y);
+                        break;
+                    }
+                } else {
+                    if (MouseUtil.isMouseOver(mouseX, mouseY, modX + 34, modY + 7 + (i * 14), 12, 12)) {
+                        guiGraphics.renderTooltip(screen.getMinecraft().font, getDirectionTooltip(directionHandler.getEnergyDirection(i)), Optional.empty(), mouseX - x, mouseY - y);
+                        break;
+                    }
+                }
+            }
+
+            //Draws Fluid slot I/O Button tooltip.
+            if (this.getFluidSlot() != null && MouseUtil.isMouseOver(mouseX, mouseY, modX + 48, modY + 7, 12, 12) && directionHandler.getFluidDirection() != null) {
+                guiGraphics.renderTooltip(screen.getMinecraft().font, getDirectionTooltip(directionHandler.getFluidDirection()), Optional.empty(), mouseX - x, mouseY - y);
+            }
         }
     }
 
@@ -467,7 +549,7 @@ public abstract class MachineTile {
         //Write watt energy slot
         var wattProperties = this.getWattSlot();
         IWattEnergyStorage wattEnergyStorage = menu.blockEntity.getWattEnergyStorage();
-        if (wattEnergyStorage != null && this.wattEnergyTooltip != null && wattProperties != null){
+        if (wattEnergyStorage != null && this.wattEnergyTooltip != null && wattProperties != null) {
             this.wattEnergyTooltip.render(guiGraphics, wattEnergyStorage);
         }
 
@@ -571,6 +653,64 @@ public abstract class MachineTile {
             }
         }
 
+        //Draw I/O Button cursor.
+        if (this.ioButtonPacket != null) {
+            //Get tile texture
+            RenderSystem.setShaderTexture(0, bgTile);
+
+            int modX = x - 64;
+            int modY = y + 16;
+
+            MachineDirectionHandler directionHandler = menu.blockEntity.getDirectionHandler();
+
+            //Draw Item slot I/O Button cursor.
+            int offset = 0;
+            for (int i = 0; i < this.getSlots().size(); i++) {
+                if (this.getNoneIOSlots().contains(i)) {
+                    offset++;
+                    continue;
+                }
+
+                if (MouseUtil.isMouseOver(mouseX, mouseY, modX + 6, modY + 7 + ((i - offset) * 14), 12, 12)) {
+                    SlotProperties slot = this.getSlots().get(i);
+                    guiGraphics.blit(bgTile, x + slot.x() - 1, y + slot.y() - 1, 0, 72, 16, 16, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    break;
+                }
+            }
+
+            //Draw Matter slot I/O Button cursor.
+            for (int i = 0; i < this.getMatterSlots().size(); i++) {
+                if (MouseUtil.isMouseOver(mouseX, mouseY, modX + 20, modY + 7 + (i * 14), 12, 12)) {
+                    MatterSlotProperties matterSlot = this.getMatterSlots().get(i);
+                    guiGraphics.blit(bgTile, x + matterSlot.x(), y + matterSlot.y() + 8, 0, 72, 16, 16, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                    break;
+                }
+            }
+
+            //Draw Energy slot I/O Button cursor.
+            for (int i = 0; i < this.getEnergySlots().size() + (this.getWattSlot() == null ? 0 : 1); i++) {
+                if (i == this.getEnergySlots().size()) {
+                    if (this.getWattSlot() != null && MouseUtil.isMouseOver(mouseX, mouseY, modX + 34, modY + 7 + (i * 14), 12, 12)) {
+                        WattSlotProperties wattSlot = this.getWattSlot();
+                        guiGraphics.blit(bgTile, x + wattSlot.x(), y + 23, 0, 72, 16, 16, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                        break;
+                    }
+                } else {
+                    if (MouseUtil.isMouseOver(mouseX, mouseY, modX + 34, modY + 7 + (i * 14), 12, 12)) {
+                        EnergySlotProperties energySlot = this.getEnergySlots().get(i);
+                        guiGraphics.blit(bgTile, x + energySlot.x(), y + 23, 0, 72, 16, 16, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                        break;
+                    }
+                }
+            }
+
+            //Draws Fluid slot I/O Button cursor.
+            if (this.getFluidSlot() != null && MouseUtil.isMouseOver(mouseX, mouseY, modX + 48, modY + 7, 12, 12) && directionHandler.getFluidDirection() != null) {
+                FluidSlotProperties fluidSlot = this.getFluidSlot();
+                guiGraphics.blit(bgTile, x + fluidSlot.x() - 5, y + fluidSlot.y() + 17, 0, 72, 16, 16, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+            }
+        }
+
         //Write machine name
         var displayName = this.getDisplayName();
         ChatFormatting format = this.getBgTileType().getFormat();
@@ -578,6 +718,43 @@ public abstract class MachineTile {
             displayName.withStyle(format);
         }
         guiGraphics.drawCenteredString(Minecraft.getInstance().font, displayName, x + screen.getXSize() / 2, y - 9, 4210752);
+    }
+
+    public static List<Component> getDirectionTooltip(DirectionType directionType) {
+        return switch (directionType) {
+            case NONE -> stringToLiteral(
+                    "_ □ _",
+                    "□ □ □  None",
+                    "□ □ _  §8-> Up");
+            case UP -> stringToLiteral(
+                    "_ ■ _",
+                    "□ □ □  Up",
+                    "□ □ _  §8-> Down");
+            case DOWN -> stringToLiteral(
+                    "_ □ _",
+                    "□ □ □  Down",
+                    "□ ■ _  §8-> Right");
+            case RIGHT -> stringToLiteral(
+                    "_ □ _",
+                    "□ □ ■  Right",
+                    "□ □ _  §8-> Left");
+            case LEFT -> stringToLiteral(
+                    "_ □ _",
+                    "■ □ □  Left",
+                    "□ □ _  §8-> Front");
+            case FRONT -> stringToLiteral(
+                    "_ □ _",
+                    "□ ■ □  Front",
+                    "□ □ _  §8-> Back");
+            case BACK -> stringToLiteral(
+                    "_ □ _",
+                    "□ □ □  Back",
+                    "■ □ _  §8-> None");
+        };
+    }
+
+    public static List<Component> stringToLiteral(String... strings) {
+        return Arrays.stream(strings).map(Component::literal).map(c -> (Component) c).toList();
     }
 
     public void onButtonPress(int type, ServerPlayer player, MachineBlockEntity blockEntity) {
@@ -599,6 +776,9 @@ public abstract class MachineTile {
             }
             case 3 -> {
                 directionHandler.setFluidDirection(directionHandler.getFluidDirection().next());
+            }
+            case 4 -> {
+                directionHandler.setWattEnergyDirection(directionHandler.getWattEnergyDirection().next());
             }
         }
 
@@ -625,13 +805,6 @@ public abstract class MachineTile {
     public final SlotList getSlots() {
         SlotList toReturn = this.getSlots(new SlotList());
         if (toReturn.isEmpty()) return MachineTile.this.getSlots(new SlotList());
-        for (EnergySlotProperties energy : this.getEnergySlots()) {
-            if (energy.maxExtract() <= 0) {
-                toReturn.create(energy.x() + 1, 62, itemStack -> true, SlotType.NORMAL);
-            } else {
-                toReturn.create(energy.x() + 1, 62, itemStack -> true, SlotType.EXTRACT_ONLY);
-            }
-        }
         return toReturn;
     }
 

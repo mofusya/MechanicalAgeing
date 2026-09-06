@@ -1,0 +1,13 @@
+{
+  "parent": "mechanical_ageing:block/multi_layered_machine_block",
+  "textures": {
+    "background": "mechanical_ageing:block/compressed_block",
+    "cover_front": "mechanical_ageing:block/impulse_turbine_shaft",
+    "cover_side": "mechanical_ageing:block/impulse_turbine_shaft",
+    "frame_bottom": "mechanical_ageing:block/machine/frame_bottom",
+    "frame_side": "mechanical_ageing:block/machine/frame_side",
+    "frame_top": "mechanical_ageing:block/machine/frame_top",
+    "particle": "mechanical_ageing:block/impulse_turbine_shaft",
+    "side_side": "mechanical_ageing:block/machine/side"
+  }
+}

@@ -1,17 +1,18 @@
 package net.mofusya.mechanical_ageing.machinetiles.watt;
 
 import net.mofusya.ornatelib.lang.SeptiLong;
+import net.mofusya.ornatelib.lang.UnLong;
 
 public interface IWattEnergyStorage {
-    SeptiLong receive(SeptiLong maxReceive, boolean simulate);
+    UnLong receive(UnLong maxReceive, boolean simulate);
 
-    SeptiLong extract(SeptiLong maxExtract, boolean simulate);
+    UnLong extract(UnLong maxExtract, boolean simulate);
 
     boolean canReceive();
 
     boolean canExtract();
 
-    SeptiLong getStored();
+    UnLong getStored();
 
-    SeptiLong getCapacity();
+    UnLong getCapacity();
 }

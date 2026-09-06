@@ -19,6 +19,7 @@ import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.tiles.energy.ForgeEnergyStorage;
 import net.mofusya.mechanical_ageing.tiles.energy.ForgeEnergyType;
+import net.mofusya.ornatelib.lang.UnLong;
 import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.SeptiLongValue;
@@ -39,14 +40,14 @@ public class DestructorTile extends MachineTile {
 
     @Override
     public @Nullable WattSlotProperties getWattSlot() {
-        return new WattSlotProperties(151, new SeptiLong(100), new SeptiLong(), new SeptiLong(10));
+        return new WattSlotProperties(151, new UnLong(100), UnLong.zero(), new UnLong(10));
     }
 
     @Override
     public MatterSlotList getMatterSlots(MatterSlotList slots) {
         return super.getMatterSlots(slots)
-                .create(97, 23, matterType -> matterType.is(MAgMatterTypes.WATER), SeptiLongValue.THOUSAND.get().multiply(100), SeptiLongValue.ZERO.get(), SeptiLongValue.TEN.get())
-                .create(124, 23, matterType -> matterType.is(MAgMatterTypes.FUEL), SeptiLongValue.HUNDRED.get(), SeptiLongValue.ZERO.get(), SeptiLongValue.TEN.get());
+                .create(97, 23, matterType -> matterType.is(MAgMatterTypes.WATER), UnLong.thousand().multi(100), UnLong.zero(), UnLong.ten())
+                .create(124, 23, matterType -> matterType.is(MAgMatterTypes.FUEL), UnLong.hundred(), UnLong.zero(), UnLong.ten());
     }
 
     @Override
@@ -68,16 +69,16 @@ public class DestructorTile extends MachineTile {
 
         if (forgeEnergyStorage.getEnergyStored() > 100 && fluidTank.drain(500, IFluidHandler.FluidAction.SIMULATE).getAmount() >= 500 &&
                 //starDustEnergyStorage.receiveEnergyFromInside(new QuintLong(1), true).isGreaterOrSameThan(new QuintLong(1)) &&
-                wattEnergyStorage.canReceiveFromInside(new SeptiLong(1)) &&
-                matterHandler.canReceiveFromInside(new MatterStack(MAgMatterTypes.WATER, SeptiLongValue.THOUSAND.get()), 0) &&
-                matterHandler.canReceiveFromInside(new MatterStack(MAgMatterTypes.FUEL, new SeptiLong(1)), 1)
+                wattEnergyStorage.canReceiveFromInside(new UnLong(1)) &&
+                matterHandler.canReceiveFromInside(new MatterStack(MAgMatterTypes.WATER, UnLong.thousand()), 0) &&
+                matterHandler.canReceiveFromInside(new MatterStack(MAgMatterTypes.FUEL, new UnLong(1)), 1)
         ) {
             forgeEnergyStorage.extractEnergyFromInside(100, false);
             fluidTank.drain(500, IFluidHandler.FluidAction.EXECUTE);
             //starDustEnergyStorage.receiveEnergyFromInside(new QuintLong(1), false);
-            wattEnergyStorage.receiveFromInside(new SeptiLong(1), false);
-            matterHandler.receiveFromInside(new MatterStack(MAgMatterTypes.WATER, SeptiLongValue.THOUSAND.get()), 0);
-            matterHandler.receiveFromInside(new MatterStack(MAgMatterTypes.FUEL, new SeptiLong(1)), 1);
+            wattEnergyStorage.receiveFromInside(new UnLong(1), false);
+            matterHandler.receiveFromInside(new MatterStack(MAgMatterTypes.WATER, UnLong.thousand()), 0);
+            matterHandler.receiveFromInside(new MatterStack(MAgMatterTypes.FUEL, new UnLong(1)), 1);
         }
     }
 }

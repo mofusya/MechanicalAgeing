@@ -4,6 +4,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.mofusya.mechanical_ageing.machinetiles.IBgTileType;
 import net.mofusya.mechanical_ageing.tiles.BgTileType;
+import net.mofusya.ornatelib.lang.UnLong;
 import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 
@@ -11,7 +12,7 @@ import net.mofusya.ornatelib.lang.SeptiLong;
 public class BrickHeatCombingChamberTile extends HeatCombingChamberTile {
     public BrickHeatCombingChamberTile(ResourceLocation id) {
         super(id, Component.translatable("block.mechanical_ageing.brick_heat_combining_chamber.machine_name"),
-                new SeptiLong(2400), new SeptiLong(300), new SeptiLong());
+                new UnLong(2400), new UnLong(300), UnLong.zero());
     }
 
     @Override

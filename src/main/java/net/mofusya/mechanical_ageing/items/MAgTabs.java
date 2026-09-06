@@ -52,12 +52,8 @@ public class MAgTabs {
             .title(Component.translatable("tab." + MAg.MOD_ID + ".main"))
             .icon(() -> new ItemStack(MAgBlocks.REINFORCED_BRICKS.get()))
             .displayItems((parameters, output) -> {
-                List<ItemLike> items = new ArrayList<>();
-                items.addAll(MAgBlocks.BLOCKS.getItems(0).stream().map(RegistryObject::get).toList());
-
-                for (ItemLike item : items) {
-                    output.accept(item);
-                }
+                output.acceptAll(MAgBlocks.BLOCKS.getItems(0).stream().map(RegistryObject::get).map(ItemStack::new).toList());
+                output.acceptAll(MAgItem.ITEMS.getItems(2).stream().map(RegistryObject::get).map(ItemStack::new).toList());
             })
             .build());
 }

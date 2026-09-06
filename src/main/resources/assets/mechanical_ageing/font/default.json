@@ -3,15 +3,10 @@
     {
       "type": "bitmap",
       "file": "mechanical_ageing:font/aleph_font.png",
-      "ascent": 16,
-      "height": 16,
+      "ascent": 7,
       "chars": [
         "ℵ"
       ]
-    },
-    {
-      "type": "reference",
-      "id": "minecraft:default"
     }
   ]
 }

@@ -3,6 +3,7 @@ package net.mofusya.mechanical_ageing.machinetiles.matter;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.ornatelib.lang.SeptiLong;
+import net.mofusya.ornatelib.lang.UnLong;
 
 @AutoRegisterCapability
 public interface IMatterHandler {
@@ -20,13 +21,13 @@ public interface IMatterHandler {
 
     MatterStack getStored(int slot);
 
-    SeptiLong getMaxStored(int slot);
+    UnLong getMaxStored(int slot);
 
     boolean canReceive(int slot);
 
     boolean canExtract(int slot);
 
-    default SeptiLong getSpace(int slot) {
-        return this.getMaxStored(slot).copy().remove(this.getStored(slot).getAmount());
+    default UnLong getSpace(int slot) {
+        return this.getMaxStored(slot).copy().min(this.getStored(slot).getAmount());
     }
 }

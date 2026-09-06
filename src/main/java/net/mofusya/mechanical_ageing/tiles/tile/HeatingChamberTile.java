@@ -15,6 +15,7 @@ import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.recipe.HeatingRecipe;
+import net.mofusya.ornatelib.lang.UnLong;
 import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.lang.SeptiLong;
 import org.jetbrains.annotations.Nullable;
@@ -25,30 +26,30 @@ import java.util.Optional;
 public class HeatingChamberTile extends MachineTile {
     @Nullable
     protected final MutableComponent displayName;
-    protected final SeptiLong ingredientTankCapacity;
-    protected final SeptiLong ingredientTankMaxReceive;
-    protected final SeptiLong ingredientTankMaxExtract;
-    protected final SeptiLong heatTankCapacity;
-    protected final SeptiLong heatTankMaxReceive;
-    protected final SeptiLong heatTankMaxExtract;
-    protected final SeptiLong resultTankCapacity;
-    protected final SeptiLong resultTankMaxReceive;
-    protected final SeptiLong resultTankMaxExtract;
+    protected final UnLong ingredientTankCapacity;
+    protected final UnLong ingredientTankMaxReceive;
+    protected final UnLong ingredientTankMaxExtract;
+    protected final UnLong heatTankCapacity;
+    protected final UnLong heatTankMaxReceive;
+    protected final UnLong heatTankMaxExtract;
+    protected final UnLong resultTankCapacity;
+    protected final UnLong resultTankMaxReceive;
+    protected final UnLong resultTankMaxExtract;
     protected final double upgradeMultiplier;
 
-    public HeatingChamberTile(ResourceLocation id, SeptiLong ingredientTankCapacity, SeptiLong ingredientTankMaxReceive, SeptiLong ingredientTankMaxExtract, SeptiLong heatTankCapacity, SeptiLong heatTankMaxReceive, SeptiLong heatTankMaxExtract, SeptiLong resultTankCapacity, SeptiLong resultTankMaxReceive, SeptiLong resultTankMaxExtract) {
+    public HeatingChamberTile(ResourceLocation id, UnLong ingredientTankCapacity, UnLong ingredientTankMaxReceive, UnLong ingredientTankMaxExtract, UnLong heatTankCapacity, UnLong heatTankMaxReceive, UnLong heatTankMaxExtract, UnLong resultTankCapacity, UnLong resultTankMaxReceive, UnLong resultTankMaxExtract) {
         this(id, null, ingredientTankCapacity, ingredientTankMaxReceive, ingredientTankMaxExtract, heatTankCapacity, heatTankMaxReceive, heatTankMaxExtract, resultTankCapacity, resultTankMaxReceive, resultTankMaxExtract, 1);
     }
 
-    public HeatingChamberTile(ResourceLocation id, @Nullable MutableComponent displayName, SeptiLong ingredientTankCapacity, SeptiLong ingredientTankMaxReceive, SeptiLong ingredientTankMaxExtract, SeptiLong heatTankCapacity, SeptiLong heatTankMaxReceive, SeptiLong heatTankMaxExtract, SeptiLong resultTankCapacity, SeptiLong resultTankMaxReceive, SeptiLong resultTankMaxExtract) {
+    public HeatingChamberTile(ResourceLocation id, @Nullable MutableComponent displayName, UnLong ingredientTankCapacity, UnLong ingredientTankMaxReceive, UnLong ingredientTankMaxExtract, UnLong heatTankCapacity, UnLong heatTankMaxReceive, UnLong heatTankMaxExtract, UnLong resultTankCapacity, UnLong resultTankMaxReceive, UnLong resultTankMaxExtract) {
         this(id, displayName, ingredientTankCapacity, ingredientTankMaxReceive, ingredientTankMaxExtract, heatTankCapacity, heatTankMaxReceive, heatTankMaxExtract, resultTankCapacity, resultTankMaxReceive, resultTankMaxExtract, 1);
     }
 
-    public HeatingChamberTile(ResourceLocation id, SeptiLong ingredientTankCapacity, SeptiLong ingredientTankMaxReceive, SeptiLong ingredientTankMaxExtract, SeptiLong heatTankCapacity, SeptiLong heatTankMaxReceive, SeptiLong heatTankMaxExtract, SeptiLong resultTankCapacity, SeptiLong resultTankMaxReceive, SeptiLong resultTankMaxExtract, double upgradeMultiplier) {
+    public HeatingChamberTile(ResourceLocation id, UnLong ingredientTankCapacity, UnLong ingredientTankMaxReceive, UnLong ingredientTankMaxExtract, UnLong heatTankCapacity, UnLong heatTankMaxReceive, UnLong heatTankMaxExtract, UnLong resultTankCapacity, UnLong resultTankMaxReceive, UnLong resultTankMaxExtract, double upgradeMultiplier) {
         this(id, null, ingredientTankCapacity, ingredientTankMaxReceive, ingredientTankMaxExtract, heatTankCapacity, heatTankMaxReceive, heatTankMaxExtract, resultTankCapacity, resultTankMaxReceive, resultTankMaxExtract, upgradeMultiplier);
     }
 
-    public HeatingChamberTile(ResourceLocation id, @Nullable MutableComponent displayName, SeptiLong ingredientTankCapacity, SeptiLong ingredientTankMaxReceive, SeptiLong ingredientTankMaxExtract, SeptiLong heatTankCapacity, SeptiLong heatTankMaxReceive, SeptiLong heatTankMaxExtract, SeptiLong resultTankCapacity, SeptiLong resultTankMaxReceive, SeptiLong resultTankMaxExtract, double upgradeMultiplier) {
+    public HeatingChamberTile(ResourceLocation id, @Nullable MutableComponent displayName, UnLong ingredientTankCapacity, UnLong ingredientTankMaxReceive, UnLong ingredientTankMaxExtract, UnLong heatTankCapacity, UnLong heatTankMaxReceive, UnLong heatTankMaxExtract, UnLong resultTankCapacity, UnLong resultTankMaxReceive, UnLong resultTankMaxExtract, double upgradeMultiplier) {
         super(id);
         this.displayName = displayName;
         this.ingredientTankCapacity = ingredientTankCapacity;
@@ -120,7 +121,7 @@ public class HeatingChamberTile extends MachineTile {
         }
     }
 
-    public SeptiLong modifyByUpgrades(SeptiLong amount, MachineBlockEntity blockEntity) {
-        return amount.multiply((float) (getUpgradeMultiplier(blockEntity, 4) * this.upgradeMultiplier));
+    public UnLong modifyByUpgrades(UnLong amount, MachineBlockEntity blockEntity) {
+        return amount.multi((float) (getUpgradeMultiplier(blockEntity, 4) * this.upgradeMultiplier));
     }
 }

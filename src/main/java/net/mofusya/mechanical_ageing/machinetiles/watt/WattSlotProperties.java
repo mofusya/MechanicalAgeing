@@ -1,23 +1,24 @@
 package net.mofusya.mechanical_ageing.machinetiles.watt;
 
 import net.mofusya.ornatelib.lang.SeptiLong;
+import net.mofusya.ornatelib.lang.UnLong;
 import org.jetbrains.annotations.Nullable;
 
-public record WattSlotProperties(int x, SeptiLong capacity, @Nullable SeptiLong maxReceive, @Nullable SeptiLong maxExtract, SeptiLong stored) {
+public record WattSlotProperties(int x, UnLong capacity, @Nullable UnLong maxReceive, @Nullable UnLong maxExtract, UnLong stored) {
 
-    public WattSlotProperties(int x, SeptiLong capacity) {
-        this(x, capacity, capacity, capacity, new SeptiLong());
+    public WattSlotProperties(int x, UnLong capacity) {
+        this(x, capacity, capacity, capacity, UnLong.zero());
     }
 
-    public WattSlotProperties(int x, SeptiLong capacity, @Nullable SeptiLong maxTransfer) {
-        this(x, capacity, maxTransfer, maxTransfer, new SeptiLong());
+    public WattSlotProperties(int x, UnLong capacity, @Nullable UnLong maxTransfer) {
+        this(x, capacity, maxTransfer, maxTransfer, UnLong.zero());
     }
 
-    public WattSlotProperties(int x, SeptiLong capacity, @Nullable SeptiLong maxReceive, @Nullable SeptiLong maxExtract) {
-        this(x, capacity, maxReceive, maxExtract, new SeptiLong());
+    public WattSlotProperties(int x, UnLong capacity, @Nullable UnLong maxReceive, @Nullable UnLong maxExtract) {
+        this(x, capacity, maxReceive, maxExtract, UnLong.zero());
     }
 
-    public WattSlotProperties(int x, SeptiLong capacity, @Nullable SeptiLong maxReceive, @Nullable SeptiLong maxExtract, SeptiLong stored) {
+    public WattSlotProperties(int x, UnLong capacity, @Nullable UnLong maxReceive, @Nullable UnLong maxExtract, UnLong stored) {
         this.x = x;
         this.capacity = capacity.copy();
         this.maxReceive = maxReceive == null ? null : maxReceive.copy();

@@ -1,7 +1,6 @@
 package net.mofusya.mechanical_ageing.machinetiles.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.flansflame.flans_star_forge.screens.helper.MouseUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -10,7 +9,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import net.mofusya.mechanical_ageing.machinetiles.matter.IMatterHandler;
+import net.mofusya.mechanical_ageing.machinetiles.util.MouseUtil;
 import net.mofusya.mechanical_ageing.matter.MatterType;
+import net.mofusya.ornatelib.lang.UnLong;
 import net.mofusya.ornatelib.util.SeptiLongHelper;
 import net.mofusya.ornatelib.lang.SeptiLong;
 
@@ -52,8 +53,8 @@ public class MatterDisplayTooltipArea {
 
                 ArrayList<Component> components = new ArrayList<>();
                 components.add(Component.translatable(type == null ? "block.minecraft.air" : type.getTranslationId()));
-                components.add(Component.literal(" §8- " + SeptiLongHelper.convertToStringAndAddSuffix(matterHandler.getStored(slot).getAmount()) + (type == null ? "mB" : type.getSuffix()) + " /"));
-                components.add(Component.literal(" §8- " + SeptiLongHelper.convertToStringAndAddSuffix(matterHandler.getMaxStored(slot)) + (type == null ? "mB" : type.getSuffix())));
+                components.add(Component.literal(" §8- ").append(matterHandler.getStored(slot).getAmount().toComponent(true, false)).append(type == null ? "mB" : type.getSuffix() + " /"));
+                components.add(Component.literal(" §8- ").append(matterHandler.getMaxStored(slot).toComponent(true, false)).append(type == null ? "mB" : type.getSuffix()));
 
                 var tags = matterHandler.getStored(slot).getTags();
                 if (tags.hasContent()) {
@@ -69,10 +70,10 @@ public class MatterDisplayTooltipArea {
     }
 
     public void render(GuiGraphics guiGraphics, IMatterHandler matterHandler, int slot) {
-        SeptiLong storedMatter = matterHandler.getStored(slot).getAmount();
-        SeptiLong maxCapacity = matterHandler.getMaxStored(slot);
+        UnLong storedMatter = matterHandler.getStored(slot).getAmount();
+        UnLong maxCapacity = matterHandler.getMaxStored(slot);
         MatterType matterType = matterHandler.getStored(slot).getType();
-        int stored = (int) (storedMatter.copy().divideAndGetFloat(maxCapacity) * BAR_SIZE[1]);
+        int stored = (int) (storedMatter.simulateDivAndGetFloat(maxCapacity) * BAR_SIZE[1]);
 
         //Get tile texture
         RenderSystem.setShaderTexture(0, this.bgTile);
