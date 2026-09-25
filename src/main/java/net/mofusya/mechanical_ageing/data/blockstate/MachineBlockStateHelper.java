@@ -129,6 +129,36 @@ public class MachineBlockStateHelper {
                 .lowerCrystalColor(MAgAlloySets.STEEL.color() - 0x202020)
         );
 
+        builderList.add(builder(MAgMachines.MANUAL_BIO_CONCENTRATOR)
+                .background("minecraft", "block/composter_side", false)
+                .frameColor(MAgAlloySets.STEEL.color())
+                .sideColor(MAgMetalSets.COPPER.color())
+                .upperCrystalColor(MAgMetalSets.COPPER.color())
+                .lowerCrystalColor(MAgMetalSets.COPPER.color())
+        );
+
+        builderList.add(builder(MAgMachines.MANUAL_MIXING_CHAMBER)
+                .background("minecraft", "block/oak_log", false)
+                .upperCrystalColor(0x70E2E8)
+                .sideColor(MAgAlloySets.STEEL.color())
+        );
+
+        builderList.add(builder(MAgMachines.WATER_COOLING_CHAMBER)
+                .background("minecraft", "block/oak_log", false)
+                .upperCrystalColor(MAgMetalSets.OSMIUM.color())
+                .lowerCrystalColor(MAgMetalSets.OSMIUM.color())
+                .sideColor(MAgAlloySets.STEEL.color())
+        );
+
+        builderList.add(builder(MAgMachines.MULTIVERSO_MATTER_CELL)
+                .background("block/compressed_block", false)
+                .backgroundColor(MAgMetalSets.UNOBTAINIUM.color())
+                .frameColor(MAgMetalSets.UNOBTAINIUM.color())
+                .sideColor(MAgMetalSets.UNOBTAINIUM.color())
+                .upperCrystalColor(0x101010)
+                .lowerCrystalColor(0x101010)
+        );
+
         return builderList;
     }
 

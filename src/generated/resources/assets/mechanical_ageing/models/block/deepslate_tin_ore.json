@@ -1,7 +1,3 @@
 {
-  "parent": "mechanical_ageing:block/duo_layered_block",
-  "textures": {
-    "layer0": "minecraft:block/deepslate",
-    "layer1": "mechanical_ageing:block/ore"
-  }
+  "parent": "mechanical_ageing:block/deepslate_ore"
 }

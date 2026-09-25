@@ -1,0 +1,20 @@
+{
+  "type": "mechanical_ageing:mixing",
+  "itemIngredient": {
+    "item": "mechanical_ageing:metallic_silicon"
+  },
+  "firstIngredient": {
+    "type": "mechanical_ageing:methanol",
+    "amount": {
+      "digit": "HUNDRED",
+      "multiplier": 2
+    }
+  },
+  "matterResult": {
+    "type": "mechanical_ageing:silane_compound",
+    "amount": {
+      "digit": "HUNDRED",
+      "multiplier": 2
+    }
+  }
+}

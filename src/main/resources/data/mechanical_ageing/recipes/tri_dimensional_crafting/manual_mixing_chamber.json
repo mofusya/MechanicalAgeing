@@ -1,0 +1,29 @@
+
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "pattern": [
+    "# # D # #",
+    "#%#%B%#%#",
+    "#I#I#I#I#"
+  ],
+  "key": {
+    "#": {
+      "tag": "logs"
+    },
+    "%": {
+      "item": "mechanical_ageing:steel"
+    },
+    "D": {
+      "item": "diamond_shovel"
+    },
+    "B": {
+      "item": "bucket"
+    },
+    "I": {
+      "item": "mechanical_ageing:iron_block"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:manual_mixing_chamber"
+  }
+}

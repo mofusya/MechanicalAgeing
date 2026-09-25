@@ -1,0 +1,24 @@
+{
+  "type": "mechanical_ageing:mixing",
+  "firstIngredient": {
+    "type": "mechanical_ageing:silane_compound",
+    "amount": {
+      "digit": "HUNDRED",
+      "multiplier": 2
+    }
+  },
+  "secondIngredient": {
+    "type": "mechanical_ageing:water",
+    "amount": {
+      "digit": "HUNDRED",
+      "multiplier": 2
+    }
+  },
+  "matterResult": {
+    "type": "mechanical_ageing:silane_mixture",
+    "amount": {
+      "digit": "HUNDRED",
+      "multiplier": 2
+    }
+  }
+}

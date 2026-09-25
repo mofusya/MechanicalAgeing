@@ -22,7 +22,6 @@ import net.mofusya.mechanical_ageing.recipes.recipe.FuelRecipe;
 import net.mofusya.mechanical_ageing.recipes.recipe.MatterBurningRecipe;
 import net.mofusya.ornatelib.lang.UnLong;
 import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
-import net.mofusya.ornatelib.lang.SeptiLong;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -72,8 +71,9 @@ public class BurningChamberTile extends MachineTile {
     @Override
     public MatterSlotList getMatterSlots(MatterSlotList slots) {
         return super.getMatterSlots(slots)
-                .create(next(16, 2), 25, matterType -> matterType.is(MAgMatterTypes.FUEL), this.fuelTankCapacity, this.fuelTankMaxReceive, this.fuelTankMaxExtract)
-                .create(next(16, 6) + 9, 25, matterType -> matterType.is(MAgMatterTypes.HEAT), this.heatTankCapacity, this.heatTankMaxReceive, this.heatTankMaxExtract);
+                .create(next(16, 2), 25, matterType -> true, this.fuelTankCapacity, this.fuelTankMaxReceive, this.fuelTankMaxExtract)
+                .create(next(16, 6) + 9, 25, matterType -> matterType.is(MAgMatterTypes.HEAT), this.heatTankCapacity, this.heatTankMaxReceive, this.heatTankMaxExtract)
+                .create(next(16, 7) + 9, 25, matterType -> matterType.is(MAgMatterTypes.CARBON_DIOXIDE), this.fuelTankCapacity, this.fuelTankMaxExtract, this.fuelTankMaxReceive);
     }
 
     @Override
@@ -129,15 +129,21 @@ public class BurningChamberTile extends MachineTile {
         ingredient.modifyAmount(amount -> amount.multi((float) (getUpgradeMultiplier(blockEntity, 4) * this.upgradeMultiplier)));
         MatterStack result = recipe.get().getResult();
         result.modifyAmount(amount -> amount.multi((float) (getUpgradeMultiplier(blockEntity, 4) * this.upgradeMultiplier)));
+        MatterStack subResult = recipe.get().getSubResult();
+        subResult.modifyAmount(amount -> amount.multi((float) (getUpgradeMultiplier(blockEntity, 4) * this.upgradeMultiplier)));
 
         if (matterHandler.canExtractFromInside(ingredient, 0) &&
-                matterHandler.canReceiveFromInside(result, 1)) {
+                matterHandler.canReceiveFromInside(result, 1) &&
+                matterHandler.canReceiveFromInside(subResult, 2)) {
             matterHandler.extractFromInside(ingredient, 0);
             matterHandler.receiveFromInside(result, 1);
+            matterHandler.receiveFromInside(subResult, 2);
         } else if (matterHandler.canExtractFromInside(recipe.get().getIngredient(), 0) &&
-                matterHandler.canReceiveFromInside(recipe.get().getResult(), 1)) {
+                matterHandler.canReceiveFromInside(recipe.get().getResult(), 1) &&
+                matterHandler.canReceiveFromInside(recipe.get().getSubResult(), 2)) {
             matterHandler.extractFromInside(recipe.get().getIngredient(), 0);
             matterHandler.receiveFromInside(recipe.get().getResult(), 1);
+            matterHandler.receiveFromInside(recipe.get().getSubResult(), 1);
         }
     }
 }

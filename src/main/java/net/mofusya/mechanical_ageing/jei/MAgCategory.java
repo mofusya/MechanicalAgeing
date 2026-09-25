@@ -207,6 +207,12 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
         var itemStacks = elements.itemStacks;
         var matterStacks = elements.matterStacks;
 
+        int upgradeSlot = this.getMachineTile().getUpgradeArchiveSlot();
+        if (upgradeSlot >= 0 && upgradeSlot < this.getMachineTile().getSlots().size()) {
+            var upgradeSlotBuild = this.getMachineTile().getSlots().get(upgradeSlot);
+            builder.addSlot(RecipeIngredientRole.RENDER_ONLY, upgradeSlotBuild.x(), upgradeSlotBuild.y()).addIngredients(Ingredient.of(MAgTags.Items.MACHINE_UPGRADE_ARCHIVE));
+        }
+
         for (int i = 0; i < ingredients.size(); i++) {
             if (ingredients.get(i).isEmpty()) continue;
 
@@ -229,12 +235,6 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
             var slot = this.getMachineTile().getMatterSlots().get(i);
             builder.addSlot(slot.maxReceive().isGreaterThan(0) ? RecipeIngredientRole.INPUT : RecipeIngredientRole.OUTPUT,
                     slot.x() + 1, slot.y() + 19).addIngredient(MAgIngredient.MATTER_TYPE, matterStacks.get(i));
-        }
-
-        int upgradeSlot = this.getMachineTile().getUpgradeArchiveSlot();
-        if (upgradeSlot >= 0 && upgradeSlot < this.getMachineTile().getSlots().size()) {
-            var upgradeSlotBuild = this.getMachineTile().getSlots().get(upgradeSlot);
-            builder.addSlot(RecipeIngredientRole.RENDER_ONLY, upgradeSlotBuild.x(), upgradeSlotBuild.y()).addIngredients(Ingredient.of(MAgTags.Items.MACHINE_UPGRADE_ARCHIVE));
         }
     }
 

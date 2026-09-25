@@ -7,8 +7,8 @@
     "item": "minecraft:coal"
   },
   "heatAmount": {
-    "digit": "ONE",
-    "multiplier": 1811
+    "digit": "HUNDRED",
+    "multiplier": 5
   },
   "smeltTime": 200,
   "result": {

@@ -22,7 +22,7 @@ public class MatterBurningCategory extends MAgCategory<MatterBurningRecipe> {
 
     @Override
     public void getElements(MatterBurningRecipe recipe, ElementList elements) {
-        elements.addMatter(recipe.getIngredient(), recipe.getResult());
+        elements.addMatter(recipe.getIngredient(), recipe.getResult(), recipe.getSubResult());
     }
 
     @Override

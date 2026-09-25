@@ -1,8 +1,6 @@
 package net.mofusya.mechanical_ageing;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -18,9 +16,11 @@ import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.alloyset.AlloySet;
 import net.mofusya.mechanical_ageing.alloyset.MAgAlloySets;
 import net.mofusya.mechanical_ageing.blocks.MAgBlocks;
+import net.mofusya.mechanical_ageing.crystalset.CrystalSet;
+import net.mofusya.mechanical_ageing.crystalset.MAgCrystalSets;
 import net.mofusya.mechanical_ageing.data.blockstate.MachineBlockStateBuilder;
 import net.mofusya.mechanical_ageing.data.blockstate.MachineBlockStateHelper;
-import net.mofusya.mechanical_ageing.items.MAgItem;
+import net.mofusya.mechanical_ageing.items.MAgItems;
 import net.mofusya.mechanical_ageing.items.MAgTabs;
 import net.mofusya.mechanical_ageing.items.item.BatteryCoreItem;
 import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
@@ -40,7 +40,7 @@ public class MAg {
     public MAg() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        MAgItem.ITEMS.register(modEventBus);
+        MAgItems.ITEMS.register(modEventBus);
         MAgMetalSets.METAL_SET.register(modEventBus);
         MAgTabs.TABS.register(modEventBus);
         MAgBlocks.BLOCKS.register(modEventBus);
@@ -48,6 +48,7 @@ public class MAg {
         MAgRecipes.SERIALIZERS.register(modEventBus);
         MAgAlloySets.ALLOYS.register(modEventBus);
         MAgMatterTypes.MATTERS.register();
+        MAgCrystalSets.CRYSTALS.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);
@@ -57,6 +58,7 @@ public class MAg {
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
+        /*
         for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
             ItemBlockRenderTypes.setRenderLayer(metalSet.ore(), RenderType.cutout());
             ItemBlockRenderTypes.setRenderLayer(metalSet.deepslateOre(), RenderType.cutout());
@@ -65,6 +67,7 @@ public class MAg {
         for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST) {
             ItemBlockRenderTypes.setRenderLayer(builder.getBlock(), RenderType.cutout());
         }
+         */
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -126,11 +129,16 @@ public class MAg {
                     return 0xFFFFFF;
                 }, metalSet.deepslateOre());
             }
+
+            for (CrystalSet crystalSet : MAgCrystalSets.CRYSTALS.getEntries()) {
+                event.register((state, level, pos, tintIndex) -> tintIndex == 0 ? crystalSet.color() : 0xFFFFFF,
+                        crystalSet.compressedBlock(), crystalSet.block(), crystalSet.ore(), crystalSet.deepslateOre());
+            }
         }
 
         @SubscribeEvent
         public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-            for (RegistryObject<Item> item : MAgItem.ITEMS.getItems(2)) {
+            for (RegistryObject<Item> item : MAgItems.ITEMS.getItems(2)) {
                 if (item.get() instanceof BatteryCoreItem batteryOrCore) {
                     event.register((itemStack, tintIndex) -> {
                         if (tintIndex == 1) {
@@ -199,6 +207,10 @@ public class MAg {
                         return 0xFFFFFF;
                     }, item);
                 }
+            }
+
+            for (CrystalSet crystalSet : MAgCrystalSets.CRYSTALS.getEntries()) {
+                event.register((itemStack, tintIndex) -> tintIndex == 0 ? crystalSet.color() : 0xFFFFFF, crystalSet.crystal());
             }
         }
     }

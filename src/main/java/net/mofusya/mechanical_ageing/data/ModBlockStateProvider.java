@@ -11,8 +11,11 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.mofusya.mechanical_ageing.C;
 import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.blocks.MAgBlocks;
+import net.mofusya.mechanical_ageing.crystalset.CrystalSet;
+import net.mofusya.mechanical_ageing.crystalset.MAgCrystalSets;
 import net.mofusya.mechanical_ageing.data.blockstate.MachineBlockStateBuilder;
 import net.mofusya.mechanical_ageing.data.blockstate.MachineBlockStateHelper;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlock;
@@ -41,6 +44,10 @@ public class ModBlockStateProvider extends BlockStateProvider {
 
         for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
             this.metalSetBlock(metalSet);
+        }
+
+        for (CrystalSet crystalSet : MAgCrystalSets.CRYSTALS.getEntries()) {
+            this.crystalSetBlock(crystalSet);
         }
 
         for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST) {
@@ -125,8 +132,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
 
                 ModelFile model = models()
-                        .withExistingParent(name, modLoc("block/tint_block"))
-                        .texture("all", modLoc("block/block"));
+                        .withExistingParent(name, getMetalSetParentLoc("block"));
 
                 this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(model).build());
 
@@ -139,8 +145,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
 
                 ModelFile model = models()
-                        .withExistingParent(name, modLoc("block/tint_block"))
-                        .texture("all", modLoc("block/compressed_block"));
+                        .withExistingParent(name, getMetalSetParentLoc("compressed_block"));
 
                 this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(model).build());
 
@@ -152,12 +157,8 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 Block block = metalSet.ore();
                 String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
 
-                ResourceLocation stone = blockTexture(Blocks.STONE);
-
                 ModelFile model = models()
-                        .withExistingParent(name, modLoc("block/duo_layered_block"))
-                        .texture("layer0", stone)
-                        .texture("layer1", modLoc("block/ore"));
+                        .withExistingParent(name, modLoc("block/ore"));
 
                 this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(model).build());
 
@@ -169,17 +170,72 @@ public class ModBlockStateProvider extends BlockStateProvider {
                 Block block = metalSet.deepslateOre();
                 String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
 
-                ResourceLocation deepslate = blockTexture(Blocks.DEEPSLATE);
-
                 ModelFile model = models()
-                        .withExistingParent(name, modLoc("block/duo_layered_block"))
-                        .texture("layer0", deepslate)
-                        .texture("layer1", modLoc("block/ore"));
+                        .withExistingParent(name, modLoc("block/deepslate_ore"));
 
                 this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(model).build());
 
                 this.itemModels().withExistingParent(name, modLoc("block/" + name));
             }
         }
+    }
+
+    private void crystalSetBlock(CrystalSet crystalSet){
+        //Block
+        {
+            Block block = crystalSet.block();
+            String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
+
+            ModelFile model = models()
+                    .withExistingParent(name, getCrystalSetParentLoc("block"));
+
+            this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(model).build());
+
+            this.itemModels().withExistingParent(name, modLoc("block/" + name));
+        }
+        //Compressed Block
+        {
+            Block block = crystalSet.compressedBlock();
+            String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
+
+            ModelFile model = models()
+                    .withExistingParent(name, getCrystalSetParentLoc("compressed_block"));
+
+            this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(model).build());
+
+            this.itemModels().withExistingParent(name, modLoc("block/" + name));
+        }
+        //Ore
+        {
+            Block block = crystalSet.ore();
+            String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
+
+            ModelFile model = models()
+                    .withExistingParent(name, modLoc("block/ore"));
+
+            this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(model).build());
+
+            this.itemModels().withExistingParent(name, modLoc("block/" + name));
+        }
+        //Deepslate Ore
+        {
+            Block block = crystalSet.deepslateOre();
+            String name = ForgeRegistries.BLOCKS.getKey(block).getPath();
+
+            ModelFile model = models()
+                    .withExistingParent(name, modLoc("block/deepslate_ore"));
+
+            this.getVariantBuilder(block).forAllStates(state -> ConfiguredModel.builder().modelFile(model).build());
+
+            this.itemModels().withExistingParent(name, modLoc("block/" + name));
+        }
+    }
+
+    private static ResourceLocation getMetalSetParentLoc(String block){
+        return new ResourceLocation(C.MOD_ID, "block/metalset/" + block);
+    }
+
+    private static ResourceLocation getCrystalSetParentLoc(String block){
+        return new ResourceLocation(C.MOD_ID, "block/crystalset/" + block);
     }
 }

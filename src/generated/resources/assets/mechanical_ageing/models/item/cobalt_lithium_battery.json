@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mechanical_ageing:item/lithium_battery",
+    "layer1": "mechanical_ageing:item/lithium_battery_sublayer"
+  }
+}

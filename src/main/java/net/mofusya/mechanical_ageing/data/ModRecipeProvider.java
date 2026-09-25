@@ -13,6 +13,8 @@ import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
 import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.alloyset.AlloySet;
 import net.mofusya.mechanical_ageing.alloyset.MAgAlloySets;
+import net.mofusya.mechanical_ageing.crystalset.CrystalSet;
+import net.mofusya.mechanical_ageing.crystalset.MAgCrystalSets;
 import net.mofusya.mechanical_ageing.data.recipes.recipe.SmeltingBuilder;
 import net.mofusya.mechanical_ageing.data.recipes.recipe.TriDimensionalCraftingBuilder;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
@@ -36,6 +38,41 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         for (AlloySet alloySet : MAgAlloySets.ALLOYS.getEntries()) {
             alloySetRecipes(alloySet, writer);
         }
+        for (CrystalSet crystalSet : MAgCrystalSets.CRYSTALS.getEntries()) {
+            crystalSetRecipes(crystalSet, writer);
+        }
+    }
+
+    private static void crystalSetRecipes(CrystalSet crystalSet, Consumer<FinishedRecipe> writer){
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, crystalSet.block())
+                .pattern("AAA")
+                .pattern("AAA")
+                .pattern("AAA")
+                .define('A', crystalSet.crystal())
+                .unlockedBy(getHasName(crystalSet.crystal()), inventoryTrigger(ItemPredicate.Builder.item().
+                        of(crystalSet.crystal()).build()))
+                .save(writer, MAg.MOD_ID + ":" + getItemName(crystalSet.block()) + "_from_compressing");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, crystalSet.crystal(), 9)
+                .requires(crystalSet.block())
+                .unlockedBy(getHasName(crystalSet.block()), inventoryTrigger(ItemPredicate.Builder.item().
+                        of(crystalSet.block()).build()))
+                .save(writer, MAg.MOD_ID + ":" + getItemName(crystalSet.crystal()) + "_from_separating");
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.MISC, crystalSet.compressedBlock())
+                .pattern("AAA")
+                .pattern("AAA")
+                .pattern("AAA")
+                .define('A', crystalSet.block())
+                .unlockedBy(getHasName(crystalSet.block()), inventoryTrigger(ItemPredicate.Builder.item().
+                        of(crystalSet.block()).build()))
+                .save(writer, MAg.MOD_ID + ":" + getItemName(crystalSet.compressedBlock()) + "_from_compressing");
+
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, crystalSet.block(), 9)
+                .requires(crystalSet.compressedBlock())
+                .unlockedBy(getHasName(crystalSet.compressedBlock()), inventoryTrigger(ItemPredicate.Builder.item().
+                        of(crystalSet.compressedBlock()).build()))
+                .save(writer, MAg.MOD_ID + ":" + getItemName(crystalSet.block()) + "_from_separating");
     }
 
     private static void alloySetRecipes(AlloySet alloySet, Consumer<FinishedRecipe> writer) {

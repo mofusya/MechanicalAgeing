@@ -1,6 +1,3 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "mechanical_ageing:item/pure_dust"
-  }
+  "parent": "mechanical_ageing:item/metalset/pure_dust"
 }

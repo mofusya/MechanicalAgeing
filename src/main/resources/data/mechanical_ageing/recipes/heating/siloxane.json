@@ -1,0 +1,21 @@
+{
+  "type": "mechanical_ageing:heating",
+  "ingredient": {
+    "type": "mechanical_ageing:silane_mixture",
+    "amount": {
+      "digit": "HUNDRED",
+      "multiplier": 2
+    }
+  },
+  "heatAmount":{
+    "digit": "ONE",
+    "multiplier": 373
+  },
+  "result": {
+    "type": "mechanical_ageing:siloxane",
+    "amount": {
+      "digit": "HUNDRED",
+      "multiplier": 2
+    }
+  }
+}

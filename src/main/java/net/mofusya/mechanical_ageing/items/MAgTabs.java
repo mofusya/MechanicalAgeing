@@ -1,35 +1,46 @@
 package net.mofusya.mechanical_ageing.items;
 
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+import net.mofusya.mechanical_ageing.C;
 import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.alloyset.MAgAlloySets;
 import net.mofusya.mechanical_ageing.blocks.MAgBlocks;
+import net.mofusya.mechanical_ageing.crystalset.MAgCrystalSets;
+import net.mofusya.mechanical_ageing.matter.MatterManager;
+import net.mofusya.mechanical_ageing.matter.MatterType;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
 import net.mofusya.mechanical_ageing.tiles.MAgMachines;
+import net.mofusya.ornatelib.registries.OrnateCreativeTabRegister;
+import net.mofusya.ornatelib.util.ItemHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MAgTabs {
-    public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MAg.MOD_ID);
+    public static final OrnateCreativeTabRegister TABS = new OrnateCreativeTabRegister(C.MOD_ID);
 
     public static final RegistryObject<CreativeModeTab> MATERIAL = TABS.register("material", () -> CreativeModeTab.builder()
             .title(Component.translatable("tab." + MAg.MOD_ID + ".material"))
             .icon(() -> new ItemStack(MAgMetalSets.IRON.ingot()))
             .displayItems((parameters, output) -> {
                 List<ItemLike> items = new ArrayList<>();
+                items.addAll(MAgCrystalSets.CRYSTALS.getAllItemLikes());
                 items.addAll(MAgAlloySets.ALLOYS.getItems().stream().map(RegistryObject::get).toList());
                 items.addAll(MAgMetalSets.METAL_SET.getAllItemLikes());
 
                 for (ItemLike item : items) {
                     output.accept(item);
+                }
+
+                List<MatterType> matterTypes = MatterManager.get().values().stream().toList();
+                for (int i = 0; i < matterTypes.size(); i++) {
+                    ItemStack itemStack = new ItemStack(MAgMachines.MULTIVERSO_MATTER_CELL.block());
+                    itemStack.getOrCreateTag().putInt(C.MATTER_INDEX, i);
+                    output.accept(itemStack);
                 }
             })
             .build());
@@ -39,7 +50,7 @@ public class MAgTabs {
             .icon(() -> new ItemStack(MAgMachines.TRI_DIM_CRAFTING_TABLE.block()))
             .displayItems((parameters, output) -> {
                 List<ItemLike> items = new ArrayList<>();
-                items.addAll(MAgItem.ITEMS.getItems(1).stream().map(RegistryObject::get).toList());
+                items.addAll(MAgItems.ITEMS.getItems(1).stream().map(RegistryObject::get).toList());
                 items.addAll(MAgMachines.MACHINES.getBlockEntries().stream().map(RegistryObject::get).toList());
 
                 for (ItemLike item : items) {
@@ -52,8 +63,9 @@ public class MAgTabs {
             .title(Component.translatable("tab." + MAg.MOD_ID + ".main"))
             .icon(() -> new ItemStack(MAgBlocks.REINFORCED_BRICKS.get()))
             .displayItems((parameters, output) -> {
-                output.acceptAll(MAgBlocks.BLOCKS.getItems(0).stream().map(RegistryObject::get).map(ItemStack::new).toList());
-                output.acceptAll(MAgItem.ITEMS.getItems(2).stream().map(RegistryObject::get).map(ItemStack::new).toList());
+                output.acceptAll(ItemHelpers.itemRegistries2ItemStacks(MAgItems.ITEMS.getMainItems()));
+                output.acceptAll(ItemHelpers.blockRegistries2ItemStacks(MAgBlocks.BLOCKS.getBlocks(0)));
+                //output.acceptAll(ItemHelpers.itemRegistries2ItemStacks(MAgItems.ITEMS.getItems(2)));
             })
             .build());
 }

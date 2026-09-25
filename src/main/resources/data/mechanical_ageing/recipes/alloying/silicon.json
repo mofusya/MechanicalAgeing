@@ -1,0 +1,17 @@
+{
+  "type": "mechanical_ageing:alloying",
+  "ingredient": {
+    "item": "mechanical_ageing:quartz"
+  },
+  "subIngredient": {
+    "item": "minecraft:coal"
+  },
+  "heatAmount": {
+    "digit": "HUNDRED",
+    "multiplier": 5
+  },
+  "smeltTime": 200,
+  "result": {
+    "item": "mechanical_ageing:silicon"
+  }
+}

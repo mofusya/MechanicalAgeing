@@ -15,7 +15,8 @@ import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineMenu;
 import net.mofusya.mechanical_ageing.machinetiles.button.OnButtonPressPacket;
 import net.mofusya.mechanical_ageing.machinetiles.button.OnIOButtonPressPacket;
 import net.mofusya.mechanical_ageing.util.LazyPointer;
-import net.mofusya.ornatelib.registries.OrnateBlockDeferredRegister;
+import net.mofusya.ornatelib.registries.OrnateBlockEntityTypeRegister;
+import net.mofusya.ornatelib.registries.OrnateBlockRegister;
 import net.mofusya.ornatelib.registries.network.PacketRegister;
 
 import java.util.ArrayList;
@@ -29,8 +30,8 @@ public class MachineRegister {
     private static final Map<ResourceLocation, LazyPointer<RegistryObject<MenuType<MachineMenu>>>> menuMap = new HashMap<>();
 
     protected final String modId;
-    protected final OrnateBlockDeferredRegister blocks;
-    protected final DeferredRegister<BlockEntityType<?>> blockEntities;
+    protected final OrnateBlockRegister blocks;
+    protected final OrnateBlockEntityTypeRegister blockEntities;
     protected final DeferredRegister<MenuType<?>> menus;
 
     private final ArrayList<RegistryObject<MenuType<MachineMenu>>> machineMenus = new ArrayList<>();
@@ -39,8 +40,8 @@ public class MachineRegister {
 
     public MachineRegister(String modId) {
         this.modId = modId;
-        blocks = OrnateBlockDeferredRegister.create(modId);
-        blockEntities = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, modId);
+        blocks = new OrnateBlockRegister(modId);
+        blockEntities = new OrnateBlockEntityTypeRegister(modId);
         menus = DeferredRegister.create(ForgeRegistries.MENU_TYPES, modId);
         packetRegister = new PacketRegister(modId);
     }
@@ -65,9 +66,10 @@ public class MachineRegister {
         propertyTile.setButtonPacket(buttonPacket, ioButtonPacket);
 
         final RegistryObject<Block> block = blocks.register(
-                id,
-                () -> new MachineBlock(() -> lazyBlockEntity.get().get(), propertyTile),
-                propertyTile.getItemBuild()
+                id, new OrnateBlockRegister.Builder()
+                        .block(() -> propertyTile.getCustomBlock(() -> lazyBlockEntity.get().get(), propertyTile))
+                        .itemFunc(propertyTile::getCustomItem)
+                        .itemBuild(propertyTile.getItemBuild())
         );
 
         final RegistryObject<BlockEntityType<MachineBlockEntity>> blockEntity = blockEntities.register(
@@ -111,7 +113,7 @@ public class MachineRegister {
     }
 
     public List<RegistryObject<BlockEntityType<?>>> getBlockEntityEntries() {
-        return new ArrayList<>(this.blockEntities.getEntries());
+        return new ArrayList<>(this.blockEntities.getBlockEntityTypes());
     }
 
     public List<RegistryObject<MenuType<MachineMenu>>> getMenuEntries() {

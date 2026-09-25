@@ -9,6 +9,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.blocks.MAgBlocks;
+import net.mofusya.mechanical_ageing.crystalset.CrystalSet;
+import net.mofusya.mechanical_ageing.crystalset.MAgCrystalSets;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
 import net.mofusya.mechanical_ageing.tiles.MAgMachines;
@@ -28,6 +30,7 @@ public class ModBlockTagProvider extends BlockTagsProvider {
             ArrayList<RegistryObject<Block>> registries = new ArrayList<>();
 
             registries.addAll(MAgMetalSets.METAL_SET.getBlocks());
+            registries.addAll(MAgCrystalSets.CRYSTALS.getBlocks());
             registries.addAll(MAgBlocks.BLOCKS.getBlocks(0));
             registries.addAll(MAgMachines.MACHINES.getBlockEntries());
 
@@ -44,6 +47,14 @@ public class ModBlockTagProvider extends BlockTagsProvider {
                 tags.add(metalSet.block());
                 tags.add(metalSet.ore());
                 tags.add(metalSet.deepslateOre());
+            }
+
+            for (CrystalSet crystalSet : MAgCrystalSets.CRYSTALS.getEntries()) {
+                var tags = this.tag(crystalSet.getBuilder().getMineableWith());
+                tags.add(crystalSet.ore());
+                tags.add(crystalSet.deepslateOre());
+                tags.add(crystalSet.block());
+                tags.add(crystalSet.compressedBlock());
             }
         }
 

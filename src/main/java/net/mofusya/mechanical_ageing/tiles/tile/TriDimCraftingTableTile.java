@@ -1,5 +1,6 @@
 package net.mofusya.mechanical_ageing.tiles.tile;
 
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -7,14 +8,23 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.mofusya.mechanical_ageing.machinetiles.CapabilityContext;
+import net.mofusya.mechanical_ageing.machinetiles.CapabilityOverride;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
+import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlock;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.button.ButtonList;
+import net.mofusya.mechanical_ageing.machinetiles.slot.LimitedItemHandler;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.recipe.TriDimCraftingRecipe;
 import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -54,6 +64,15 @@ public class TriDimCraftingTableTile extends MachineTile {
     public ButtonList getButtons(ButtonList list) {
         return super.getButtons(list)
                 .create(152, 63, SlotType.EXTRACT_ONLY);
+    }
+
+    @Override
+    public <T> CapabilityOverride<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side, CapabilityContext context) {
+        if (cap == ForgeCapabilities.ITEM_HANDLER && (context.directionHandler().getItemDirection(27) == null || getCombinedDirection(context.blockEntity().getBlockState().getValue(MachineBlock.FACING), context.directionHandler().getItemDirection(27)) != side)) {
+            return new CapabilityOverride<>(() -> LazyOptional.of(() -> new LimitedItemHandler(context.itemHandler(), 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26)).cast(), false);
+        }
+
+        return super.getCapability(cap, side, context);
     }
 
     @Override

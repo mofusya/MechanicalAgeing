@@ -1,0 +1,14 @@
+{
+  "type": "mechanical_ageing:smelting",
+  "heatAmount": {
+    "digit": "HUNDRED",
+    "multiplier": 15
+  },
+  "ingredient": {
+    "item": "mechanical_ageing:silicon"
+  },
+  "result": {
+    "item": "mechanical_ageing:metallic_silicon"
+  },
+  "smeltTime": 200
+}

@@ -1,16 +1,6 @@
 package net.mofusya.mechanical_ageing.items.implemts;
 
-public interface IMetalAttributed {
-    double getDensity();
-
-    double getHardness();
-
-    int getMeltingPoint();
-
-    int getBoilingPoint();
-
-    float getRadiationMultiplier();
-
+public interface IMetalAttributed extends IMaterialAttributed{
     boolean isMagnetic();
 
     boolean hasMagneticField();

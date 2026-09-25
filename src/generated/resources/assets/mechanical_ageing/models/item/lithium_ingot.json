@@ -1,6 +1,3 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "mechanical_ageing:item/ingot"
-  }
+  "parent": "mechanical_ageing:item/metalset/ingot"
 }

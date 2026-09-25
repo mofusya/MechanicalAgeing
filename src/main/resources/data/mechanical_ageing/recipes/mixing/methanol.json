@@ -1,0 +1,24 @@
+{
+  "type": "mechanical_ageing:mixing",
+  "firstIngredient": {
+    "type": "mechanical_ageing:methane",
+    "amount": {
+      "digit": "HUNDRED",
+      "multiplier": 2
+    }
+  },
+  "secondIngredient": {
+    "type": "mechanical_ageing:water_vapor",
+    "amount": {
+      "digit": "HUNDRED",
+      "multiplier": 2
+    }
+  },
+  "matterResult": {
+    "type": "mechanical_ageing:methanol",
+    "amount": {
+      "digit": "HUNDRED",
+      "multiplier": 4
+    }
+  }
+}

@@ -9,7 +9,7 @@
   },
   "heatAmount":{
     "digit": "ONE",
-    "multiplier": 100
+    "multiplier": 373
   },
   "result": {
     "type": "mechanical_ageing:water_vapor",

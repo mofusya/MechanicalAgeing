@@ -1,0 +1,22 @@
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "pattern": [
+    "C%C%#%C%C",
+    "%#%# #%#%",
+    "C#C# #C#C"
+  ],
+  "key": {
+    "C": {
+      "item": "mechanical_ageing:copper_chunk"
+    },
+    "%": {
+      "item": "mechanical_ageing:steel"
+    },
+    "#": {
+      "tag": "planks"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:manual_bio_concentrator"
+  }
+}

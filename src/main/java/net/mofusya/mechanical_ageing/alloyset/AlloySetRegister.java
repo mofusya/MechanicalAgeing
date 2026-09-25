@@ -11,13 +11,14 @@ import net.mofusya.mechanical_ageing.matter.MatterRegister;
 import net.mofusya.mechanical_ageing.matter.MatterType;
 import net.mofusya.ornatelib.item.AttributedItem;
 import net.mofusya.ornatelib.registries.OrnateItemDeferredRegister;
+import net.mofusya.ornatelib.registries.OrnateItemRegister;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AlloySetRegister {
     private final String modId;
-    private final OrnateItemDeferredRegister itemRegisters;
+    private final OrnateItemRegister itemRegisters;
     private final MatterRegister matterRegister;
     private final ArrayList<AlloySet> alloySets = new ArrayList<>();
 
@@ -27,7 +28,7 @@ public class AlloySetRegister {
 
     public AlloySetRegister(String modId, int slot) {
         this.modId = modId;
-        this.itemRegisters = OrnateItemDeferredRegister.create(modId, slot);
+        this.itemRegisters = new OrnateItemRegister(modId, slot);
         this.matterRegister = new MatterRegister();
     }
 

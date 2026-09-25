@@ -5,6 +5,8 @@
   "tab.mechanical_ageing.machines": "MechanicalAgeing: Machines",
   "tab.mechanical_ageing.main": "MechanicalAgeing",
 
+  "item.mechanical_ageing.silicone_rubber": "Silicone Rubber",
+
   "item.mechanical_ageing.circuit_board": "Circuit Board",
   "item.mechanical_ageing.circuit_board.conductivity": "§7Conductivity§8(Wh)",
   "item.mechanical_ageing.circuit_board.durability": "§7Durability§8(Wh)",
@@ -38,6 +40,15 @@
   "block.mechanical_ageing.basic_watter_pump.machine_name": "Basic Pump",
   "block.mechanical_ageing.basic_rotation_generator": "Basic Rotation Generator",
   "block.mechanical_ageing.basic_rotation_generator.machine_name": "Basic Rot-Gen",
+  "block.mechanical_ageing.manual_bio_concentrator": "Manual Bio Concentrator",
+  "block.mechanical_ageing.manual_bio_concentrator.machine_name": "Manual Bio-C",
+  "block.mechanical_ageing.manual_mixing_chamber": "Manual Mixing Chamber",
+  "block.mechanical_ageing.manual_mixing_chamber.machine_name": "Manual MC",
+  "block.mechanical_ageing.water_cooling_chamber": "Water Cooling Chamber",
+  "block.mechanical_ageing.water_cooling_chamber.machine_name": "Water Cool C",
+
+  "block.mechanical_ageing.multiverso_matter_cell": "Multiverso Matter Cell",
+  "block.mechanical_ageing.multiverso_matter_cell.machine_name": "Multiverso MC",
 
   "recipe.mechanical_ageing.fuel": "Fuel",
   "recipe.mechanical_ageing.matter_bunging": "Matter Burning",
@@ -45,12 +56,21 @@
   "recipe.mechanical_ageing.alloying": "Alloying",
   "recipe.mechanical_ageing.heating": "Heating",
   "recipe.mechanical_ageing.turbine_rotating": "Turbine Rotating",
+  "recipe.mechanical_ageing.mixing": "Mixing",
+  "recipe.mechanical_ageing.water_cooling": "Water Cooling",
 
-  "matter.mechanical_ageing.water": "Water",
-  "matter.mechanical_ageing.water_vapor": "Water Vapor",
-  "matter.mechanical_ageing.fuel": "Fuel",
+  "matter.mechanical_ageing.carbon": "Carbon",
   "matter.mechanical_ageing.heat": "Heat",
+  "matter.mechanical_ageing.carbon_dioxide": "Carbon Dioxide",
+  "matter.mechanical_ageing.water": "Water - Dihydrogen Monoxide",
+  "matter.mechanical_ageing.water_vapor": "Water Vapor - Dihydrogen Monoxide",
   "matter.mechanical_ageing.rotation": "Rotation",
+  "matter.mechanical_ageing.methane": "Methane - Carbon Tetrahydride",
+  "matter.mechanical_ageing.methanol": "Methanol - Carbon Tetrahydride Monoxide",
+  "matter.mechanical_ageing.silane_compound": "Silane Compound - Tetrahydride Silicon",
+  "matter.mechanical_ageing.silane_mixture": "Silane Mixture",
+  "matter.mechanical_ageing.siloxane": "Siloxane",
+  "matter.mechanical_ageing.liquid_silicone_rubber": "Liquid Silicone Rubber",
 
   "matter_attribute.mechanical_ageing.tier": "Tier",
 
@@ -94,6 +114,26 @@
   "item.mechanical_ageing.duo_compressed_magnetite": "Duo-Compressed Magnetite [x729]",
   "item.mechanical_ageing.tri_compressed_magnetite": "Tri-Compressed Magnetite [x19,683]",
   "item.mechanical_ageing.quad_compressed_magnetite": "Quad-Compressed Magnetite [x531,441]",
+
+  "item.mechanical_ageing.silicon": "Silicon",
+  "item.mechanical_ageing.compressed_silicon": "Compressed Silicone [x27]",
+  "item.mechanical_ageing.duo_compressed_silicon": "Duo-Compressed Silicone [x729]",
+  "item.mechanical_ageing.tri_compressed_silicon": "Tri-Compressed Silicone [x19,683]",
+  "item.mechanical_ageing.quad_compressed_silicon": "Quad-Compressed Silicone [x531,441]",
+
+  "item.mechanical_ageing.metallic_silicon": "Metallic Silicon",
+  "item.mechanical_ageing.compressed_metallic_silicon": "Compressed Metallic Silicone [x27]",
+  "item.mechanical_ageing.duo_compressed_metallic_silicon": "Duo-Compressed Metallic Silicone [x729]",
+  "item.mechanical_ageing.tri_compressed_metallic_silicon": "Tri-Compressed Metallic Silicone [x19,683]",
+  "item.mechanical_ageing.quad_compressed_metallic_silicon": "Quad-Compressed Metallic Silicone [x531,441]",
+
+  "block.mechanical_ageing.compressed_quartz_block": "Compressed Quartz Block",
+  "block.mechanical_ageing.quartz_block": "Quartz Block",
+  "block.mechanical_ageing.quartz_ore": "Quartz Ore",
+  "block.mechanical_ageing.deepslate_quartz_ore": "Deepslate Quartz Ore",
+  "item.mechanical_ageing.quartz": "Quartz",
+  "matter.mechanical_ageing.liquid_quartz": "Liquid Quartz",
+  "matter.mechanical_ageing.quartz_gas": "Quartz Gas",
 
   "block.mechanical_ageing.compressed_iron_block": "Compressed Iron Block",
   "block.mechanical_ageing.iron_block": "Iron Block",

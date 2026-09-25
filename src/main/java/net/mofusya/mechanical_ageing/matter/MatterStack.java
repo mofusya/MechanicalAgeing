@@ -40,10 +40,6 @@ public final class MatterStack {
         if (matterStack == null) return false;
         if (!checkTags(this, matterStack)) return false;
 
-        if (matterStack.getType() != null && matterStack.getType().is(MAgMatterTypes.WATER_VAPOR) && !matterStack.getTags().hasContent()){
-            return false;
-        }
-
         if (this.type == null) {
             if (!simulate) {
                 this.modify(matterType -> matterStack.getType(), matterAmount -> matterAmount.add(matterStack.getAmount()));
@@ -157,6 +153,14 @@ public final class MatterStack {
         if (matterStackA.getType() == null || matterStackB.getType() == null) return true;
 
         return matterStackA.getTags().matches(matterStackB.getTags());
+    }
+
+    public static boolean checkIngredientTags(MatterStack ingredient, MatterStack matterStack) {
+        if (ingredient == null || matterStack == null) return true;
+        if (ingredient.getType() == null || matterStack.getType() == null) return true;
+        if (!ingredient.getTags().hasContent()) return true;
+
+        return ingredient.getTags().matches(matterStack.getTags());
     }
 
     @Override

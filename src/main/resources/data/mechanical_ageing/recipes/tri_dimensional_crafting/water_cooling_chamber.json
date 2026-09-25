@@ -1,0 +1,29 @@
+
+{
+  "type": "mechanical_ageing:tri_dimensional_crafting",
+  "pattern": [
+    "#O#O O#O#",
+    "#%#% %#%#",
+    "#I#ICI#I#"
+  ],
+  "key": {
+    "#": {
+      "tag": "logs"
+    },
+    "%": {
+      "item": "mechanical_ageing:steel"
+    },
+    "C": {
+      "item": "cauldron"
+    },
+    "I": {
+      "item": "mechanical_ageing:osmium_block"
+    },
+    "O": {
+      "item": "mechanical_ageing:osmium_chunk"
+    }
+  },
+  "result": {
+    "item": "mechanical_ageing:water_cooling_chamber"
+  }
+}

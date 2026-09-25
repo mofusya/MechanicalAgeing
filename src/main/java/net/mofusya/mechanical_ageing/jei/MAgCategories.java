@@ -37,6 +37,12 @@ public class MAgCategories {
         create(TurbineRotationCategory::new, TurbineRotationCategory.TYPE, TurbineRotatingRecipe.Type.INSTANCE,
                 MAgMachines.IMPULSE_TURBINE.block()
         );
+        create(MixingCategory::new, MixingCategory.TYPE, MixingRecipe.Type.INSTANCE,
+                MAgMachines.MANUAL_MIXING_CHAMBER.block()
+        );
+        create(WaterCoolingCategory::new, WaterCoolingCategory.TYPE, WaterCoolingRecipe.Type.INSTANCE,
+                MAgMachines.WATER_COOLING_CHAMBER.block()
+        );
     }
 
     public static void create(Function<IGuiHelper, MAgCategory<?>> instance, RecipeType<?> jeiType, net.minecraft.world.item.crafting.RecipeType<?> mcType, ItemLike... catalysts) {

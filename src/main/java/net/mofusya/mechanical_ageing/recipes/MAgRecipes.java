@@ -32,4 +32,10 @@ public class MAgRecipes {
 
     public static final RegistryObject<RecipeSerializer<TurbineRotatingRecipe>> TURBINE_ROTATING =
             SERIALIZERS.register("turbine_rotating", () -> TurbineRotatingRecipe.Serializer.INSTANCE);
+
+    public static final RegistryObject<RecipeSerializer<MixingRecipe>> MIXING =
+            SERIALIZERS.register("mixing", () -> MixingRecipe.Serializer.INSTANCE);
+
+    public static final RegistryObject<RecipeSerializer<WaterCoolingRecipe>> WATER_COOLING =
+            SERIALIZERS.register("water_cooling", () -> WaterCoolingRecipe.Serializer.INSTANCE);
 }

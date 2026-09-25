@@ -11,7 +11,6 @@ import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.MAgRecipe;
-import net.mofusya.ornatelib.lang.SeptiLong;
 import net.mofusya.ornatelib.lang.UnLong;
 
 public class FuelRecipe extends MAgRecipe {
@@ -38,7 +37,7 @@ public class FuelRecipe extends MAgRecipe {
     }
 
     public MatterStack getResult() {
-        return new MatterStack(MAgMatterTypes.FUEL, this.getResultAmount());
+        return new MatterStack(MAgMatterTypes.CARBON, this.getResultAmount());
     }
 
     public enum Type implements RecipeType<FuelRecipe> {INSTANCE}

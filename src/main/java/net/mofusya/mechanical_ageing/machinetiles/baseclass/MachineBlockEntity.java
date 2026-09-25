@@ -199,6 +199,7 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
         if (this.getLevel() == null) return super.getCapability(cap, side);
 
         var capabilityOverride = this.machineTile.getCapability(cap, side, new CapabilityContext(
+                this,
                 this.itemHandler,
                 this.lazyItemHandler,
                 this.energyStorages,
@@ -452,16 +453,16 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
     public static DirectionType getCombinedDirection(Direction baseDirection, Direction direction) {
         return switch (baseDirection) {
             case NORTH -> switch (direction) {
-                case NORTH -> DirectionType.BACK;
-                case SOUTH -> DirectionType.FRONT;
+                case NORTH -> DirectionType.FRONT;
+                case SOUTH -> DirectionType.BACK;
                 case WEST -> DirectionType.RIGHT;
                 case EAST -> DirectionType.LEFT;
                 case UP -> DirectionType.UP;
                 case DOWN -> DirectionType.DOWN;
             };
             case SOUTH -> switch (direction) {
-                case NORTH -> DirectionType.FRONT;
-                case SOUTH -> DirectionType.BACK;
+                case NORTH -> DirectionType.BACK;
+                case SOUTH -> DirectionType.FRONT;
                 case WEST -> DirectionType.LEFT;
                 case EAST -> DirectionType.RIGHT;
                 case UP -> DirectionType.UP;
@@ -470,16 +471,16 @@ public class MachineBlockEntity extends BlockEntity implements MenuProvider {
             case WEST -> switch (direction) {
                 case NORTH -> DirectionType.LEFT;
                 case SOUTH -> DirectionType.RIGHT;
-                case WEST -> DirectionType.BACK;
-                case EAST -> DirectionType.FRONT;
+                case WEST -> DirectionType.FRONT;
+                case EAST -> DirectionType.BACK;
                 case UP -> DirectionType.UP;
                 case DOWN -> DirectionType.DOWN;
             };
             case EAST -> switch (direction) {
                 case NORTH -> DirectionType.RIGHT;
                 case SOUTH -> DirectionType.LEFT;
-                case WEST -> DirectionType.FRONT;
-                case EAST -> DirectionType.BACK;
+                case WEST -> DirectionType.BACK;
+                case EAST -> DirectionType.FRONT;
                 case UP -> DirectionType.UP;
                 case DOWN -> DirectionType.DOWN;
             };

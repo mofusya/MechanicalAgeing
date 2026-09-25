@@ -16,10 +16,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -110,7 +107,7 @@ public abstract class MachineTile {
         this.matterIOHandler(level, pos, state, matterHandler, directionHandler);
     }
 
-    //PUSH [NOT FINISHED. DO NOT USE. PLEASE.]
+    //PUSH [NOT FINISHED. DO NOT USE. PLEASE.] todo: MAKE THIS F'N THING WORK.
     private void itemIOHandler(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity, MachineDirectionHandler directionHandler) {
         for (int i = 0; i < this.getSlots().size(); i++) {
             IItemHandler itemHandler = blockEntity.getItemHandler();
@@ -202,6 +199,8 @@ public abstract class MachineTile {
                 int finalI = i;
                 int finalJ = j;
                 pMachine.getCapability(MAgCapabilities.MATTER, direction.getOpposite()).ifPresent(handler -> {
+                    Direction oDirection = direction.getOpposite();
+
                     LimitedMatterHandler limitedHandler = (LimitedMatterHandler) handler;
                     if (!limitedHandler.canReceive(finalJ)) return;
 
@@ -274,6 +273,14 @@ public abstract class MachineTile {
 
     public BlockBehaviour.Properties getBlockBuild() {
         return BlockBehaviour.Properties.copy(Blocks.IRON_DOOR).mapColor(DyeColor.GRAY).strength(4.0f);
+    }
+
+    public BlockItem getCustomItem(Block block, Item.Properties build) {
+        return new BlockItem(block, build);
+    }
+
+    public MachineBlock getCustomBlock(Supplier<BlockEntityType<? extends MachineBlockEntity>> blockEntity, MachineTile machineTile) {
+        return new MachineBlock(blockEntity, machineTile);
     }
 
     public IBgTileType getBgTileType() {
@@ -893,8 +900,8 @@ public abstract class MachineTile {
                 case DOWN -> Direction.DOWN;
                 case RIGHT -> Direction.WEST;
                 case LEFT -> Direction.EAST;
-                case FRONT -> Direction.SOUTH;
-                case BACK -> Direction.NORTH;
+                case FRONT -> Direction.NORTH;
+                case BACK -> Direction.SOUTH;
             };
             case SOUTH -> switch (direction) {
                 case NONE -> null;
@@ -902,8 +909,8 @@ public abstract class MachineTile {
                 case DOWN -> Direction.DOWN;
                 case RIGHT -> Direction.EAST;
                 case LEFT -> Direction.WEST;
-                case FRONT -> Direction.NORTH;
-                case BACK -> Direction.SOUTH;
+                case FRONT -> Direction.SOUTH;
+                case BACK -> Direction.NORTH;
             };
             case WEST -> switch (direction) {
                 case NONE -> null;
@@ -911,8 +918,8 @@ public abstract class MachineTile {
                 case DOWN -> Direction.DOWN;
                 case RIGHT -> Direction.SOUTH;
                 case LEFT -> Direction.NORTH;
-                case FRONT -> Direction.EAST;
-                case BACK -> Direction.WEST;
+                case FRONT -> Direction.WEST;
+                case BACK -> Direction.EAST;
             };
             case EAST -> switch (direction) {
                 case NONE -> null;
@@ -920,8 +927,8 @@ public abstract class MachineTile {
                 case DOWN -> Direction.DOWN;
                 case RIGHT -> Direction.NORTH;
                 case LEFT -> Direction.SOUTH;
-                case FRONT -> Direction.WEST;
-                case BACK -> Direction.EAST;
+                case FRONT -> Direction.EAST;
+                case BACK -> Direction.WEST;
             };
             default -> throw new IllegalStateException("Unexpected value: " + baseDirection);
         };

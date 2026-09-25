@@ -1,29 +1,30 @@
 package net.mofusya.mechanical_ageing.matter;
 
 import net.minecraft.resources.ResourceLocation;
-import net.mofusya.mechanical_ageing.MAg;
+import net.mofusya.mechanical_ageing.C;
 
 public class MAgMatterTypes {
-
     public static final MatterRegister MATTERS = new MatterRegister();
 
-    public static final MatterType WATER = MATTERS.create(
-            new ResourceLocation(MAg.MOD_ID, "water"),
-            new MatterType.Builder(0x4040FF).build());
+    public static final MatterType CARBON = create("carbon", 0x3C3C3C);
+    public static final MatterType HEAT = create("heat", 0xBA3D06, "K");
+    public static final MatterType CARBON_DIOXIDE = create("carbon_dioxide", 0xB5B5B5);
+    public static final MatterType WATER = create("water", 0x4040FF);
+    public static final MatterType WATER_VAPOR = create("water_vapor", 0xE0E0E0);
+    public static final MatterType ROTATION = create("rotation", 0x9E9380, "RP");
+    public static final MatterType METHANE = create("methane", 0xA3BFEB);
+    public static final MatterType METHANOL = create("methanol", 0xB3CFFB);
+    public static final MatterType SILANE_COMPOUND = create("silane_compound", 0xC3DFFF);
+    public static final MatterType SILANE_MIXTURE = create("silane_mixture", 0xD3FFFF);
+    public static final MatterType SILOXANE = create("siloxane", 0x76CBFF);
+    public static final MatterType LIQUID_SILICONE_RUBBER = create("liquid_silicone_rubber", 0xEFEFFF);
 
-    public static final MatterType WATER_VAPOR = MATTERS.create(
-            new ResourceLocation(MAg.MOD_ID, "water_vapor"),
-            new MatterType.Builder(0xE0E0E0).build());
+    /*Helpers*/
+    private static MatterType create(String id, int color) {
+        return MATTERS.create(new ResourceLocation(C.MOD_ID, id), new MatterType.Builder(color).build());
+    }
 
-    public static final MatterType FUEL = MATTERS.create(
-            new ResourceLocation(MAg.MOD_ID, "fuel"),
-            new MatterType.Builder(0xF0DBC0).build());
-
-    public static final MatterType HEAT = MATTERS.create(
-            new ResourceLocation(MAg.MOD_ID, "heat"),
-            new MatterType.Builder(0xBA3D06).suffix("K").build());
-
-    public static final MatterType ROTATION = MATTERS.create(
-            new ResourceLocation(MAg.MOD_ID, "rotation"),
-            new MatterType.Builder(0x9E9380).suffix("RP").build());
+    private static MatterType create(String id, int color, String suffix) {
+        return MATTERS.create(new ResourceLocation(C.MOD_ID, id), new MatterType.Builder(color).suffix(suffix).build());
+    }
 }

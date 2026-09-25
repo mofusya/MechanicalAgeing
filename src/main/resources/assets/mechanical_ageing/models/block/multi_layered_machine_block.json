@@ -1,5 +1,6 @@
 {
   "parent": "block/block",
+  "render_type": "cutout",
   "textures": {
     "none": "mechanical_ageing:block/machine/none",
     "cover_front": "mechanical_ageing:block/machine/none",

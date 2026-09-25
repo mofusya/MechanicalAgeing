@@ -6,8 +6,6 @@ import net.mofusya.mechanical_ageing.machinetiles.MachineObject;
 import net.mofusya.mechanical_ageing.machinetiles.MachineRegister;
 import net.mofusya.mechanical_ageing.tiles.tile.HeatingChamberTile;
 import net.mofusya.mechanical_ageing.tiles.tile.*;
-import net.mofusya.ornatelib.lang.SeptiLong;
-import net.mofusya.ornatelib.lang.SeptiLongValue;
 import net.mofusya.ornatelib.lang.UnLong;
 
 public class MAgMachines {
@@ -41,4 +39,9 @@ public class MAgMachines {
                     new UnLong(1048576), UnLong.zero(), new UnLong(1048576)));
     public static final MachineObject BASIC_WATTER_PUMP = MACHINES.register("basic_watter_pump", BasicMatterPumpTile::new);
     public static final MachineObject BASIC_ROTATION_GENERATOR = MACHINES.register("basic_rotation_generator", RotationGeneratorTile::new);
+    public static final MachineObject MANUAL_BIO_CONCENTRATOR = MACHINES.register("manual_bio_concentrator", ManualBioConcentratorTile::new);
+    public static final MachineObject MANUAL_MIXING_CHAMBER = MACHINES.register("manual_mixing_chamber", ManualMixingChamberTile::new);
+    public static final MachineObject WATER_COOLING_CHAMBER = MACHINES.register("water_cooling_chamber", WaterCoolingChamberTile::new);
+
+    public static final MachineObject MULTIVERSO_MATTER_CELL = MACHINES.register("multiverso_matter_cell", MultiversoMatterCellTile::new);
 }

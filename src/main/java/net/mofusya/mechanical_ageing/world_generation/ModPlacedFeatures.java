@@ -12,6 +12,8 @@ import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
 import net.mofusya.mechanical_ageing.MAg;
+import net.mofusya.mechanical_ageing.crystalset.CrystalSet;
+import net.mofusya.mechanical_ageing.crystalset.MAgCrystalSets;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
 
@@ -25,6 +27,12 @@ public class ModPlacedFeatures {
 
         for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
             register(context, metalSet.getOrePlacedKey(), configuredFeatures.getOrThrow(metalSet.getOreKey()), ModOrePlacement.commonOrePlacement(16,
+                    HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(32))
+            ));
+        }
+
+        for (CrystalSet crystalSet : MAgCrystalSets.CRYSTALS.getEntries()) {
+            register(context, crystalSet.getOrePlacedKey(), configuredFeatures.getOrThrow(crystalSet.getOreKey()), ModOrePlacement.commonOrePlacement(16,
                     HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(32))
             ));
         }

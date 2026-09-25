@@ -12,6 +12,8 @@ import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguratio
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.mofusya.mechanical_ageing.MAg;
+import net.mofusya.mechanical_ageing.crystalset.CrystalSet;
+import net.mofusya.mechanical_ageing.crystalset.MAgCrystalSets;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
 
@@ -31,6 +33,14 @@ public class ModConfiguredFeatures {
                     OreConfiguration.target(deepslateReplaceables, metalSet.deepslateOre().defaultBlockState()));
 
             register(context, metalSet.getOreKey(), Feature.ORE, new OreConfiguration(ores, 8));
+        }
+
+        for (CrystalSet crystalSet : MAgCrystalSets.CRYSTALS.getEntries()){
+            List<OreConfiguration.TargetBlockState> ores = List.of(
+                    OreConfiguration.target(stoneReplaceables, crystalSet.ore().defaultBlockState()),
+                    OreConfiguration.target(deepslateReplaceables, crystalSet.deepslateOre().defaultBlockState()));
+
+            register(context, crystalSet.getOreKey(), Feature.ORE, new OreConfiguration(ores, 8));
         }
     }
 

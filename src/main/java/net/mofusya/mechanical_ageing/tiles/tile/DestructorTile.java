@@ -21,8 +21,6 @@ import net.mofusya.mechanical_ageing.tiles.energy.ForgeEnergyStorage;
 import net.mofusya.mechanical_ageing.tiles.energy.ForgeEnergyType;
 import net.mofusya.ornatelib.lang.UnLong;
 import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
-import net.mofusya.ornatelib.lang.SeptiLong;
-import net.mofusya.ornatelib.lang.SeptiLongValue;
 import org.jetbrains.annotations.Nullable;
 
 @MethodsReturnNonNullByDefault
@@ -47,7 +45,7 @@ public class DestructorTile extends MachineTile {
     public MatterSlotList getMatterSlots(MatterSlotList slots) {
         return super.getMatterSlots(slots)
                 .create(97, 23, matterType -> matterType.is(MAgMatterTypes.WATER), UnLong.thousand().multi(100), UnLong.zero(), UnLong.ten())
-                .create(124, 23, matterType -> matterType.is(MAgMatterTypes.FUEL), UnLong.hundred(), UnLong.zero(), UnLong.ten());
+                .create(124, 23, matterType -> matterType.is(MAgMatterTypes.CARBON), UnLong.hundred(), UnLong.zero(), UnLong.ten());
     }
 
     @Override
@@ -71,14 +69,14 @@ public class DestructorTile extends MachineTile {
                 //starDustEnergyStorage.receiveEnergyFromInside(new QuintLong(1), true).isGreaterOrSameThan(new QuintLong(1)) &&
                 wattEnergyStorage.canReceiveFromInside(new UnLong(1)) &&
                 matterHandler.canReceiveFromInside(new MatterStack(MAgMatterTypes.WATER, UnLong.thousand()), 0) &&
-                matterHandler.canReceiveFromInside(new MatterStack(MAgMatterTypes.FUEL, new UnLong(1)), 1)
+                matterHandler.canReceiveFromInside(new MatterStack(MAgMatterTypes.CARBON, new UnLong(1)), 1)
         ) {
             forgeEnergyStorage.extractEnergyFromInside(100, false);
             fluidTank.drain(500, IFluidHandler.FluidAction.EXECUTE);
             //starDustEnergyStorage.receiveEnergyFromInside(new QuintLong(1), false);
             wattEnergyStorage.receiveFromInside(new UnLong(1), false);
             matterHandler.receiveFromInside(new MatterStack(MAgMatterTypes.WATER, UnLong.thousand()), 0);
-            matterHandler.receiveFromInside(new MatterStack(MAgMatterTypes.FUEL, new UnLong(1)), 1);
+            matterHandler.receiveFromInside(new MatterStack(MAgMatterTypes.CARBON, new UnLong(1)), 1);
         }
     }
 }

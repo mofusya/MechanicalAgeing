@@ -10,21 +10,22 @@ import net.mofusya.mechanical_ageing.items.item.ToppedMetalAttributedBlockItem;
 import net.mofusya.mechanical_ageing.items.item.ToppedMetalAttributedItem;
 import net.mofusya.ornatelib.item.AttributedItem;
 import net.mofusya.ornatelib.registries.OrnateBlockDeferredRegister;
-import net.mofusya.ornatelib.registries.OrnateItemDeferredRegister;
+import net.mofusya.ornatelib.registries.OrnateBlockRegister;
+import net.mofusya.ornatelib.registries.OrnateItemRegister;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MetalSetRegister {
     private final String modId;
-    private final OrnateItemDeferredRegister itemRegisters;
-    private final OrnateBlockDeferredRegister blockRegisters;
+    private final OrnateItemRegister itemRegisters;
+    private final OrnateBlockRegister blockRegisters;
     private final ArrayList<MetalSet> metalSets = new ArrayList<>();
 
     private MetalSetRegister(String modId, int slot) {
         this.modId = modId;
-        this.itemRegisters = OrnateItemDeferredRegister.create(modId, slot);
-        this.blockRegisters = OrnateBlockDeferredRegister.create(modId, slot);
+        this.itemRegisters = new OrnateItemRegister(modId, slot);
+        this.blockRegisters = new OrnateBlockRegister(modId, slot);
     }
 
     public MetalSet register(String id, MetalSet.Builder builder) {
@@ -50,8 +51,8 @@ public class MetalSetRegister {
         return toReturn;
     }
 
-    private static OrnateBlockDeferredRegister.Builder createDefferBlockBuilder(MetalSet.Builder builder) {
-        return new OrnateBlockDeferredRegister.Builder()
+    private static OrnateBlockRegister.Builder createDefferBlockBuilder(MetalSet.Builder builder) {
+        return new OrnateBlockRegister.Builder()
                 .itemFunc((block, properties) -> new ToppedMetalAttributedBlockItem(block, properties, createMetalAttribute(builder)))
                 .itemBuild(builder.getItemBuild())
                 .blockBuild(builder.getBlockBuild());

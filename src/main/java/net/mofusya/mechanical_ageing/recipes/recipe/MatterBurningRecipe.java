@@ -14,11 +14,13 @@ import net.mofusya.mechanical_ageing.recipes.MAgRecipe;
 public class MatterBurningRecipe extends MAgRecipe {
     private final LazyMatterStack ingredient;
     private final LazyMatterStack result;
+    private final LazyMatterStack subResult;
 
-    public MatterBurningRecipe(ResourceLocation id, LazyMatterStack ingredient, LazyMatterStack result) {
+    public MatterBurningRecipe(ResourceLocation id, LazyMatterStack ingredient, LazyMatterStack result, LazyMatterStack subResult) {
         super(id, Serializer.INSTANCE, Type.INSTANCE);
         this.ingredient = ingredient;
         this.result = result;
+        this.subResult = subResult;
     }
 
     @Override
@@ -26,8 +28,7 @@ public class MatterBurningRecipe extends MAgRecipe {
         var matterStacks = container.getMatters();
         if (matterStacks == null) return false;
 
-        boolean matches = test(this.getIngredient(), matterStacks[0]);
-        return matches;
+        return test(this.getIngredient(), matterStacks[0]);
     }
 
     public MatterStack getIngredient() {
@@ -36,6 +37,10 @@ public class MatterBurningRecipe extends MAgRecipe {
 
     public MatterStack getResult() {
         return this.result.get();
+    }
+
+    public MatterStack getSubResult() {
+        return this.subResult.get();
     }
 
     public enum Type implements RecipeType<MatterBurningRecipe> {
@@ -47,18 +52,19 @@ public class MatterBurningRecipe extends MAgRecipe {
 
         @Override
         public MatterBurningRecipe fromJson(ResourceLocation id, JsonObject json) {
-            return new MatterBurningRecipe(id, readMatter(json, "ingredient"), readMatter(json, "result"));
+            return new MatterBurningRecipe(id, readMatter(json, "ingredient"), readMatter(json, "result"), readMatter(json, "subResult", true));
         }
 
         @Override
         public MatterBurningRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-            return new MatterBurningRecipe(id, readMatter(buf), readMatter(buf));
+            return new MatterBurningRecipe(id, readMatter(buf), readMatter(buf), readMatter(buf));
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buf, MatterBurningRecipe recipe) {
             writeToBuf(buf, recipe.ingredient);
             writeToBuf(buf, recipe.result);
+            writeToBuf(buf, recipe.subResult);
         }
     }
 }

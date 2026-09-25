@@ -7,11 +7,13 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.mofusya.mechanical_ageing.C;
 import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.alloyset.AlloySet;
 import net.mofusya.mechanical_ageing.alloyset.MAgAlloySets;
-import net.mofusya.mechanical_ageing.items.MAgItem;
-import net.mofusya.mechanical_ageing.items.item.BatteryCoreItem;
+import net.mofusya.mechanical_ageing.crystalset.CrystalSet;
+import net.mofusya.mechanical_ageing.crystalset.MAgCrystalSets;
+import net.mofusya.mechanical_ageing.items.MAgItems;
 import net.mofusya.mechanical_ageing.items.item.BatteryItem;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 public class ModItemModelProvider extends ItemModelProvider {
+
     public ModItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, MAg.MOD_ID, existingFileHelper);
     }
@@ -28,16 +31,18 @@ public class ModItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         ArrayList<RegistryObject<Item>> registries = new ArrayList<>();
 
+        registries.addAll(MAgItems.ITEMS.getItems(0));
+
         for (RegistryObject<Item> item : registries) {
             this.simpleItem(item);
         }
 
-        for (int i = 0; i < MAgItem.ITEMS.getItems(1).size(); i++) {
-            RegistryObject<Item> archive = MAgItem.ITEMS.getItems(1).get(i);
+        for (int i = 0; i < MAgItems.ITEMS.getItems(1).size(); i++) {
+            RegistryObject<Item> archive = MAgItems.ITEMS.getItems(1).get(i);
             machineUpgradeArchiveItem(archive, i + 1);
         }
-        for (RegistryObject<Item> batteryOrCore : MAgItem.ITEMS.getItems(2)) {
-            if (batteryOrCore.get() instanceof BatteryItem){
+        for (RegistryObject<Item> batteryOrCore : MAgItems.ITEMS.getItems(2)) {
+            if (batteryOrCore.get() instanceof BatteryItem) {
                 layeredSimpleItem(batteryOrCore, "lithium_battery", "lithium_battery_sublayer");
             } else {
                 layeredSimpleItem(batteryOrCore, "lithium_battery_core", "lithium_battery_core_sublayer");
@@ -48,6 +53,9 @@ public class ModItemModelProvider extends ItemModelProvider {
         }
         for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
             this.metalSetItem(metalSet);
+        }
+        for (CrystalSet crystalSet : MAgCrystalSets.CRYSTALS.getEntries()) {
+            this.withExistingParent(getPath(crystalSet.crystal()), getCrystalSetParentLoc("crystal"));
         }
     }
 
@@ -100,14 +108,26 @@ public class ModItemModelProvider extends ItemModelProvider {
     }
 
     private void metalSetItem(MetalSet metalSet) {
-        this.withExistingParent(getPath(metalSet.ingot()), new ResourceLocation("item/generated")).texture("layer0", modLoc("item/ingot"));
-        this.withExistingParent(getPath(metalSet.chunk()), new ResourceLocation("item/generated")).texture("layer0", modLoc("item/chunk"));
-        this.withExistingParent(getPath(metalSet.pureDust()), new ResourceLocation("item/generated")).texture("layer0", modLoc("item/pure_dust"));
-        this.withExistingParent(getPath(metalSet.dust()), new ResourceLocation("item/generated")).texture("layer0", modLoc("item/dust"));
-        this.withExistingParent(getPath(metalSet.dirtyDust()), new ResourceLocation("item/generated")).texture("layer0", modLoc("item/dirty_dust"));
-        this.withExistingParent(getPath(metalSet.particle()), new ResourceLocation("item/generated")).texture("layer0", modLoc("item/particle"));
-        this.withExistingParent(getPath(metalSet.raw()), new ResourceLocation("item/generated")).texture("layer0", modLoc("item/raw"));
-        this.withExistingParent(getPath(metalSet.nugget()), new ResourceLocation("item/generated")).texture("layer0", modLoc("item/nugget"));
+        this.withExistingParent(getPath(metalSet.ingot()), getMetalSetParentLoc("ingot"));
+        this.withExistingParent(getPath(metalSet.chunk()), getMetalSetParentLoc("chunk"));
+        this.withExistingParent(getPath(metalSet.pureDust()), getMetalSetParentLoc("pure_dust"));
+        this.withExistingParent(getPath(metalSet.dust()), getMetalSetParentLoc("dust"));
+        this.withExistingParent(getPath(metalSet.dirtyDust()), getMetalSetParentLoc("dirty_dust"));
+        this.withExistingParent(getPath(metalSet.particle()), getMetalSetParentLoc("particle"));
+        this.withExistingParent(getPath(metalSet.raw()), getMetalSetParentLoc("raw"));
+        this.withExistingParent(getPath(metalSet.nugget()), getMetalSetParentLoc("nugget"));
+    }
+
+    private static ResourceLocation getMetalSetParentLoc(String item){
+        return new ResourceLocation(C.MOD_ID, "item/metalset/" + item);
+    }
+
+    private static ResourceLocation getCrystalSetParentLoc(String item){
+        return new ResourceLocation(C.MOD_ID, "item/crystalset/" + item);
+    }
+
+    private static ResourceLocation getAlloySetParentLoc(String item){
+        return new ResourceLocation(C.MOD_ID, "item/alloyset/" + item);
     }
 
     private static String getPath(Item item) {

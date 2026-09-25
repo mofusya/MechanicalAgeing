@@ -1,0 +1,18 @@
+{
+  "type": "mechanical_ageing:water_cooling",
+  "ingredient": {
+    "type": "mechanical_ageing:liquid_silicone_rubber",
+    "amount": {
+      "digit": "ONE",
+      "multiplier": 25
+    }
+  },
+  "waterAmount": {
+    "digit": "HUNDRED",
+    "multiplier": 1
+  },
+  "processingTick": 160,
+  "result": {
+    "item": "mechanical_ageing:silicone_rubber"
+  }
+}

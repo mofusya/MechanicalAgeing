@@ -9,6 +9,7 @@ import net.mofusya.mechanical_ageing.MAg;
 public class MAgTags {
     public static class Items{
         public static final TagKey<Item> MACHINE_UPGRADE_ARCHIVE = create("upgrade_archive");
+        public static final TagKey<Item> CALCIUM_CARBONATE = createForge("calcium_carbonate");
 
         private static TagKey<Item> create(String name){
             return ItemTags.create(new ResourceLocation(MAg.MOD_ID, name));

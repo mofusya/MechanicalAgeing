@@ -1,7 +1,7 @@
 {
   "type": "mechanical_ageing:matter_burning",
   "ingredient": {
-    "type": "mechanical_ageing:fuel",
+    "type": "mechanical_ageing:carbon",
     "amount": {
       "digit": "ONE",
       "multiplier": 2
@@ -12,6 +12,13 @@
     "amount": {
       "digit": "ONE",
       "multiplier": 1
+    }
+  },
+  "subResult": {
+    "type": "mechanical_ageing:carbon_dioxide",
+    "amount": {
+      "digit": "ONE",
+      "multiplier": 2
     }
   }
 }

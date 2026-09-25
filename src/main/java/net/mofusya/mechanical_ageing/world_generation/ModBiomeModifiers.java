@@ -11,6 +11,8 @@ import net.minecraftforge.common.world.BiomeModifier;
 import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.mofusya.mechanical_ageing.MAg;
+import net.mofusya.mechanical_ageing.crystalset.CrystalSet;
+import net.mofusya.mechanical_ageing.crystalset.MAgCrystalSets;
 import net.mofusya.mechanical_ageing.metalset.MetalSet;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
 
@@ -24,6 +26,14 @@ public class ModBiomeModifiers {
             context.register(metalSet.getOreBiomeKey(), new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
                     biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
                     HolderSet.direct(placedFeatures.getOrThrow(metalSet.getOrePlacedKey())),
+                    GenerationStep.Decoration.UNDERGROUND_ORES
+            ));
+        }
+
+        for (CrystalSet crystalSet : MAgCrystalSets.CRYSTALS.getEntries()) {
+            context.register(crystalSet.getOreBiomeKey(), new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                    biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
+                    HolderSet.direct(placedFeatures.getOrThrow(crystalSet.getOrePlacedKey())),
                     GenerationStep.Decoration.UNDERGROUND_ORES
             ));
         }

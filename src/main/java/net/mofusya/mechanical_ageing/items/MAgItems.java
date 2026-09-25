@@ -9,18 +9,21 @@ import net.mofusya.mechanical_ageing.items.item.BatteryItem;
 import net.mofusya.mechanical_ageing.items.item.MachineUpgradeArchive;
 import net.mofusya.mechanical_ageing.metalset.IMetalLike;
 import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
-import net.mofusya.mechanical_ageing.metalset.MetalSet;
-import net.mofusya.ornatelib.registries.OrnateItemDeferredRegister;
+import net.mofusya.ornatelib.registries.OrnateItemRegister;
 
 import java.util.ArrayList;
 
-public class MAgItem {
+public class MAgItems {
     /*
      * 0: Main
      * 1: UpgradeArchives
      * 2: BatteryAndCores
      */
-    public static final OrnateItemDeferredRegister ITEMS = OrnateItemDeferredRegister.create(MAg.MOD_ID, 3);
+    public static final OrnateItemRegister ITEMS = new OrnateItemRegister(MAg.MOD_ID, 3);
+
+    public static final RegistryObject<Item> SILICONE_RUBBER = ITEMS.register("silicone_rubber");
+
+
 
     public static final ArrayList<RegistryObject<Item>> MACHINE_UPGRADE_ARCHIVES = new ArrayList<>();
     public static final ArrayList<RegistryObject<Item>> BATTERY_AND_CORES = new ArrayList<>();
