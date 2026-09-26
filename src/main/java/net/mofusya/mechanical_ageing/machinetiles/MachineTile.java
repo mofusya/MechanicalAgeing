@@ -110,7 +110,7 @@ public abstract class MachineTile {
         this.matterIOHandler(level, pos, state, matterHandler, directionHandler);
     }
 
-    //PUSH [NOT FINISHED. DO NOT USE. PLEASE.] todo: MAKE THIS SHIT WORK.
+    //PUSH
     private void itemIOHandler(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity, MachineDirectionHandler directionHandler) {
         ItemStackHandler itemHandler = blockEntity.getItemHandler();
         if (itemHandler == null) return;
