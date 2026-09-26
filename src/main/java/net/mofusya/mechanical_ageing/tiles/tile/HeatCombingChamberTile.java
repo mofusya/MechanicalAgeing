@@ -19,7 +19,6 @@ import net.mofusya.mechanical_ageing.recipes.MAgContainer;
 import net.mofusya.mechanical_ageing.recipes.recipe.AlloyingRecipe;
 import net.mofusya.ornatelib.lang.UnLong;
 import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
-import net.mofusya.ornatelib.lang.SeptiLong;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -71,9 +70,9 @@ public class HeatCombingChamberTile extends MachineTile {
     @Override
     public SlotList getSlots(SlotList slots) {
         return super.getSlots(slots)
-                .create(next(16, 2), 16, itemStack -> true, SlotType.NORMAL)
-                .create(next(16, 2), next(16, 2), itemStack -> true, SlotType.NORMAL)
-                .create(next(16, 6) + 9, next(16), itemStack -> false, SlotType.EXTRACT_ONLY);
+                .create(next(16, 2), 16, itemStack -> true, SlotType.INPUT)
+                .create(next(16, 2), next(16, 2), itemStack -> true, SlotType.INPUT)
+                .create(next(16, 6) + 9, next(16), itemStack -> false, SlotType.OUTPUT);
     }
 
     @Override

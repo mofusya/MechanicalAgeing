@@ -36,7 +36,7 @@ public class WaterCoolingChamberTile extends MachineTile {
     @Override
     public SlotList getSlots(SlotList slots) {
         return super.getSlots(slots)
-                .create(next(16, 6) + 9, 34, itemStack -> false, SlotType.EXTRACT_ONLY);
+                .create(next(16, 6) + 9, 34, itemStack -> false, SlotType.OUTPUT);
     }
 
     @Override

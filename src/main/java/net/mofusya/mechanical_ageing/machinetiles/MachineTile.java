@@ -29,6 +29,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.items.implemts.IMachineUpgradeArchive;
@@ -54,6 +55,7 @@ import net.mofusya.mechanical_ageing.machinetiles.render.EnergyDisplayTooltipAre
 import net.mofusya.mechanical_ageing.machinetiles.render.FluidTankRenderer;
 import net.mofusya.mechanical_ageing.machinetiles.render.MatterDisplayTooltipArea;
 import net.mofusya.mechanical_ageing.machinetiles.render.WattEnergyDisplayTooltipArea;
+import net.mofusya.mechanical_ageing.machinetiles.slot.LimitedItemHandler;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotProperties;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
@@ -102,27 +104,43 @@ public abstract class MachineTile {
         MatterHandler matterHandler = (MatterHandler) blockEntity.getMatterHandler();
         MachineDirectionHandler directionHandler = blockEntity.getDirectionHandler();
 
+        this.itemIOHandler(level, pos, state, blockEntity, directionHandler);
         this.energyIOHandler(level, pos, state, blockEntity, directionHandler);
         this.wattEnergyIOHandler(level, pos, state, wattEnergyStorage, directionHandler);
         this.matterIOHandler(level, pos, state, matterHandler, directionHandler);
     }
 
-    //PUSH [NOT FINISHED. DO NOT USE. PLEASE.] todo: MAKE THIS F'N THING WORK.
+    //PUSH [NOT FINISHED. DO NOT USE. PLEASE.] todo: MAKE THIS SHIT WORK.
     private void itemIOHandler(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity, MachineDirectionHandler directionHandler) {
+        ItemStackHandler itemHandler = blockEntity.getItemHandler();
+        if (itemHandler == null) return;
+
         for (int i = 0; i < this.getSlots().size(); i++) {
-            IItemHandler itemHandler = blockEntity.getItemHandler();
-            if (itemHandler == null) continue;
+            if (!this.getSlots().get(i).type().is(SlotType.OUTPUT)) continue;
 
             Direction direction = getCombinedDirection(state.getValue(MachineBlock.FACING), directionHandler.getItemDirection(i));
             if (direction == null) continue;
 
             BlockPos pPos = pos.relative(direction, 1);
             BlockEntity pBlockEntity = level.getBlockEntity(pPos);
-            if (pBlockEntity == null) continue;
+            if (!(pBlockEntity instanceof MachineBlockEntity pMachine)) continue;
 
-            pBlockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, direction.getOpposite()).ifPresent(handler -> {
+            ItemStack itemStack = itemHandler.getStackInSlot(i).copy();
+            if (itemStack.isEmpty()) continue;
 
+            pMachine.getCapability(ForgeCapabilities.ITEM_HANDLER, direction.getOpposite()).ifPresent(handler -> {
+                LimitedItemHandler limitedHandler = (LimitedItemHandler) handler;
+                for (Integer allowedSlot : limitedHandler.getAllowedSlots()) {
+                    int maxInsert = this.howMuchCanItemInsertToSlot(pMachine, allowedSlot, itemStack);
+                    if (maxInsert <= 0) continue;
+
+                    this.insertItemToSlot(pMachine, allowedSlot, itemStack.copy());
+                    itemStack.shrink(maxInsert);
+
+                    if (itemStack.getCount() <= 0) break;
+                }
             });
+            itemHandler.setStackInSlot(i, itemStack);
         }
     }
 
@@ -199,8 +217,6 @@ public abstract class MachineTile {
                 int finalI = i;
                 int finalJ = j;
                 pMachine.getCapability(MAgCapabilities.MATTER, direction.getOpposite()).ifPresent(handler -> {
-                    Direction oDirection = direction.getOpposite();
-
                     LimitedMatterHandler limitedHandler = (LimitedMatterHandler) handler;
                     if (!limitedHandler.canReceive(finalJ)) return;
 
@@ -337,12 +353,13 @@ public abstract class MachineTile {
             for (int i = 0; i < this.getButtons().size(); i++) {
                 var button = this.getButtons().get(i);
                 int finalI = i;
-                if (button.type().is(SlotType.SYSTEM)) {
-                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 18, 18, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> buttonPacket.send2Server(finalI, menu.blockEntity.getBlockPos())));
-                } else if (button.type().is(SlotType.NORMAL)) {
-                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 0, 36, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> buttonPacket.send2Server(finalI, menu.blockEntity.getBlockPos())));
-                } else {
-                    screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 44, 36, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> buttonPacket.send2Server(finalI, menu.blockEntity.getBlockPos())));
+                switch (button.type()) {
+                    case SYSTEM ->
+                            screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 18, 18, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> buttonPacket.send2Server(finalI, menu.blockEntity.getBlockPos())));
+                    case OUTPUT ->
+                            screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 44, 36, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> buttonPacket.send2Server(finalI, menu.blockEntity.getBlockPos())));
+                    case INPUT, NEUTRAL ->
+                            screen.addRenderableWidget(new ImageButton(x + button.x(), y + button.y(), 18, 18, 0, 36, 0, bgTile, BG_TILE_WIDTH, BG_TILE_HEIGHT, pButton -> buttonPacket.send2Server(finalI, menu.blockEntity.getBlockPos())));
                 }
             }
         }
@@ -525,15 +542,13 @@ public abstract class MachineTile {
 
         //Write slots
         for (SlotProperties slotBuild : this.getSlots()) {
-
-            if (slotBuild.type().is(SlotType.SYSTEM)) {
-                guiGraphics.blit(bgTile, x + slotBuild.x() - 1, y + slotBuild.y() - 1, 0, 18, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
-            } else {
-                if (slotBuild.type().is(SlotType.NORMAL)) {
-                    guiGraphics.blit(bgTile, x + slotBuild.x() - 1, y + slotBuild.y() - 1, 0, 54, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
-                } else {
-                    guiGraphics.blit(bgTile, x + slotBuild.x() - 1, y + slotBuild.y() - 1, 44, 54, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
-                }
+            switch (slotBuild.type()) {
+                case SYSTEM ->
+                        guiGraphics.blit(bgTile, x + slotBuild.x() - 1, y + slotBuild.y() - 1, 0, 18, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                case OUTPUT ->
+                        guiGraphics.blit(bgTile, x + slotBuild.x() - 1, y + slotBuild.y() - 1, 44, 54, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                case INPUT, NEUTRAL ->
+                        guiGraphics.blit(bgTile, x + slotBuild.x() - 1, y + slotBuild.y() - 1, 0, 54, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
             }
         }
         //Write inventory slots
@@ -872,9 +887,24 @@ public abstract class MachineTile {
         return (itemStack.is(pItemStack.getItem()) && itemStack.getCount() + pItemStack.getCount() <= itemStack.getItem().getMaxStackSize()) || itemStack.isEmpty();
     }
 
+    protected int howMuchCanItemInsertToSlot(MachineBlockEntity blockEntity, int slot, ItemStack pItemStack) {
+        var itemHandler = blockEntity.getItemHandler();
+        if (!itemHandler.isItemValid(slot, pItemStack)) return 0;
+
+        ItemStack itemStack = itemHandler.getStackInSlot(slot);
+        if (itemStack.isEmpty()) return pItemStack.getCount();
+        if (!itemStack.is(pItemStack.getItem())) return 0;
+
+        int maxCount = itemStack.getMaxStackSize();
+        maxCount -= itemStack.getCount();
+
+        return maxCount;
+    }
+
     protected void insertItemToSlot(MachineBlockEntity blockEntity, int slot, ItemStack pItemStack) {
         var itemHandler = blockEntity.getItemHandler();
         ItemStack itemStack = itemHandler.getStackInSlot(slot).copy();
+
         if (itemStack.isEmpty()) {
             itemHandler.setStackInSlot(slot, pItemStack);
         } else {

@@ -5,6 +5,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LimitedItemHandler implements IItemHandlerModifiable {
@@ -66,5 +67,9 @@ public class LimitedItemHandler implements IItemHandlerModifiable {
     public boolean isItemValid(int slot, @NotNull ItemStack stack) {
         if (!allowedSlots.contains(slot)) return false;
         return this.handler.isItemValid(slot, stack);
+    }
+
+    public List<Integer> getAllowedSlots() {
+        return new ArrayList<>(this.allowedSlots);
     }
 }

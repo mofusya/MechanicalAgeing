@@ -61,8 +61,8 @@ public class ManualMixingChamberTile extends MachineTile {
     @Override
     public SlotList getSlots(SlotList slots) {
         return super.getSlots(slots)
-                .create(next(17, 2), 34, itemStack -> true, SlotType.NORMAL)
-                .create(next(17, 6) + 9, 34, itemStack -> false, SlotType.EXTRACT_ONLY);
+                .create(next(17, 2), 34, itemStack -> true, SlotType.INPUT)
+                .create(next(17, 6) + 9, 34, itemStack -> false, SlotType.OUTPUT);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class ManualMixingChamberTile extends MachineTile {
     @Override
     public ButtonList getButtons(ButtonList list) {
         return super.getButtons(list)
-                .create(176 / 2 + 4, 16, SlotType.NORMAL);
+                .create(176 / 2 + 4, 16, SlotType.INPUT);
     }
 
     @Override

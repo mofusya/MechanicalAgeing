@@ -8,7 +8,6 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
@@ -102,14 +101,10 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
 
         //Write slots
         for (SlotProperties slotBuild : machineTile.getSlots()) {
-            if (slotBuild.type().is(SlotType.SYSTEM)) {
-                guiGraphics.blit(bgTile, slotBuild.x() - 1, slotBuild.y() - 1, 0, 18, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
-            } else {
-                if (slotBuild.type().is(SlotType.NORMAL)) {
-                    guiGraphics.blit(bgTile, slotBuild.x() - 1, slotBuild.y() - 1, 0, 54, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
-                } else {
-                    guiGraphics.blit(bgTile, slotBuild.x() - 1, slotBuild.y() - 1, 44, 54, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
-                }
+            switch (slotBuild.type()){
+                case SYSTEM -> guiGraphics.blit(bgTile, slotBuild.x() - 1, slotBuild.y() - 1, 0, 18, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                case OUTPUT ->  guiGraphics.blit(bgTile, slotBuild.x() - 1, slotBuild.y() - 1, 44, 54, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
+                case INPUT, NEUTRAL -> guiGraphics.blit(bgTile, slotBuild.x() - 1, slotBuild.y() - 1, 0, 54, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
             }
         }
 
@@ -144,9 +139,9 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
             switch (buttonBuild.type()) {
                 case SYSTEM ->
                         guiGraphics.blit(bgTile, buttonBuild.x(), buttonBuild.y(), 18, 18, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
-                case EXTRACT_ONLY ->
+                case OUTPUT ->
                         guiGraphics.blit(bgTile, buttonBuild.x(), buttonBuild.y(), 44, 36, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
-                case NORMAL ->
+                case INPUT ->
                         guiGraphics.blit(bgTile, buttonBuild.x(), buttonBuild.y(), 0, 36, 18, 18, BG_TILE_WIDTH, BG_TILE_HEIGHT);
             }
         }
@@ -217,7 +212,7 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
             if (ingredients.get(i).isEmpty()) continue;
 
             var slot = this.getMachineTile().getSlots().get(i);
-            builder.addSlot(slot.type().is(SlotType.NORMAL) ? RecipeIngredientRole.INPUT : RecipeIngredientRole.OUTPUT,
+            builder.addSlot(slot.type().is(SlotType.OUTPUT) ? RecipeIngredientRole.OUTPUT : RecipeIngredientRole.INPUT,
                     slot.x(), slot.y()).addIngredients(ingredients.get(i));
         }
 
@@ -225,7 +220,7 @@ public abstract class MAgCategory<T extends MAgRecipe> implements IRecipeCategor
             if (itemStacks.get(i).isEmpty()) continue;
 
             var slot = this.getMachineTile().getSlots().get(i);
-            builder.addSlot(slot.type().is(SlotType.NORMAL) ? RecipeIngredientRole.INPUT : RecipeIngredientRole.OUTPUT,
+            builder.addSlot(slot.type().is(SlotType.OUTPUT) ? RecipeIngredientRole.OUTPUT : RecipeIngredientRole.INPUT,
                     slot.x(), slot.y()).addItemStack(itemStacks.get(i));
         }
 

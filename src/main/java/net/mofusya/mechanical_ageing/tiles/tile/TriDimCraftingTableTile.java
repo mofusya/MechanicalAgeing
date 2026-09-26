@@ -39,11 +39,11 @@ public class TriDimCraftingTableTile extends MachineTile {
     public SlotList getSlots(SlotList slots) {
         var toReturn = new SlotList();
         for (int i = 0; i < 3; i++) {
-            toReturn.createVerLine(6, 25 + (18 * i), itemStack -> true, SlotType.NORMAL, 3)
-                    .createVerLine(61, 16 + (18 * i), itemStack -> true, SlotType.NORMAL, 3)
-                    .createVerLine(116, 7 + (18 * i), itemStack -> true, SlotType.NORMAL, 3);
+            toReturn.createVerLine(6, 25 + (18 * i), itemStack -> true, SlotType.INPUT, 3)
+                    .createVerLine(61, 16 + (18 * i), itemStack -> true, SlotType.INPUT, 3)
+                    .createVerLine(116, 7 + (18 * i), itemStack -> true, SlotType.INPUT, 3);
         }
-        return toReturn.create(133, 63, itemStack -> false, SlotType.EXTRACT_ONLY);
+        return toReturn.create(133, 63, itemStack -> false, SlotType.OUTPUT);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class TriDimCraftingTableTile extends MachineTile {
     @Override
     public ButtonList getButtons(ButtonList list) {
         return super.getButtons(list)
-                .create(152, 63, SlotType.EXTRACT_ONLY);
+                .create(152, 63, SlotType.OUTPUT);
     }
 
     @Override

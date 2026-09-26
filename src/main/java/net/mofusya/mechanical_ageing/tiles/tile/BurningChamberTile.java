@@ -65,7 +65,7 @@ public class BurningChamberTile extends MachineTile {
     @Override
     public SlotList getSlots(SlotList slots) {
         return super.getSlots(slots)
-                .createHorLine(next(16), 16, itemStack -> itemStack.is(Items.COAL), SlotType.NORMAL, 3);
+                .createHorLine(next(16), 16, itemStack -> itemStack.is(Items.COAL), SlotType.INPUT, 3);
     }
 
     @Override

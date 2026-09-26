@@ -11,17 +11,17 @@ import java.util.function.Function;
 public class MatterSlotList extends ArrayList<MatterSlotProperties> {
 
     public MatterSlotList create(int x, int y, Function<MatterType, Boolean> isTypeValidFunc, UnLong capability) {
-        return this.create(x, y, isTypeValidFunc, matterTag -> matterTag.matches(new ArrayMap<>()), capability, capability, capability);
+        return this.create(x, y, isTypeValidFunc, matterTag -> true, capability, capability, capability);
     }
 
     public MatterSlotList create(int x, int y, Function<MatterType, Boolean> isTypeValidFunc,
                                  UnLong capability, UnLong maxTransfer) {
-        return this.create(x, y, isTypeValidFunc, matterTag -> matterTag.matches(new ArrayMap<>()), capability, maxTransfer, maxTransfer);
+        return this.create(x, y, isTypeValidFunc, matterTag -> true, capability, maxTransfer, maxTransfer);
     }
 
     public MatterSlotList create(int x, int y, Function<MatterType, Boolean> isTypeValidFunc,
                                  UnLong capability, UnLong maxReceive, UnLong maxExtract) {
-        return this.create(x, y, isTypeValidFunc, matterTag -> matterTag.matches(new ArrayMap<>()), capability, maxReceive, maxExtract);
+        return this.create(x, y, isTypeValidFunc, matterTag -> true, capability, maxReceive, maxExtract);
     }
 
     public MatterSlotList create(int x, int y, Function<MatterType, Boolean> isTypeValidFunc, Function<ArrayMap<String, String>, Boolean> isTagValidFunc, UnLong capability) {

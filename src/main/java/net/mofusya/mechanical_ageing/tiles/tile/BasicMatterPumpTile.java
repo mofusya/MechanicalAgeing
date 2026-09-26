@@ -20,8 +20,6 @@ import net.mofusya.mechanical_ageing.machinetiles.matter.MatterSlotList;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotType;
 import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
-import net.mofusya.ornatelib.lang.SeptiLong;
-import net.mofusya.ornatelib.lang.SeptiLongValue;
 import net.mofusya.ornatelib.lang.UnLong;
 
 public class BasicMatterPumpTile extends MachineTile {
@@ -45,7 +43,7 @@ public class BasicMatterPumpTile extends MachineTile {
     @Override
     public ButtonList getButtons(ButtonList list) {
         return super.getButtons(list)
-                .create(next(16, 5), 25, "Pull", SlotType.NORMAL);
+                .create(next(16, 5), 25, "Pull", SlotType.INPUT);
     }
 
     @Override

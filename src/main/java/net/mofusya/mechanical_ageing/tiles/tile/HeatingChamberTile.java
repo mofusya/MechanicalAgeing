@@ -69,7 +69,7 @@ public class HeatingChamberTile extends MachineTile {
         return super.getMatterSlots(slots)
                 .create(next(15), 25, matterType -> matterType.is(MAgMatterTypes.HEAT), this.heatTankCapacity, this.heatTankMaxReceive, this.heatTankMaxExtract)
                 .create(next(15, 2), 25, matterType -> true, this.ingredientTankCapacity, this.ingredientTankMaxReceive, this.ingredientTankMaxExtract)
-                .create(next(16, 6) + 9, 25, matterType -> true, matterTag -> matterTag.getKeys().contains("mechanical_ageing.tier"), this.resultTankCapacity, this.resultTankMaxReceive, this.resultTankMaxExtract);
+                .create(next(16, 6) + 9, 25, matterType -> true, this.resultTankCapacity, this.resultTankMaxReceive, this.resultTankMaxExtract);
     }
 
     @Override
