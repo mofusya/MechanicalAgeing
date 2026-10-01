@@ -21,7 +21,7 @@ group = mod_group_id
 version = mod_version
 
 base {
-    archivesName = mod_id
+    archivesName = mod_file_name
 }
 
 java {
@@ -168,7 +168,7 @@ dependencies {
     implementation fg.deobf("curse.maven:flansknowledgelib-1336263:7680293")
     implementation fg.deobf("curse.maven:geckolib-388172:7553267")
 
-    implementation fg.deobf("curse.maven:ornatelib-1479095:8902806")
+    implementation fg.deobf("curse.maven:ornatelib-1479095:9017745")
 
     implementation fg.deobf("curse.maven:patchouli-306770:7731017")
 
@@ -184,7 +184,7 @@ tasks.named('processResources', ProcessResources).configure {
                              forge_version       : forge_version, forge_version_range: forge_version_range,
                              loader_version_range: loader_version_range,
                              mod_id              : mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-                             mod_authors         : mod_authors, mod_description: mod_description,]
+                             mod_authors         : mod_authors, mod_description: mod_description, ornate_version_range: ornate_version_range,]
 
     inputs.properties replaceProperties
 

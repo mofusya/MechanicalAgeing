@@ -7,12 +7,14 @@ import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.blocks.block.DriveShaftBlock;
 import net.mofusya.mechanical_ageing.blocks.block.NarrowBlock;
+import net.mofusya.mechanical_ageing.blocks.block.PlusMatterCableBlock;
+import net.mofusya.mechanical_ageing.cables.MAgCableTypes;
 import net.mofusya.ornatelib.item.AttributedItem;
 import net.mofusya.ornatelib.registries.OrnateBlockDeferredRegister;
 import net.mofusya.ornatelib.registries.OrnateBlockRegister;
 
 public class MAgBlocks {
-    public static final OrnateBlockRegister BLOCKS = new OrnateBlockRegister(MAg.MOD_ID, 2);
+    public static final OrnateBlockRegister BLOCKS = new OrnateBlockRegister(MAg.MOD_ID, 3);
 
     public static final RegistryObject<Block> REINFORCED_BRICKS = BLOCKS.register("reinforced_bricks", new OrnateBlockRegister.Builder()
             .attribute(new AttributedItem.Builder().attribute("melting_point", 2800, true))
@@ -42,4 +44,9 @@ public class MAgBlocks {
             .blockBuild(BlockBehaviour.Properties.copy(Blocks.COPPER_BLOCK).noOcclusion())
             .blockFunc(build -> new NarrowBlock(build, 1))
     );
+
+    public static final RegistryObject<Block> PLUS_MATTER_CABLE = BLOCKS.register("plus_matter_cable", new OrnateBlockRegister.Builder()
+            .blockFunc(build -> new PlusMatterCableBlock<>(() -> MAgCableTypes.PLUS_MATTER, build))
+            .blockBuild(BlockBehaviour.Properties.of().noOcclusion().noCollission().noParticlesOnBreak().destroyTime(1f))
+    , 2);
 }

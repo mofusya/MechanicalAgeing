@@ -1,4 +1,4 @@
-package net.mofusya.mechanical_ageing.tiles;
+package net.mofusya.mechanical_ageing.machinetiles;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;

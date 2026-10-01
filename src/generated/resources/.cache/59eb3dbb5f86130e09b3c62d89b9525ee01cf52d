@@ -1,4 +1,4 @@
-// 1.20.1	2026-09-12T18:58:08.5839125	Loot Tables
+// 1.20.1	2026-09-28T17:45:49.3760805	Loot Tables
 e961023aadff7e9a06eaf93db4149837fc2ca6af data/mechanical_ageing/loot_tables/blocks/aluminum_block.json
 71bd2b145e6f9ae11a07a10dbe766a6f6ed8d6d5 data/mechanical_ageing/loot_tables/blocks/aluminum_ore.json
 f84e982671aabab9ca8eba3afd34774fe4b4bd53 data/mechanical_ageing/loot_tables/blocks/basic_rotation_generator.json
@@ -71,6 +71,7 @@ cc3d47f279819f452b72d8d3c321e1543dbf14fc data/mechanical_ageing/loot_tables/bloc
 b1ad86e4db3c2289c077085d8db8906267866bb3 data/mechanical_ageing/loot_tables/blocks/osmium_ore.json
 0e20da6021ac71e2719551094bf568225e3a9ef9 data/mechanical_ageing/loot_tables/blocks/platinum_block.json
 9f5eb4f9f5dace3e5a3b449dc76e72ab44a5980e data/mechanical_ageing/loot_tables/blocks/platinum_ore.json
+fafab358efe616cfd25efa13c5301f54bb70ff5b data/mechanical_ageing/loot_tables/blocks/plus_matter_cable.json
 aca7bf371856cb5776e5698c33b9c32fe7205a9f data/mechanical_ageing/loot_tables/blocks/quartz_block.json
 ef7b8ad90ddc6cef4ca6889b5c6e9272e2b19b37 data/mechanical_ageing/loot_tables/blocks/quartz_ore.json
 d1efc140d3615decd9e4ce6acda9495c4154f3df data/mechanical_ageing/loot_tables/blocks/reinforced_bricks.json

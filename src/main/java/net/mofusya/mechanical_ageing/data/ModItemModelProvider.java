@@ -37,6 +37,8 @@ public class ModItemModelProvider extends ItemModelProvider {
             this.simpleItem(item);
         }
 
+        this.handheldItem(MAgItems.SCREW_DIVER);
+
         for (int i = 0; i < MAgItems.ITEMS.getItems(1).size(); i++) {
             RegistryObject<Item> archive = MAgItems.ITEMS.getItems(1).get(i);
             machineUpgradeArchiveItem(archive, i + 1);
@@ -74,6 +76,10 @@ public class ModItemModelProvider extends ItemModelProvider {
 
     private void simpleItemWithSublayer(RegistryObject<Item> item, String prefix) {
         this.layeredSimpleItem(item, item.getId().getPath(), item.getId().getPath() + prefix);
+    }
+
+    private void handheldItem(RegistryObject<Item> item) {
+        this.withExistingParent(item.getId().getPath(), new ResourceLocation("item/handheld")).texture("layer0", new ResourceLocation(C.MOD_ID, "item/" + item.getId().getPath()));
     }
 
     private void machineUpgradeArchiveItem(RegistryObject<Item> archive, int value) {

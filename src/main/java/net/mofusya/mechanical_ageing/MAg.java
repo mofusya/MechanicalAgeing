@@ -16,6 +16,7 @@ import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.alloyset.AlloySet;
 import net.mofusya.mechanical_ageing.alloyset.MAgAlloySets;
 import net.mofusya.mechanical_ageing.blocks.MAgBlocks;
+import net.mofusya.mechanical_ageing.cables.MAgCableTypes;
 import net.mofusya.mechanical_ageing.crystalset.CrystalSet;
 import net.mofusya.mechanical_ageing.crystalset.MAgCrystalSets;
 import net.mofusya.mechanical_ageing.data.blockstate.MachineBlockStateBuilder;
@@ -49,6 +50,7 @@ public class MAg {
         MAgAlloySets.ALLOYS.register(modEventBus);
         MAgMatterTypes.MATTERS.register();
         MAgCrystalSets.CRYSTALS.register(modEventBus);
+        MAgCableTypes.CABLE_TYPES.register();
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::clientSetup);

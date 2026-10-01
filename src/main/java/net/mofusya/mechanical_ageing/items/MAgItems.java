@@ -18,12 +18,12 @@ public class MAgItems {
      * 0: Main
      * 1: UpgradeArchives
      * 2: BatteryAndCores
+     * 3: Sub
      */
-    public static final OrnateItemRegister ITEMS = new OrnateItemRegister(MAg.MOD_ID, 3);
+    public static final OrnateItemRegister ITEMS = new OrnateItemRegister(MAg.MOD_ID, 4);
 
+    public static final RegistryObject<Item> SCREW_DIVER = ITEMS.register("screw_driver", 3);
     public static final RegistryObject<Item> SILICONE_RUBBER = ITEMS.register("silicone_rubber");
-
-
 
     public static final ArrayList<RegistryObject<Item>> MACHINE_UPGRADE_ARCHIVES = new ArrayList<>();
     public static final ArrayList<RegistryObject<Item>> BATTERY_AND_CORES = new ArrayList<>();

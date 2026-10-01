@@ -1,4 +1,4 @@
-// 1.20.1	2026-09-11T17:24:44.2826393	Item Models: mechanical_ageing
+// 1.20.1	2026-10-01T22:28:01.9596877	Item Models: mechanical_ageing
 453e37d4ce019613bfd7a925c8b68e6a0d16340f assets/mechanical_ageing/models/item/aluminum_chunk.json
 719a8934fa666ae06a7c4296756cfe03c230192a assets/mechanical_ageing/models/item/aluminum_dust.json
 bb05164cfb4ae45d117d6a9e24e0c313be13cea9 assets/mechanical_ageing/models/item/aluminum_ingot.json
@@ -149,6 +149,7 @@ b20c8d1a7738b2dc0debf3eaa1052eac365cc1f1 assets/mechanical_ageing/models/item/pu
 25ff16a0df965822b7425a92fab6a3eef4fb3d22 assets/mechanical_ageing/models/item/raw_titanium.json
 25ff16a0df965822b7425a92fab6a3eef4fb3d22 assets/mechanical_ageing/models/item/raw_tungsten.json
 25ff16a0df965822b7425a92fab6a3eef4fb3d22 assets/mechanical_ageing/models/item/raw_unobtainium.json
+39e99233129af045e4c145dd06fbedbda9514d6b assets/mechanical_ageing/models/item/screw_driver.json
 06ccbe90d083bcb6eafe31d498c805bb75940ba9 assets/mechanical_ageing/models/item/silicon.json
 8288cef6a6d24afa8598e1fc4a23e066fc22acb5 assets/mechanical_ageing/models/item/silicone_rubber.json
 453e37d4ce019613bfd7a925c8b68e6a0d16340f assets/mechanical_ageing/models/item/silver_chunk.json

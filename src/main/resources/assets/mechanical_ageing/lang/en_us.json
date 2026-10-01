@@ -5,11 +5,15 @@
   "tab.mechanical_ageing.machines": "MechanicalAgeing: Machines",
   "tab.mechanical_ageing.main": "MechanicalAgeing",
 
+  "item.mechanical_ageing.screw_diver": "Screw Driver",
+
   "item.mechanical_ageing.silicone_rubber": "Silicone Rubber",
 
   "item.mechanical_ageing.circuit_board": "Circuit Board",
   "item.mechanical_ageing.circuit_board.conductivity": "§7Conductivity§8(Wh)",
   "item.mechanical_ageing.circuit_board.durability": "§7Durability§8(Wh)",
+
+  "block.mechanical_ageing.plus_matter_cable": "Plus Matter Cable",
 
   "block.mechanical_ageing.reinforced_bricks": "Reinforced Bricks",
   "block.mechanical_ageing.drive_shaft": "Drive Shaft",

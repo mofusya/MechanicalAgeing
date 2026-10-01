@@ -1,0 +1,186 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/center_cable"
+      }
+    },
+
+
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/neutral_cable"
+      },
+      "when": {
+        "up": "neutral"
+      }
+    },
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/insert_cable"
+      },
+      "when": {
+        "up": "insert"
+      }
+    },
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/extract_cable"
+      },
+      "when": {
+        "up": "extract"
+      }
+    },
+
+
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/neutral_cable",
+        "x": 180
+      },
+      "when": {
+        "down": "neutral"
+      }
+    },
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/insert_cable",
+        "x": 180
+      },
+      "when": {
+        "down": "insert"
+      }
+    },
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/extract_cable",
+        "x": 180
+      },
+      "when": {
+        "down": "extract"
+      }
+    },
+
+
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/neutral_cable",
+        "x": 90
+      },
+      "when": {
+        "north": "neutral"
+      }
+    },
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/insert_cable",
+        "x": 90
+      },
+      "when": {
+        "north": "insert"
+      }
+    },
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/extract_cable",
+        "x": 90
+      },
+      "when": {
+        "north": "extract"
+      }
+    },
+
+
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/neutral_cable",
+        "x": 270
+      },
+      "when": {
+        "south": "neutral"
+      }
+    },
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/insert_cable",
+        "x": 270
+      },
+      "when": {
+        "south": "insert"
+      }
+    },
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/extract_cable",
+        "x": 270
+      },
+      "when": {
+        "south": "extract"
+      }
+    },
+
+
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/neutral_cable",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "west": "neutral"
+      }
+    },
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/insert_cable",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "west": "insert"
+      }
+    },
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/extract_cable",
+        "x": 90,
+        "y": 90
+      },
+      "when": {
+        "west": "extract"
+      }
+    },
+
+
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/neutral_cable",
+        "x": 90,
+        "y": 270
+      },
+      "when": {
+        "east": "neutral"
+      }
+    },
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/insert_cable",
+        "x": 90,
+        "y": 270
+      },
+      "when": {
+        "east": "insert"
+      }
+    },
+    {
+      "apply": {
+        "model": "mechanical_ageing:block/cable/extract_cable",
+        "x": 90,
+        "y": 270
+      },
+      "when": {
+        "east": "extract"
+      }
+    }
+  ]
+}

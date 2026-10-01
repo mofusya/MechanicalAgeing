@@ -33,7 +33,7 @@ public class ModBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         ArrayList<RegistryObject<Block>> registries = new ArrayList<>();
 
-        registries.addAll(MAgBlocks.BLOCKS.getBlocks());
+        registries.addAll(MAgBlocks.BLOCKS.getMainBlocks());
         registries.remove(MAgBlocks.DRIVE_SHAFT);
         registries.remove(MAgBlocks.ROTOR_BLADE);
         registries.remove(MAgBlocks.COIL_BLOCK);

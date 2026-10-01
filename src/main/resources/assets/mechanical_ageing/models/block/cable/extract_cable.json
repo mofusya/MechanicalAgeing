@@ -1,0 +1,72 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "mechanical_ageing:block/cable_base",
+		"particle": "mechanical_ageing:block/cable_base"
+	},
+	"render_type": "cutout",
+	"elements": [
+		{
+			"name": "cableCore",
+			"from": [7.25, 10, 7.25],
+			"to": [8.75, 16, 8.75],
+			"rotation": {"angle": 0, "axis": "z", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [14.5, 0, 16, 6], "texture": "#0"},
+				"east": {"uv": [14.5, 0, 16, 6], "texture": "#0"},
+				"south": {"uv": [14.5, 0, 16, 6], "texture": "#0"},
+				"west": {"uv": [14.5, 0, 16, 6], "texture": "#0"},
+				"up": {"uv": [13, 0, 14.5, 1.5], "texture": "#0"},
+				"down": {"uv": [13, 0, 14.5, 1.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "cable",
+			"from": [6, 10, 6],
+			"to": [10, 16, 10],
+			"rotation": {"angle": 0, "axis": "z", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [4, 0, 8, 6], "texture": "#0"},
+				"east": {"uv": [4, 0, 8, 6], "texture": "#0"},
+				"south": {"uv": [4, 0, 8, 6], "texture": "#0"},
+				"west": {"uv": [4, 0, 8, 6], "texture": "#0"},
+				"up": {"uv": [0, 0, 4, 4], "texture": "#0"},
+				"down": {"uv": [0, 8, 4, 12], "texture": "#0"}
+			}
+		},
+		{
+			"name": "eCableCover",
+			"from": [5.999, 9.999, 5.999],
+			"to": [10.001, 16.001, 10.001],
+			"rotation": {"angle": 0, "axis": "z", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [8, 6, 12, 12], "texture": "#0", "tintindex": 0},
+				"east": {"uv": [8, 6, 12, 12], "texture": "#0", "tintindex": 0},
+				"south": {"uv": [8, 6, 12, 12], "texture": "#0", "tintindex": 0},
+				"west": {"uv": [8, 6, 12, 12], "texture": "#0", "tintindex": 0},
+				"up": {"uv": [0, 4, 4, 8], "texture": "#0", "tintindex": 0},
+				"down": {"uv": [0, 8, 4, 12], "texture": "#0", "tintindex": 0}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "root",
+			"origin": [8, 8, 8],
+			"scope": 0,
+			"color": 0,
+			"children": [
+				0,
+				1,
+				{
+					"name": "eCable",
+					"origin": [6, 0, 8],
+					"scope": 0,
+					"color": 0,
+					"children": [2]
+				}
+			]
+		}
+	]
+}

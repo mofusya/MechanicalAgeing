@@ -64,6 +64,7 @@ public class MAgTabs {
             .icon(() -> new ItemStack(MAgBlocks.REINFORCED_BRICKS.get()))
             .displayItems((parameters, output) -> {
                 output.acceptAll(ItemHelpers.itemRegistries2ItemStacks(MAgItems.ITEMS.getMainItems()));
+                output.acceptAll(ItemHelpers.itemRegistries2ItemStacks(MAgItems.ITEMS.getItems(3)));
                 output.acceptAll(ItemHelpers.blockRegistries2ItemStacks(MAgBlocks.BLOCKS.getBlocks(0)));
                 //output.acceptAll(ItemHelpers.itemRegistries2ItemStacks(MAgItems.ITEMS.getItems(2)));
             })

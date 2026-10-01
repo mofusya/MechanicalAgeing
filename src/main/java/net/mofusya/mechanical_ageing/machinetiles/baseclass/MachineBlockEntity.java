@@ -41,7 +41,7 @@ import net.mofusya.mechanical_ageing.machinetiles.slot.LimitedItemHandler;
 import net.mofusya.mechanical_ageing.machinetiles.slot.SlotList;
 import net.mofusya.mechanical_ageing.machinetiles.watt.IWattEnergyStorage;
 import net.mofusya.mechanical_ageing.machinetiles.watt.WattEnergyStorage;
-import net.mofusya.mechanical_ageing.tiles.MAgCapabilities;
+import net.mofusya.mechanical_ageing.machinetiles.MAgCapabilities;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
