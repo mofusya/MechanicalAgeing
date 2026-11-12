@@ -7,13 +7,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
-import net.mofusya.mechanical_ageing.MAg;
-import net.mofusya.mechanical_ageing.blocks.MAgBlocks;
-import net.mofusya.mechanical_ageing.crystalset.CrystalSet;
-import net.mofusya.mechanical_ageing.crystalset.MAgCrystalSets;
-import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
-import net.mofusya.mechanical_ageing.metalset.MetalSet;
-import net.mofusya.mechanical_ageing.tiles.MAgMachines;
+import net.mofusya.mechanical_ageing.C;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -21,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class ModBlockTagProvider extends BlockTagsProvider {
     public ModBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
-        super(output, lookupProvider, MAg.MOD_ID, existingFileHelper);
+        super(output, lookupProvider, C.MOD_ID, existingFileHelper);
     }
 
     @Override
@@ -29,10 +23,6 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         {
             ArrayList<RegistryObject<Block>> registries = new ArrayList<>();
 
-            registries.addAll(MAgMetalSets.METAL_SET.getBlocks());
-            registries.addAll(MAgCrystalSets.CRYSTALS.getBlocks());
-            registries.addAll(MAgBlocks.BLOCKS.getBlocks(0));
-            registries.addAll(MAgMachines.MACHINES.getBlockEntries());
 
             var tags = this.tag(BlockTags.MINEABLE_WITH_PICKAXE);
             for (RegistryObject<Block> block : registries) {
@@ -41,28 +31,8 @@ public class ModBlockTagProvider extends BlockTagsProvider {
         }
 
         {
-            for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
-                var tags = this.tag(metalSet.mineableWith());
-                tags.add(metalSet.compressedBlock());
-                tags.add(metalSet.block());
-                tags.add(metalSet.ore());
-                tags.add(metalSet.deepslateOre());
-            }
-
-            for (CrystalSet crystalSet : MAgCrystalSets.CRYSTALS.getEntries()) {
-                var tags = this.tag(crystalSet.getBuilder().getMineableWith());
-                tags.add(crystalSet.ore());
-                tags.add(crystalSet.deepslateOre());
-                tags.add(crystalSet.block());
-                tags.add(crystalSet.compressedBlock());
-            }
-        }
-
-        {
             ArrayList<RegistryObject<Block>> registries = new ArrayList<>();
 
-            registries.addAll(MAgMachines.MACHINES.getBlockEntries());
-            registries.addAll(MAgBlocks.BLOCKS.getBlocks(0));
 
             var tags = this.tag(BlockTags.NEEDS_IRON_TOOL);
             for (RegistryObject<Block> block : registries) {

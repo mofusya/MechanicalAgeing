@@ -1,219 +1,33 @@
 package net.mofusya.mechanical_ageing;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.world.item.Item;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegistryObject;
-import net.mofusya.mechanical_ageing.alloyset.AlloySet;
-import net.mofusya.mechanical_ageing.alloyset.MAgAlloySets;
-import net.mofusya.mechanical_ageing.blocks.MAgBlocks;
-import net.mofusya.mechanical_ageing.cables.MAgCableTypes;
-import net.mofusya.mechanical_ageing.crystalset.CrystalSet;
-import net.mofusya.mechanical_ageing.crystalset.MAgCrystalSets;
-import net.mofusya.mechanical_ageing.data.blockstate.MachineBlockStateBuilder;
-import net.mofusya.mechanical_ageing.data.blockstate.MachineBlockStateHelper;
-import net.mofusya.mechanical_ageing.items.MAgItems;
-import net.mofusya.mechanical_ageing.items.MAgTabs;
-import net.mofusya.mechanical_ageing.items.item.BatteryCoreItem;
-import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
-import net.mofusya.mechanical_ageing.metalset.MAgMetalSets;
-import net.mofusya.mechanical_ageing.metalset.MetalSet;
-import net.mofusya.mechanical_ageing.recipes.MAgRecipes;
-import net.mofusya.mechanical_ageing.tiles.MAgMachines;
 import org.slf4j.Logger;
 
-import java.util.ArrayList;
-
 @Mod(MAg.MOD_ID)
-public class MAg {
-    public static final String MOD_ID = "mechanical_ageing";
+public class MAg
+{
+    public static final String MOD_ID = "examplemod";
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public MAg() {
+    public MAg()
+    {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        MAgItems.ITEMS.register(modEventBus);
-        MAgMetalSets.METAL_SET.register(modEventBus);
-        MAgTabs.TABS.register(modEventBus);
-        MAgBlocks.BLOCKS.register(modEventBus);
-        MAgMachines.MACHINES.register(modEventBus);
-        MAgRecipes.SERIALIZERS.register(modEventBus);
-        MAgAlloySets.ALLOYS.register(modEventBus);
-        MAgMatterTypes.MATTERS.register();
-        MAgCrystalSets.CRYSTALS.register(modEventBus);
-        MAgCableTypes.CABLE_TYPES.register();
-
-        modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(this::clientSetup);
 
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::addCreative);
     }
 
-    private void clientSetup(final FMLClientSetupEvent event) {
+    private void addCreative(BuildCreativeModeTabContentsEvent event)
+    {
         /*
-        for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
-            ItemBlockRenderTypes.setRenderLayer(metalSet.ore(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(metalSet.deepslateOre(), RenderType.cutout());
-        }
-
-        for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST) {
-            ItemBlockRenderTypes.setRenderLayer(builder.getBlock(), RenderType.cutout());
-        }
+        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS)
+            event.accept(EXAMPLE_BLOCK_ITEM);
          */
-    }
-
-    private void commonSetup(final FMLCommonSetupEvent event) {
-    }
-
-    private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        //if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) event.accept(EXAMPLE_BLOCK_ITEM);
-    }
-
-    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientSetup {
-
-        @SubscribeEvent
-        public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
-            for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST) {
-                event.register((state, getter, pos, tintIndex) -> switch (tintIndex) {
-                    case 0 -> builder.getFrameColor() == -404 ? 0xFFFFFF : builder.getFrameColor();
-                    case 1 -> builder.getSideColor() == -404 ? 0xFFFFFF : builder.getSideColor();
-                    case 2 -> builder.getUpperCrystalColor() == -404 ? 0xFFFFFF : builder.getUpperCrystalColor();
-                    case 3 -> builder.getLowerCrystalColor() == -404 ? 0xFFFFFF : builder.getLowerCrystalColor();
-                    case 4 -> builder.getBackgroundColor() == -404 ? 0xFFFFFF : builder.getBackgroundColor();
-                    default -> 0xFFFFFF;
-                }, builder.getBlock());
-            }
-
-            for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
-
-                event.register((state, level, pos, tintIndex) -> {
-                    if (tintIndex == 0) {
-                        return metalSet.color();
-                    }
-                    return 0xFFFFFF;
-                }, metalSet.compressedBlock());
-
-                event.register((state, level, pos, tintIndex) -> {
-                    if (tintIndex == 0) {
-                        return metalSet.color();
-                    }
-                    return 0xFFFFFF;
-                }, metalSet.block());
-
-                event.register((state, level, pos, tintIndex) -> {
-                    if (tintIndex == 0) {
-                        if (metalSet.oreColor() == -404) {
-                            return metalSet.color();
-                        }
-                        return metalSet.oreColor();
-                    }
-                    return 0xFFFFFF;
-                }, metalSet.ore());
-
-                event.register((state, level, pos, tintIndex) -> {
-                    if (tintIndex == 0) {
-                        if (metalSet.oreColor() == -404) {
-                            return metalSet.color();
-                        }
-                        return metalSet.oreColor();
-                    }
-                    return 0xFFFFFF;
-                }, metalSet.deepslateOre());
-            }
-
-            for (CrystalSet crystalSet : MAgCrystalSets.CRYSTALS.getEntries()) {
-                event.register((state, level, pos, tintIndex) -> tintIndex == 0 ? crystalSet.color() : 0xFFFFFF,
-                        crystalSet.compressedBlock(), crystalSet.block(), crystalSet.ore(), crystalSet.deepslateOre());
-            }
-        }
-
-        @SubscribeEvent
-        public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-            for (RegistryObject<Item> item : MAgItems.ITEMS.getItems(2)) {
-                if (item.get() instanceof BatteryCoreItem batteryOrCore) {
-                    event.register((itemStack, tintIndex) -> {
-                        if (tintIndex == 1) {
-                            return batteryOrCore.getColor();
-                        }
-                        return 0xFFFFFF;
-                    }, item.get());
-                }
-            }
-
-            for (MachineBlockStateBuilder builder : MachineBlockStateHelper.BUILDER_LIST) {
-                event.register((itemStack, tintIndex) -> switch (tintIndex) {
-                    case 0 -> builder.getFrameColor() == -404 ? 0xFFFFFF : builder.getFrameColor();
-                    case 1 -> builder.getSideColor() == -404 ? 0xFFFFFF : builder.getSideColor();
-                    case 2 -> builder.getUpperCrystalColor() == -404 ? 0xFFFFFF : builder.getUpperCrystalColor();
-                    case 3 -> builder.getLowerCrystalColor() == -404 ? 0xFFFFFF : builder.getLowerCrystalColor();
-                    case 4 -> builder.getBackgroundColor() == -404 ? 0xFFFFFF : builder.getBackgroundColor();
-                    default -> 0xFFFFFF;
-                }, builder.getBlock());
-            }
-
-            for (AlloySet alloySet : MAgAlloySets.ALLOYS.getEntries()) {
-                event.register((itemStack, tintIndex) -> tintIndex == 0 ? alloySet.color() : 0xFFFFFF,
-                        alloySet.alloy(),
-                        alloySet.compressed(),
-                        alloySet.duoCompressed(),
-                        alloySet.triCompressed(),
-                        alloySet.quadCompressed()
-                );
-            }
-
-            for (MetalSet metalSet : MAgMetalSets.METAL_SET.getEntries()) {
-                ArrayList<Item> items = new ArrayList<>();
-                items.add(metalSet.ingot());
-                items.add(metalSet.chunk());
-                items.add(metalSet.pureDust());
-                items.add(metalSet.nugget());
-                items.add(metalSet.compressedBlock().asItem());
-                items.add(metalSet.block().asItem());
-
-                for (Item item : items) {
-                    event.register((itemStack, tintIndex) -> {
-                        if (tintIndex == 0) {
-                            return metalSet.color();
-                        }
-                        return 0xFFFFFF;
-                    }, item);
-                }
-
-                ArrayList<Item> oreItems = new ArrayList<>();
-                oreItems.add(metalSet.raw());
-                oreItems.add(metalSet.ore().asItem());
-                oreItems.add(metalSet.deepslateOre().asItem());
-                oreItems.add(metalSet.dust());
-                oreItems.add(metalSet.dirtyDust());
-                oreItems.add(metalSet.particle());
-
-                for (Item item : oreItems) {
-                    event.register((itemStack, tintIndex) -> {
-                        if (tintIndex == 0) {
-                            if (metalSet.oreColor() == -404) {
-                                return metalSet.color();
-                            }
-                            return metalSet.oreColor();
-                        }
-                        return 0xFFFFFF;
-                    }, item);
-                }
-            }
-
-            for (CrystalSet crystalSet : MAgCrystalSets.CRYSTALS.getEntries()) {
-                event.register((itemStack, tintIndex) -> tintIndex == 0 ? crystalSet.color() : 0xFFFFFF, crystalSet.crystal());
-            }
-        }
     }
 }
