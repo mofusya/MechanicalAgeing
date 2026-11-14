@@ -158,7 +158,7 @@ dependencies {
     implementation fg.deobf("curse.maven:collective-342584:6429218")
     implementation fg.deobf("curse.maven:full-brightness-toggle-391656:6185948")
 
-    implementation fg.deobf("curse.maven:ornatelib-1479095:9575440")
+    implementation fg.deobf("curse.maven:ornatelib-1479095:9606808")
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }
