@@ -1,13 +1,28 @@
 package net.mofusya.mechanical_ageing.ores;
 
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.*;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.common.world.BiomeModifier;
+import net.minecraftforge.common.world.ForgeBiomeModifiers;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.mofusya.mechanical_ageing.C;
 import net.mofusya.mechanical_ageing.data.*;
 import net.mofusya.mechanical_ageing.data.loot_tables.MAgBlockLootTableProvider;
@@ -16,6 +31,7 @@ import net.mofusya.ornatelib.util.annotation.ParametersAreNonNullByDefault;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -26,6 +42,65 @@ import java.util.function.Consumer;
 public enum MAgOreTypeData implements IMAgDataProvider {
     INSTANCE;
 
+    //region WorldGenerations
+    @Override
+    public void generateWorldGenerations(RegistrySetBuilder builder) {
+        builder.add(Registries.CONFIGURED_FEATURE, this::configuredFeatureBootstrap);
+        builder.add(Registries.PLACED_FEATURE, this::placedFeatureBootstrap);
+        builder.add(ForgeRegistries.Keys.BIOME_MODIFIERS, this::biomeModifierBootstrap);
+    }
+
+    private void biomeModifierBootstrap(BootstapContext<BiomeModifier> context) {
+        var placedFeatures = context.lookup(Registries.PLACED_FEATURE);
+        var biomes = context.lookup(Registries.BIOME);
+
+        for (OreType oreType : MAgOreTypes.R.getEntries().values()) {
+            context.register(oreType.getOreBiomeKey(), new ForgeBiomeModifiers.AddFeaturesBiomeModifier(
+                    biomes.getOrThrow(BiomeTags.IS_OVERWORLD),
+                    HolderSet.direct(placedFeatures.getOrThrow(oreType.getOrePlacedKey())),
+                    GenerationStep.Decoration.UNDERGROUND_ORES
+            ));
+        }
+    }
+
+    private void configuredFeatureBootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
+        RuleTest stoneReplaceable = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
+        RuleTest deepslateReplaceable = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
+
+        for (OreType oreType : MAgOreTypes.R.getEntries().values()) {
+            List<OreConfiguration.TargetBlockState> ores = List.of(
+                    OreConfiguration.target(stoneReplaceable, oreType.getOre().get().defaultBlockState()),
+                    OreConfiguration.target(deepslateReplaceable, oreType.getDeepslateOre().get().defaultBlockState()));
+
+            registerOreConfiguredFeature(context, oreType.getOreKey(), new OreConfiguration(ores, 8));
+        }
+    }
+
+    private void placedFeatureBootstrap(BootstapContext<PlacedFeature> context) {
+        HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+
+        for (OreType oreType : MAgOreTypes.R.getEntries().values()) {
+            registerConfiguredFeatures(context, oreType.getOrePlacedKey(), configuredFeatures.getOrThrow(oreType.getOreKey()), commonOrePlacement(
+                    HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(32))
+            ));
+        }
+    }
+
+    private List<PlacementModifier> commonOrePlacement(PlacementModifier p_195345_) {
+        return List.of(CountPlacement.of(16), InSquarePlacement.spread(), p_195345_, BiomeFilter.biome());
+    }
+
+    private void registerOreConfiguredFeature(BootstapContext<ConfiguredFeature<?, ?>> context, ResourceKey<ConfiguredFeature<?, ?>> key, OreConfiguration configuration) {
+        context.register(key, new ConfiguredFeature<>(Feature.ORE, configuration));
+    }
+
+    private void registerConfiguredFeatures(BootstapContext<PlacedFeature> context, ResourceKey<PlacedFeature> key, Holder<ConfiguredFeature<?, ?>> configuration,
+                                            List<PlacementModifier> modifiers) {
+        context.register(key, new PlacedFeature(configuration, List.copyOf(modifiers)));
+    }
+
+    //endregion
+    //region Recipes
     @Override
     public void generateRecipes(MAgRecipeProvider provider, Consumer<FinishedRecipe> writer) {
         for (OreType oreType : MAgOreTypes.R.getEntries().values()) {
@@ -33,6 +108,7 @@ public enum MAgOreTypeData implements IMAgDataProvider {
         }
     }
 
+    //endregion
     //region BlockTags
     @Override
     public void generateBlockTags(MAgBlockTagProvider provider, HolderLookup.Provider holderLookupProvider) {

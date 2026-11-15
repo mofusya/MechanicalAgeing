@@ -1,6 +1,7 @@
 package net.mofusya.mechanical_ageing.data;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -35,6 +36,9 @@ public interface IMAgDataProvider {
     }
 
     default void generateRecipes(MAgRecipeProvider provider, Consumer<FinishedRecipe> writer) {
+    }
+
+    default void generateWorldGenerations(RegistrySetBuilder builder) {
     }
 
     default Collection<Block> getKnownBlockLootTables() {

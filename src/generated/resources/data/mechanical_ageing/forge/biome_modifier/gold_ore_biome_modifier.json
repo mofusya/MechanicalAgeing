@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_overworld",
+  "features": "mechanical_ageing:gold_placed_ore",
+  "step": "underground_ores"
+}

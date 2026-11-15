@@ -44,6 +44,7 @@ public class MAgDataGenerator {
         generator.addProvider(event.includeServer(), blockTagProvider);
         generator.addProvider(event.includeServer(), new MAgItemTagProvider(packOutput, lookupProvider, blockTagProvider.contentsGetter(), existingFileHelper));
         generator.addProvider(event.includeServer(), new MAgRecipeProvider(packOutput));
+        generator.addProvider(event.includeServer(), new MAgWorldGenerationProvider(packOutput, lookupProvider));
 
         generator.addProvider(event.includeClient(), new MAgItemModelProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new MAgBlockStateProvider(packOutput, existingFileHelper));

@@ -1,17 +1,26 @@
 package net.mofusya.mechanical_ageing.ores;
 
 import net.kairayk.yklibrary.util.VectorColor;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraftforge.common.world.BiomeModifier;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.mofusya.mechanical_ageing.MAg;
 import net.mofusya.mechanical_ageing.util.ColouredBoolean;
 import net.mofusya.mechanical_ageing.util.MultiversalObject;
 import net.mofusya.ornatelib.util.annotation.FieldsAreNonNullByDefault;
 import net.mofusya.ornatelib.util.annotation.FieldsMayBeNullByDefault;
 import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.util.annotation.ParametersMayBeNullByDefault;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
@@ -41,6 +50,9 @@ public final class OreType {
     private final MultiversalObject<Item> dust;
     private final MultiversalObject<Item> dirtyDust;
     private final MultiversalObject<Item> wetParticle;
+    private final ResourceKey<ConfiguredFeature<?, ?>> oreKey;
+    private final ResourceKey<PlacedFeature> orePlacedKey;
+    private final ResourceKey<BiomeModifier> oreBiomeKey;
 
     public OreType(@Nonnull ResourceLocation id, @Nonnull VectorColor color, @Nonnull Builder oreTypeBuilder,
                    MultiversalObject<Block> ore, MultiversalObject<Block> deepslateOre,
@@ -55,8 +67,9 @@ public final class OreType {
 
                    MultiversalObject<Item> crystal,
 
-                   MultiversalObject<Item> pureDust, MultiversalObject<Item> dust, MultiversalObject<Item> dirtyDust,
-                   MultiversalObject<Item> wetParticle) {
+                   MultiversalObject<Item> pureDust, MultiversalObject<Item> dust,
+                   MultiversalObject<Item> dirtyDust, MultiversalObject<Item> wetParticle
+    ) {
         this.id = id;
         this.color = color;
         this.oreTypeBuilder = oreTypeBuilder;
@@ -75,6 +88,20 @@ public final class OreType {
         this.dust = dust;
         this.dirtyDust = dirtyDust;
         this.wetParticle = wetParticle;
+
+        if (oreTypeBuilder.ores().get()) {
+            this.oreKey = registerKey(id.getPath() + "_ore", Registries.CONFIGURED_FEATURE);
+            this.orePlacedKey = registerKey(id.getPath() + "_placed_ore", Registries.PLACED_FEATURE);
+            this.oreBiomeKey = registerKey(id.getPath() + "_ore_biome_modifier", ForgeRegistries.Keys.BIOME_MODIFIERS);
+        } else {
+            this.oreKey = null;
+            this.orePlacedKey = null;
+            this.oreBiomeKey = null;
+        }
+    }
+
+    private static <T> ResourceKey<T> registerKey(@NotNull String name, @NotNull ResourceKey<Registry<T>> resourceKey) {
+        return ResourceKey.create(resourceKey, new ResourceLocation(MAg.MOD_ID, name));
     }
 
     public ResourceLocation getId() {
@@ -149,29 +176,16 @@ public final class OreType {
         return Objects.requireNonNull(wetParticle);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (OreType) obj;
-        return Objects.equals(this.id, that.id) &&
-                Objects.equals(this.color, that.color) &&
-                Objects.equals(this.oreTypeBuilder, that.oreTypeBuilder) &&
-                Objects.equals(this.ore, that.ore) &&
-                Objects.equals(this.deepslateOre, that.deepslateOre) &&
-                Objects.equals(this.block, that.block) &&
-                Objects.equals(this.compressedBlock, that.compressedBlock) &&
-                Objects.equals(this.doubleCompressedBlock, that.doubleCompressedBlock) &&
-                Objects.equals(this.tripleCompressedBlock, that.tripleCompressedBlock) &&
-                Objects.equals(this.raw, that.raw) &&
-                Objects.equals(this.icedRaw, that.icedRaw) &&
-                Objects.equals(this.ingot, that.ingot) &&
-                Objects.equals(this.chunk, that.chunk) &&
-                Objects.equals(this.crystal, that.crystal) &&
-                Objects.equals(this.pureDust, that.pureDust) &&
-                Objects.equals(this.dust, that.dust) &&
-                Objects.equals(this.dirtyDust, that.dirtyDust) &&
-                Objects.equals(this.wetParticle, that.wetParticle);
+    public ResourceKey<ConfiguredFeature<?, ?>> getOreKey() {
+        return Objects.requireNonNull(oreKey);
+    }
+
+    public ResourceKey<PlacedFeature> getOrePlacedKey() {
+        return Objects.requireNonNull(orePlacedKey);
+    }
+
+    public ResourceKey<BiomeModifier> getOreBiomeKey() {
+        return Objects.requireNonNull(oreBiomeKey);
     }
 
     /**
