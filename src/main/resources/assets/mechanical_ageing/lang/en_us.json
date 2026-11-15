@@ -1,3 +1,27 @@
 {
-  "creativetab.mechanical_ageing.ingredients": "MAg: Ingredients"
+  "creativetab.mechanical_ageing.ingredients": "MAg: Ingredients",
+
+  "oretype.mechanical_ageing.iron": "Iron",
+  "oretype.mechanical_ageing.gold": "Gold",
+
+
+  "oretype.mechanical_ageing.type.multiversal": "Multiversal",
+
+  "oretype.mechanical_ageing.type.ore": "Ore",
+  "oretype.mechanical_ageing.type.deepslate": "Deepslate",
+  "oretype.mechanical_ageing.type.block": "Block",
+  "oretype.mechanical_ageing.type.compressed": "Compressed",
+  "oretype.mechanical_ageing.type.duo_compressed": "Double Compressed",
+  "oretype.mechanical_ageing.type.tri_compressed": "Triple Compressed",
+
+  "oretype.mechanical_ageing.type.raw": "Raw",
+  "oretype.mechanical_ageing.type.iced_raw": "Iced Raw",
+  "oretype.mechanical_ageing.type.ingot": "Ingot",
+  "oretype.mechanical_ageing.type.chunk": "Chunk",
+  "oretype.mechanical_ageing.type.crystal": "Crystal",
+  "oretype.mechanical_ageing.type.pure": "Pure",
+  "oretype.mechanical_ageing.type.dust": "Dust",
+  "oretype.mechanical_ageing.type.dirty": "Dirty",
+  "oretype.mechanical_ageing.type.wet": "Wet",
+  "oretype.mechanical_ageing.type.particle": "Particle"
 }

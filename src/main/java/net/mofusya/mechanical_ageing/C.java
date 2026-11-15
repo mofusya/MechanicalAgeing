@@ -1,5 +1,7 @@
 package net.mofusya.mechanical_ageing;
 
+import net.minecraft.resources.ResourceLocation;
+
 /**
  * The final class for static storing all constants for this mod.
  */
@@ -9,4 +11,10 @@ public final class C {
     public static final String TYPE = "type";
     public static final String AMOUNT = "amount";
     public static final String TAGS = "tags";
+    public static final String ORETYPE_DIR = "oretype/";
+
+
+    public static ResourceLocation modLoc(String path){
+        return new ResourceLocation(C.MOD_ID, path);
+    }
 }

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "mechanical_ageing:item/oretype/dirty_dust",
+    "layer1": "mechanical_ageing:item/oretype/wet_particle"
+  }
+}

@@ -11,7 +11,7 @@ import net.mofusya.ornatelib.util.ItemHelpers;
 public class MAgCreativeTabs {
     public static final OrnateCreativeTabRegister R = new OrnateCreativeTabRegister(C.MOD_ID);
 
-    public static final RegistryObject<CreativeModeTab> INGREDIENTS = R.register("ingredients", () -> new ItemStack(MAgOreTypes.IRON.getIngot().get()), (parameters, output) -> {
+    public static final RegistryObject<CreativeModeTab> INGREDIENTS = R.register("ingredients", () -> new ItemStack(MAgOreTypes.IRON.getOre().getMultiversal()), (parameters, output) -> {
         output.acceptAll(ItemHelpers.itemRegistries2ItemStacks(MAgOreTypes.R.getItemR().getMainItems()));
         output.acceptAll(ItemHelpers.blockRegistries2ItemStacks(MAgOreTypes.R.getBlockR().getMainBlocks()));
 

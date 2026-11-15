@@ -4,9 +4,11 @@ import net.kairayk.yklibrary.util.VectorColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.mofusya.mechanical_ageing.util.ColouredBoolean;
 import net.mofusya.mechanical_ageing.util.MultiversalObject;
-import net.mofusya.ornatelib.util.annotation.EverythingAreNonNullByDefault;
+import net.mofusya.ornatelib.util.annotation.FieldsAreNonNullByDefault;
 import net.mofusya.ornatelib.util.annotation.FieldsMayBeNullByDefault;
 import net.mofusya.ornatelib.util.annotation.MethodsReturnNonNullByDefault;
 import net.mofusya.ornatelib.util.annotation.ParametersMayBeNullByDefault;
@@ -40,7 +42,7 @@ public final class OreType {
     private final MultiversalObject<Item> dirtyDust;
     private final MultiversalObject<Item> wetParticle;
 
-    public OreType(ResourceLocation id, VectorColor color, Builder oreTypeBuilder,
+    public OreType(@Nonnull ResourceLocation id, @Nonnull VectorColor color, @Nonnull Builder oreTypeBuilder,
                    MultiversalObject<Block> ore, MultiversalObject<Block> deepslateOre,
 
                    MultiversalObject<Block> block, MultiversalObject<Block> compressedBlock,
@@ -73,10 +75,6 @@ public final class OreType {
         this.dust = dust;
         this.dirtyDust = dirtyDust;
         this.wetParticle = wetParticle;
-    }
-
-    public static Builder builder() {
-        return new Builder();
     }
 
     public ResourceLocation getId() {
@@ -179,101 +177,138 @@ public final class OreType {
     /**
      * The builder of the {@code OreType}, on what Item/Block will the {@code OreType} will have.
      */
-    @EverythingAreNonNullByDefault
+    @FieldsAreNonNullByDefault
+    @MethodsReturnNonNullByDefault
+    @ParametersMayBeNullByDefault
     public static class Builder {
-        private boolean hasOres = false;
-        private boolean hasBlocks = false;
-        private boolean hasRaws = false;
-        private boolean hasIngots = false;
-        private boolean hasCrystals = false;
-        private boolean hasDusts = false;
-        private boolean hasProcessingItems = false;
+        private final ColouredBoolean hasOres = new ColouredBoolean();
+        private final ColouredBoolean hasBlocks = new ColouredBoolean();
+        private final ColouredBoolean hasRaws = new ColouredBoolean();
+        private final ColouredBoolean hasIngots = new ColouredBoolean();
+        private final ColouredBoolean hasCrystals = new ColouredBoolean();
+        private final ColouredBoolean hasDusts = new ColouredBoolean();
+        private final ColouredBoolean hasProcessingItems = new ColouredBoolean();
 
-        private BlockBehaviour.Properties blockBuild = BlockBehaviour.Properties.of();
+        private BlockBehaviour.Properties blockBuild = BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).requiresCorrectToolForDrops();
         private Item.Properties itemBuild = new Item.Properties();
 
-        public Builder hasBlockBuild(BlockBehaviour.Properties blockBuild) {
+        public Builder hasBlockBuild(@Nonnull BlockBehaviour.Properties blockBuild) {
             this.blockBuild = blockBuild;
             return this;
         }
 
-        public Builder hasItemBuild(Item.Properties itemBuild) {
+        public Builder hasItemBuild(@Nonnull Item.Properties itemBuild) {
             this.itemBuild = itemBuild;
             return this;
         }
 
         public Builder hasOres() {
-            this.hasOres = true;
+            return hasOres(null);
+        }
+
+        public Builder hasOres(VectorColor color) {
+            this.hasOres.activate();
+            this.hasOres.setColour(color);
             return this;
         }
 
         public Builder hasBlocks() {
-            this.hasBlocks = true;
+            return hasBlocks(null);
+        }
+
+        public Builder hasBlocks(VectorColor color) {
+            this.hasBlocks.activate();
+            this.hasBlocks.setColour(color);
             return this;
         }
 
         public Builder hasRaws() {
-            this.hasRaws = true;
+            return hasRaws(null);
+        }
 
-            if (this.ingots() && this.crystals()) {
-                this.hasCrystals = false;
+        public Builder hasRaws(VectorColor color) {
+            this.hasRaws.activate();
+            this.hasRaws.setColour(color);
+
+            if (this.ingots().get() && this.crystals().get()) {
+                this.hasCrystals.disable();
             }
             return this;
         }
 
         public Builder hasIngots() {
-            this.hasIngots = true;
+            return hasIngots(null);
+        }
 
-            if (this.raws() && this.crystals()) {
-                this.hasCrystals = false;
+        public Builder hasIngots(VectorColor color) {
+            this.hasIngots.activate();
+            this.hasIngots.setColour(color);
+
+            if (this.raws().get() && this.crystals().get()) {
+                this.hasCrystals.disable();
             }
             return this;
         }
 
         public Builder hasCrystals() {
-            this.hasCrystals = true;
+            return hasCrystals(null);
+        }
 
-            if (this.raws() && this.ingots()) {
-                this.hasIngots = false;
+        public Builder hasCrystals(VectorColor color) {
+            this.hasCrystals.activate();
+            this.hasCrystals.setColour(color);
+
+            if (this.raws().get() && this.ingots().get()) {
+                this.hasIngots.disable();
             }
             return this;
         }
 
         public Builder hasDusts() {
-            this.hasDusts = true;
+            return hasDusts(null);
+        }
+
+        public Builder hasDusts(VectorColor color) {
+            this.hasDusts.activate();
+            this.hasDusts.setColour(color);
             return this;
         }
 
         public Builder hasProcessingItems() {
-            this.hasProcessingItems = true;
+            return hasProcessingItems(null);
+        }
+
+        public Builder hasProcessingItems(VectorColor color) {
+            this.hasProcessingItems.activate();
+            this.hasProcessingItems.setColour(color);
             return this;
         }
 
-        public boolean ores() {
+        public ColouredBoolean ores() {
             return hasOres;
         }
 
-        public boolean blocks() {
+        public ColouredBoolean blocks() {
             return hasBlocks;
         }
 
-        public boolean raws() {
+        public ColouredBoolean raws() {
             return hasRaws;
         }
 
-        public boolean ingots() {
+        public ColouredBoolean ingots() {
             return hasIngots;
         }
 
-        public boolean crystals() {
+        public ColouredBoolean crystals() {
             return hasCrystals;
         }
 
-        public boolean dusts() {
+        public ColouredBoolean dusts() {
             return hasDusts;
         }
 
-        public boolean processingItems() {
+        public ColouredBoolean processingItems() {
             return hasProcessingItems;
         }
 

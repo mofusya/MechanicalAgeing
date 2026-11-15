@@ -1,0 +1,16 @@
+{
+  "values": [
+    "mechanical_ageing:iron_ore",
+    "mechanical_ageing:multiversal_iron_ore",
+    "mechanical_ageing:deepslate_iron_ore",
+    "mechanical_ageing:multiversal_deepslate_iron_ore",
+    "mechanical_ageing:iron_block",
+    "mechanical_ageing:multiversal_iron_block",
+    "mechanical_ageing:compressed_iron_block",
+    "mechanical_ageing:multiversal_compressed_iron_block",
+    "mechanical_ageing:duo_compressed_iron_block",
+    "mechanical_ageing:multiversal_duo_compressed_iron_block",
+    "mechanical_ageing:tri_compressed_iron_block",
+    "mechanical_ageing:multiversal_tri_compressed_iron_block"
+  ]
+}

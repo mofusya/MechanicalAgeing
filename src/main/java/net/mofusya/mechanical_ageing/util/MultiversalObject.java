@@ -2,6 +2,8 @@ package net.mofusya.mechanical_ageing.util;
 
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.List;
+
 public class MultiversalObject<T> {
     private final RegistryObject<T> normalObject;
     private final RegistryObject<T> multiversalObject;
@@ -25,5 +27,12 @@ public class MultiversalObject<T> {
 
     public RegistryObject<T> getMultiversalObject() {
         return this.multiversalObject;
+    }
+
+    public List<T> getAll() {
+        return List.of(this.get(), this.getMultiversal());
+    }
+    public List<RegistryObject<T>> getAllObjects() {
+        return List.of(this.getObject(), this.getMultiversalObject());
     }
 }
