@@ -17,7 +17,6 @@ import java.util.concurrent.CompletableFuture;
 
 @Mod.EventBusSubscriber(modid = C.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MAgDataGenerator {
-
     private static final List<IMAgDataProvider> DATA_PROVIDERS = new ArrayList<>();
 
     static {

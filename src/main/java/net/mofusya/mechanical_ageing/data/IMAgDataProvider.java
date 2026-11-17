@@ -7,7 +7,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.ModelProvider;
-import net.mofusya.mechanical_ageing.C;
 import net.mofusya.mechanical_ageing.data.loot_tables.MAgBlockLootTableProvider;
 import net.mofusya.ornatelib.util.annotation.ParametersAreNonNullByDefault;
 
@@ -20,6 +19,10 @@ import java.util.function.Consumer;
  */
 @ParametersAreNonNullByDefault
 public interface IMAgDataProvider {
+    static ModelFile getModelFromLoc(ResourceLocation loc, ModelProvider<?> provider) {
+        return new ModelFile.ExistingModelFile(loc, provider.existingFileHelper);
+    }
+
     default void generateBlockState(MAgBlockStateProvider provider) {
     }
 
@@ -43,9 +46,5 @@ public interface IMAgDataProvider {
 
     default Collection<Block> getKnownBlockLootTables() {
         return List.of();
-    }
-
-    static ModelFile getModelFromLoc(ResourceLocation loc, ModelProvider<?> provider){
-        return new ModelFile.ExistingModelFile(loc, provider.existingFileHelper);
     }
 }

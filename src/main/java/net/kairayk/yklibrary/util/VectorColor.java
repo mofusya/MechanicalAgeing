@@ -187,6 +187,13 @@ public record VectorColor(float r, float g, float b, float a) {
         return (ai << 24) | (ri << 16) | (gi << 8) | bi;
     }
 
+    public int toRGB() {
+        int ri = (int) (Math.max(0.0f, Math.min(1.0f, this.r)) * 255) & 0xFF;
+        int gi = (int) (Math.max(0.0f, Math.min(1.0f, this.g)) * 255) & 0xFF;
+        int bi = (int) (Math.max(0.0f, Math.min(1.0f, this.b)) * 255) & 0xFF;
+        return (ri << 16) | (gi << 8) | bi;
+    }
+
     //region getter
     public float getMax() {
         return Math.max(this.r, Math.max(this.g, this.b));

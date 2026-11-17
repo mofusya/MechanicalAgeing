@@ -1,4 +1,4 @@
-package net.mofusya.mechanical_ageing.items.blocks.item;
+package net.mofusya.mechanical_ageing.blocks.item;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;

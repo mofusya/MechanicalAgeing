@@ -9,7 +9,7 @@ public class MAgOreTypes {
     public static final OreTypeRegister R = new OreTypeRegister(C.MOD_ID, REGISTRY::register);
 
     public static final OreType IRON = R.register("iron", VectorColor.WHITE, simpleMetalLikeBuilder());
-    public static final OreType GOLD = R.register("gold", VectorColor.WHITE, simpleMetalLikeBuilder());
+    public static final OreType GOLD = R.register("gold", VectorColor.YELLOW, simpleMetalLikeBuilder());
 
     public static OreType.Builder simpleMetalLikeBuilder(){
         return new OreType.Builder()

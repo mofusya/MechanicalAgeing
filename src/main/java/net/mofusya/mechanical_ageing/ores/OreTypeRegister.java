@@ -5,7 +5,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.mofusya.mechanical_ageing.items.blocks.item.FoilBlockItem;
 import net.mofusya.mechanical_ageing.ores.block.OreTypeBlock;
 import net.mofusya.mechanical_ageing.ores.item.OreTypeBlockItem;
 import net.mofusya.mechanical_ageing.ores.item.OreTypeItem;
