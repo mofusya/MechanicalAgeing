@@ -11,4 +11,7 @@ import net.mofusya.ornatelib.util.annotation.EverythingAreNonNullByDefault;
  */
 @EverythingAreNonNullByDefault
 public record TripleEntry<T>(T first, T second, T third) {
+    public TripleEntry(T value) {
+        this(value, value, value);
+    }
 }

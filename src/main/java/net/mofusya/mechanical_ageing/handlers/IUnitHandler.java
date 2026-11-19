@@ -1,4 +1,4 @@
-package net.mofusya.mechanical_ageing.handler;
+package net.mofusya.mechanical_ageing.handlers;
 
 import net.kairayk.yklibrary.util.scrpos.IScrPos;
 import net.minecraft.client.gui.GuiGraphics;

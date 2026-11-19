@@ -3,7 +3,7 @@ package net.mofusya.mechanical_ageing.data;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.mofusya.mechanical_ageing.data.loot_tables.MAgBlockLootTableProvider;
+import net.mofusya.mechanical_ageing.data.loot_table.MAgBlockLootTableProvider;
 
 import java.util.List;
 import java.util.Set;

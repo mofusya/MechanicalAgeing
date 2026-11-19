@@ -1,9 +1,29 @@
 {
+  "config.jade.plugin_mechanical_ageing.provider": "MAg Jade Provider",
+
   "creativetab.mechanical_ageing.ingredients": "MAg: Ingredients",
+  "creativetab.mechanical_ageing.machines": "MAg: Machines",
 
   "oretype.mechanical_ageing.iron": "Iron",
   "oretype.mechanical_ageing.gold": "Gold",
 
+  "matter.mechanical_ageing.empty": "Empty",
+
+  "unit.mechanical_ageing.kelvin": "Kelvin",
+  "unit.mechanical_ageing.kelvin.chamber": "Kelvin Chamber",
+  "unit.mechanical_ageing.kelvin.short": "Kv",
+  "unit.mechanical_ageing.ralts": "Ralts",
+  "unit.mechanical_ageing.ralts.chamber": "Ralts Chamber",
+  "unit.mechanical_ageing.ralts.short": "Rt",
+  "unit.mechanical_ageing.vaarr": "Vaarr",
+  "unit.mechanical_ageing.vaarr.chamber": "Vaarr Chamber",
+  "unit.mechanical_ageing.vaarr.short": "Vr",
+  "unit.mechanical_ageing.nealts": "Nealts",
+  "unit.mechanical_ageing.nealts.chamber": "Nealts Chamber",
+  "unit.mechanical_ageing.nealts.short": "Nl",
+  "unit.mechanical_ageing.tsealv": "Tsealv",
+  "unit.mechanical_ageing.tsealv.chamber": "Tsealv Chamber",
+  "unit.mechanical_ageing.tsealv.short": "Te",
 
   "oretype.mechanical_ageing.type.multiversal": "Multiversal",
 

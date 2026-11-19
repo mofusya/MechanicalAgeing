@@ -1,4 +1,4 @@
-package net.mofusya.mechanical_ageing.data.loot_tables;
+package net.mofusya.mechanical_ageing.data.loot_table;
 
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
@@ -8,7 +8,6 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.data.IMAgDataProvider;
 import net.mofusya.mechanical_ageing.data.MAgDataGenerator;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Set;

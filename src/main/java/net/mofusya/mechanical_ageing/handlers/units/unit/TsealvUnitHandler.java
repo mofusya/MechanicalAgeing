@@ -1,7 +1,7 @@
-package net.mofusya.mechanical_ageing.handler.units.unit;
+package net.mofusya.mechanical_ageing.handlers.units.unit;
 
 import net.kairayk.yklibrary.util.VectorColor;
-import net.mofusya.mechanical_ageing.handler.units.SimpleUnitHandler;
+import net.mofusya.mechanical_ageing.handlers.units.SimpleUnitHandler;
 import net.mofusya.mechanical_ageing.util.TripleEntry;
 import org.jetbrains.annotations.Range;
 
@@ -9,10 +9,9 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * A Capability handler for the Kelvin unit.
+ * A Capability handler for the Tsealv unit.
  */
-public class KelvinUnitHandler extends SimpleUnitHandler {
-
+public class TsealvUnitHandler extends SimpleUnitHandler {
     /**
      * An overdriven constructor,
      *
@@ -21,7 +20,7 @@ public class KelvinUnitHandler extends SimpleUnitHandler {
      * @param maxExtract   The max extracting limit of this.
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public KelvinUnitHandler(Double capacity, Double maxReceive, Double maxExtract, Runnable onChangeFunc) {
+    public TsealvUnitHandler(Double capacity, Double maxReceive, Double maxExtract, Runnable onChangeFunc) {
         super(capacity, maxReceive, maxExtract, onChangeFunc);
     }
 
@@ -34,7 +33,7 @@ public class KelvinUnitHandler extends SimpleUnitHandler {
      * @param allowedSlots The list of slot indexes that can be accessed or changed.
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public KelvinUnitHandler(Double capacity, Double maxReceive, Double maxExtract, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
+    public TsealvUnitHandler(Double capacity, Double maxReceive, Double maxExtract, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
         super(capacity, maxReceive, maxExtract, allowedSlots, onChangeFunc);
     }
 
@@ -47,7 +46,7 @@ public class KelvinUnitHandler extends SimpleUnitHandler {
      * @param maxExtract   The max extracting limit of this.
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public KelvinUnitHandler(@Range(from = 1, to = Integer.MAX_VALUE) int slotCount, Double capacity, Double maxReceive, Double maxExtract, Runnable onChangeFunc) {
+    public TsealvUnitHandler(@Range(from = 1, to = Integer.MAX_VALUE) int slotCount, Double capacity, Double maxReceive, Double maxExtract, Runnable onChangeFunc) {
         super(slotCount, capacity, maxReceive, maxExtract, onChangeFunc);
     }
 
@@ -61,7 +60,7 @@ public class KelvinUnitHandler extends SimpleUnitHandler {
      * @param allowedSlots The list of slot indexes that can be accessed or changed.
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public KelvinUnitHandler(@Range(from = 1, to = Integer.MAX_VALUE) int slotCount, Double capacity, Double maxReceive, Double maxExtract, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
+    public TsealvUnitHandler(@Range(from = 1, to = Integer.MAX_VALUE) int slotCount, Double capacity, Double maxReceive, Double maxExtract, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
         super(slotCount, capacity, maxReceive, maxExtract, allowedSlots, onChangeFunc);
     }
 
@@ -73,7 +72,7 @@ public class KelvinUnitHandler extends SimpleUnitHandler {
      * @param maxExtract   The max extracting limit per slot of this.
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public KelvinUnitHandler(List<Double> capacity, List<Double> maxReceive, List<Double> maxExtract, Runnable onChangeFunc) {
+    public TsealvUnitHandler(List<Double> capacity, List<Double> maxReceive, List<Double> maxExtract, Runnable onChangeFunc) {
         super(capacity, maxReceive, maxExtract, onChangeFunc);
     }
 
@@ -86,7 +85,7 @@ public class KelvinUnitHandler extends SimpleUnitHandler {
      * @param allowedSlots The list of slot indexes that can be accessed or changed.
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public KelvinUnitHandler(List<Double> capacity, List<Double> maxReceive, List<Double> maxExtract, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
+    public TsealvUnitHandler(List<Double> capacity, List<Double> maxReceive, List<Double> maxExtract, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
         super(capacity, maxReceive, maxExtract, allowedSlots, onChangeFunc);
     }
 
@@ -96,7 +95,7 @@ public class KelvinUnitHandler extends SimpleUnitHandler {
      * @param settings     The setting entry for initializing the {@code capacity}, the {@code maxReceive}, and the {@code maxExtract},
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public KelvinUnitHandler(Collection<TripleEntry<Double>> settings, Runnable onChangeFunc) {
+    public TsealvUnitHandler(Collection<TripleEntry<Double>> settings, Runnable onChangeFunc) {
         super(settings, onChangeFunc);
     }
 
@@ -107,7 +106,7 @@ public class KelvinUnitHandler extends SimpleUnitHandler {
      * @param allowedSlots The list of slot indexes that can be accessed or changed.
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public KelvinUnitHandler(Collection<TripleEntry<Double>> settings, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
+    public TsealvUnitHandler(Collection<TripleEntry<Double>> settings, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
         super(settings, allowedSlots, onChangeFunc);
     }
 

@@ -1,9 +1,11 @@
 package net.mofusya.mechanical_ageing.items;
 
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.RegistryObject;
 import net.mofusya.mechanical_ageing.C;
+import net.mofusya.mechanical_ageing.machinetiles.MAgMachineTiles;
 import net.mofusya.mechanical_ageing.ores.MAgOreTypes;
 import net.mofusya.ornatelib.registries.OrnateCreativeTabRegister;
 import net.mofusya.ornatelib.util.ItemHelpers;
@@ -17,5 +19,9 @@ public class MAgCreativeTabs {
 
         output.acceptAll(ItemHelpers.itemRegistries2ItemStacks(MAgOreTypes.R.getItemR().getItems(1)));
         output.acceptAll(ItemHelpers.blockRegistries2ItemStacks(MAgOreTypes.R.getBlockR().getBlocks(1)));
+    });
+
+    public static final RegistryObject<CreativeModeTab> MACHINES = R.register("machines", () -> new ItemStack(MAgMachineTiles.TEST.get().getBlock().get()), (parameters, output) -> {
+        output.acceptAll(ItemHelpers.blockRegistries2ItemStacks(MAgMachineTiles.R.getBlockR().getBlocks()));
     });
 }

@@ -1,7 +1,7 @@
-package net.mofusya.mechanical_ageing.handler.units.unit;
+package net.mofusya.mechanical_ageing.handlers.units.unit;
 
 import net.kairayk.yklibrary.util.VectorColor;
-import net.mofusya.mechanical_ageing.handler.units.SimpleUnitHandler;
+import net.mofusya.mechanical_ageing.handlers.units.SimpleUnitHandler;
 import net.mofusya.mechanical_ageing.util.TripleEntry;
 import org.jetbrains.annotations.Range;
 

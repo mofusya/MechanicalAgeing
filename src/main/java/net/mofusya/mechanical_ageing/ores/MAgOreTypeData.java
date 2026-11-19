@@ -25,7 +25,7 @@ import net.minecraftforge.common.world.ForgeBiomeModifiers;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.mofusya.mechanical_ageing.C;
 import net.mofusya.mechanical_ageing.data.*;
-import net.mofusya.mechanical_ageing.data.loot_tables.MAgBlockLootTableProvider;
+import net.mofusya.mechanical_ageing.data.loot_table.MAgBlockLootTableProvider;
 import net.mofusya.mechanical_ageing.util.MultiversalObject;
 import net.mofusya.ornatelib.util.annotation.ParametersAreNonNullByDefault;
 

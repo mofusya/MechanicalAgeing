@@ -1,17 +1,16 @@
-package net.mofusya.mechanical_ageing.handler.matter;
+package net.mofusya.mechanical_ageing.handlers.matter;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.mofusya.mechanical_ageing.C;
-import net.mofusya.mechanical_ageing.handler.IUnitHandler;
+import net.mofusya.mechanical_ageing.handlers.IUnitHandler;
 import net.mofusya.mechanical_ageing.matter.IMatterStack;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 
 @AutoRegisterCapability
-public interface IMatterHandler extends IUnitHandler<IMatterStack> {
+public interface IMatterStackHandler extends IUnitHandler<IMatterStack>{
 
     /**
      * A method for converting this to a NBT tag.

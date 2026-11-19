@@ -1,13 +1,18 @@
-package net.mofusya.mechanical_ageing.handler.matter;
+package net.mofusya.mechanical_ageing.handlers.units;
 
 import com.google.common.collect.ImmutableList;
+import net.kairayk.yklibrary.util.VectorColor;
 import net.kairayk.yklibrary.util.scrpos.IScrPos;
 import net.minecraft.client.gui.GuiGraphics;
-import net.mofusya.mechanical_ageing.matter.IMatterStack;
-import net.mofusya.mechanical_ageing.matter.MAgMatters;
-import net.mofusya.mechanical_ageing.matter.MatterStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+import net.mofusya.mechanical_ageing.C;
+import net.mofusya.mechanical_ageing.handlers.IUnitHandler;
 import net.mofusya.mechanical_ageing.util.ListUtil;
 import net.mofusya.mechanical_ageing.util.TripleEntry;
+import net.mofusya.ornatelib.util.annotation.EverythingAreNonNullByDefault;
 import net.mofusya.ornatelib.util.function.Modification;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -17,33 +22,38 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * A multi layered Capability handler for {@code IMatterStack}.
+ * A Capability handler for simple, multi layered double units.
  */
-public abstract class MatterHandler implements IMatterHandler {
+@EverythingAreNonNullByDefault
+public abstract class SimpleUnitHandler implements IUnitHandler<Double> {
     /**
-     * A field for storing the slot count this has.
+     * A field for storing the slot count this haves.
      */
     private final int slotCount;
+
     /**
      * The fields for storing the max capacity, receiving limit, and extract limit.
      */
     private final ImmutableList<Double> capacity;
     private final ImmutableList<Double> maxReceive;
     private final ImmutableList<Double> maxExtract;
+
     /**
      * The list of slot indexes that can be accessed or changed.
      * When null, every slot is treated as allowed.
      */
     @Nullable
     private final ImmutableList<Integer> allowedSlots;
+
     /**
      * The field for storing a function, fired when this was changed.
      */
     private final Runnable onChangeFunc;
+
     /**
      * A field for storing the actual amounts.
      */
-    private final List<IMatterStack> stored;
+    private final List<Double> stored;
 
     //region Constructors
 
@@ -55,7 +65,7 @@ public abstract class MatterHandler implements IMatterHandler {
      * @param maxExtract   The max extracting limit of this.
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public MatterHandler(Double capacity, Double maxReceive, Double maxExtract, Runnable onChangeFunc) {
+    public SimpleUnitHandler(Double capacity, Double maxReceive, Double maxExtract, Runnable onChangeFunc) {
         this(capacity, maxReceive, maxExtract, null, onChangeFunc);
     }
 
@@ -68,7 +78,7 @@ public abstract class MatterHandler implements IMatterHandler {
      * @param allowedSlots The list of slot indexes that can be accessed or changed.
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public MatterHandler(Double capacity, Double maxReceive, Double maxExtract, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
+    public SimpleUnitHandler(Double capacity, Double maxReceive, Double maxExtract, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
         this(1, capacity, maxReceive, maxExtract, allowedSlots, onChangeFunc);
     }
 
@@ -81,7 +91,7 @@ public abstract class MatterHandler implements IMatterHandler {
      * @param maxExtract   The max extracting limit of this.
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public MatterHandler(@Range(from = 1, to = Integer.MAX_VALUE) int slotCount, Double capacity, Double maxReceive, Double maxExtract, Runnable onChangeFunc) {
+    public SimpleUnitHandler(@Range(from = 1, to = Integer.MAX_VALUE) int slotCount, Double capacity, Double maxReceive, Double maxExtract, Runnable onChangeFunc) {
         this(slotCount, capacity, maxReceive, maxExtract, null, onChangeFunc);
     }
 
@@ -95,7 +105,7 @@ public abstract class MatterHandler implements IMatterHandler {
      * @param allowedSlots The list of slot indexes that can be accessed or changed.
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public MatterHandler(@Range(from = 1, to = Integer.MAX_VALUE) int slotCount, Double capacity, Double maxReceive, Double maxExtract, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
+    public SimpleUnitHandler(@Range(from = 1, to = Integer.MAX_VALUE) int slotCount, Double capacity, Double maxReceive, Double maxExtract, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
         this(ListUtil.createFilledListFor(slotCount, () -> capacity), ListUtil.createFilledListFor(slotCount, () -> maxReceive), ListUtil.createFilledListFor(slotCount, () -> maxExtract), allowedSlots, onChangeFunc);
     }
 
@@ -107,7 +117,7 @@ public abstract class MatterHandler implements IMatterHandler {
      * @param maxExtract   The max extracting limit per slot of this.
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public MatterHandler(List<Double> capacity, List<Double> maxReceive, List<Double> maxExtract, Runnable onChangeFunc) {
+    public SimpleUnitHandler(List<Double> capacity, List<Double> maxReceive, List<Double> maxExtract, Runnable onChangeFunc) {
         this(capacity, maxReceive, maxExtract, null, onChangeFunc);
     }
 
@@ -120,7 +130,7 @@ public abstract class MatterHandler implements IMatterHandler {
      * @param allowedSlots The list of slot indexes that can be accessed or changed.
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public MatterHandler(List<Double> capacity, List<Double> maxReceive, List<Double> maxExtract, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
+    public SimpleUnitHandler(List<Double> capacity, List<Double> maxReceive, List<Double> maxExtract, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
         this(convertListsToSettings(capacity, maxReceive, maxExtract), allowedSlots, onChangeFunc);
     }
 
@@ -130,7 +140,7 @@ public abstract class MatterHandler implements IMatterHandler {
      * @param settings     The setting entry for initializing the {@code capacity}, the {@code maxReceive}, and the {@code maxExtract},
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public MatterHandler(Collection<TripleEntry<Double>> settings, Runnable onChangeFunc) {
+    public SimpleUnitHandler(Collection<TripleEntry<Double>> settings, Runnable onChangeFunc) {
         this(settings, null, onChangeFunc);
     }
 
@@ -141,7 +151,7 @@ public abstract class MatterHandler implements IMatterHandler {
      * @param allowedSlots The list of slot indexes that can be accessed or changed.
      * @param onChangeFunc A function, fired when this was changed.
      */
-    public MatterHandler(Collection<TripleEntry<Double>> settings, Collection<Integer> allowedSlots, Runnable onChangeFunc) {
+    public SimpleUnitHandler(Collection<TripleEntry<Double>> settings, @Nullable Collection<Integer> allowedSlots, Runnable onChangeFunc) {
         this.slotCount = settings.size();
         this.onChangeFunc = onChangeFunc;
 
@@ -158,9 +168,9 @@ public abstract class MatterHandler implements IMatterHandler {
         this.maxReceive = maxReceiveBuilder.build();
         this.maxExtract = maxExtractBuilder.build();
 
-        this.allowedSlots = ImmutableList.copyOf(allowedSlots);
+        this.allowedSlots = allowedSlots == null ? null : ImmutableList.copyOf(allowedSlots);
 
-        this.stored = ListUtil.createFilledListFor(this.getSlotCount(), MatterStack::empty);
+        this.stored = ListUtil.createFilledListFor(this.getSlotCount(), () -> 0d);
     }
     //endregion
 
@@ -219,8 +229,9 @@ public abstract class MatterHandler implements IMatterHandler {
      */
     @Override
     public int getSlotCount() {
-        return this.slotCount;
+        return slotCount;
     }
+
 
     /**
      * An indexed getter for the {@code stored}.
@@ -229,7 +240,8 @@ public abstract class MatterHandler implements IMatterHandler {
      * @return The stored amount from {@code stored} in index {@code slot}.
      */
     @Override
-    public IMatterStack getStored(int slot) {
+    public Double getStored(int slot) {
+        if (this.isDenied(slot)) return 0d;
         return this.stored.get(slot);
     }
 
@@ -240,8 +252,9 @@ public abstract class MatterHandler implements IMatterHandler {
      * @param slot   The index to set.
      */
     @Override
-    public void setStored(IMatterStack amount, int slot) {
-        if (amount.isEmpty()) return;
+    @Deprecated
+    public void setStored(Double amount, int slot) {
+        if (this.isDenied(slot)) return;
         this.stored.set(slot, amount);
         this.onChanged();
     }
@@ -253,7 +266,8 @@ public abstract class MatterHandler implements IMatterHandler {
      * @param slot         The index to modify.
      */
     @Override
-    public void modStored(Modification<IMatterStack> modification, int slot) {
+    @Deprecated
+    public void modStored(Modification<Double> modification, int slot) {
         this.setStored(modification.apply(this.getStored(slot)), slot);
     }
 
@@ -264,8 +278,9 @@ public abstract class MatterHandler implements IMatterHandler {
      * @return The max capacity from {@code capacity} in index {@code slot}.
      */
     @Override
-    public IMatterStack getCapacity(int slot) {
-        return new MatterStack(MAgMatters.EMPTY.get(), this.capacity.get(slot));
+    public Double getCapacity(int slot) {
+        if (this.isDenied(slot)) return 0d;
+        return this.capacity.get(slot);
     }
 
     /**
@@ -275,10 +290,9 @@ public abstract class MatterHandler implements IMatterHandler {
      * @return The leftover space from index {@code slot}.
      */
     @Override
-    public IMatterStack getSpace(int slot) {
-        var capacity = this.getCapacity(slot);
-        capacity.remove(this.getStored(slot), false);
-        return capacity;
+    public Double getSpace(int slot) {
+        if (this.isDenied(slot)) return 0d;
+        return this.getCapacity(slot) - this.getStored(slot);
     }
 
     /**
@@ -288,8 +302,9 @@ public abstract class MatterHandler implements IMatterHandler {
      * @return The max receiving limit from {@code maxReceive} in index {@code slot}.
      */
     @Override
-    public IMatterStack getMaxReceive(int slot) {
-        return new MatterStack(MAgMatters.EMPTY.get(), this.maxReceive.get(slot));
+    public Double getMaxReceive(int slot) {
+        if (this.isDenied(slot)) return 0d;
+        return this.maxReceive.get(slot);
     }
 
     /**
@@ -299,8 +314,9 @@ public abstract class MatterHandler implements IMatterHandler {
      * @return The max extracting limit from {@code maxExtract} in index {@code slot}.
      */
     @Override
-    public IMatterStack getMaxExtract(int slot) {
-        return new MatterStack(MAgMatters.EMPTY.get(), this.maxExtract.get(slot));
+    public Double getMaxExtract(int slot) {
+        if (this.isDenied(slot)) return 0d;
+        return this.maxExtract.get(slot);
     }
 
     /**
@@ -311,7 +327,7 @@ public abstract class MatterHandler implements IMatterHandler {
      */
     @Override
     public boolean canReceive(int slot) {
-        return this.getMaxReceive(slot).getAmount() > 0d;
+        return this.getMaxReceive(slot) > 0f;
     }
 
     /**
@@ -322,7 +338,7 @@ public abstract class MatterHandler implements IMatterHandler {
      */
     @Override
     public boolean canExtract(int slot) {
-        return this.getMaxExtract(slot).getAmount() > 0d;
+        return this.getMaxExtract(slot) > 0f;
     }
 
     /**
@@ -335,28 +351,18 @@ public abstract class MatterHandler implements IMatterHandler {
      * @return The amount that has been successfully received. (Or can be received when simulated)
      */
     @Override
-    public IMatterStack receive(IMatterStack amount, boolean simulated, boolean forceLightReceive, int slot) {
-        if (this.isDenied(slot)) return MatterStack.empty();
-        if (!this.isValid(amount, slot)) return MatterStack.empty();
-        if (!this.canReceive(slot) && !forceLightReceive) return MatterStack.empty();
+    public Double receive(Double amount, boolean simulated, boolean forceLightReceive, int slot) {
+        if (this.isDenied(slot)) return 0d;
+        if (!this.canReceive(slot) && !forceLightReceive) return 0d;
 
-        IMatterStack stored = this.getStored(slot);
-        IMatterStack receiveAmount = amount.isEmpty() ? amount.copy(stored.getType()) : amount.copy();
-        if (this.getMaxReceive(slot).getAmount() < receiveAmount.getAmount() && !forceLightReceive)
-            receiveAmount.setTo(this.getMaxReceive(slot));
-        if (this.getSpace(slot).getAmount() < receiveAmount.getAmount()) receiveAmount.setTo(this.getSpace(slot));
+        if (this.getMaxReceive(slot) < amount && !forceLightReceive) amount = this.getMaxReceive(slot);
+        if (this.getSpace(slot) < amount) amount = this.getSpace(slot);
 
-        if (!stored.add(receiveAmount, true)) return MatterStack.empty();
-
+        double finalAmount = amount;
         if (!simulated) {
-            if (stored.isEmpty()){
-                this.setStored(receiveAmount, slot);
-            } else {
-                stored.add(receiveAmount, false);
-                this.onChanged();
-            }
+            this.modStored(s -> s + finalAmount, slot);
         }
-        return receiveAmount;
+        return finalAmount;
     }
 
     /**
@@ -369,24 +375,27 @@ public abstract class MatterHandler implements IMatterHandler {
      * @return The amount that has been successfully extracted. (Or can be extracted when simulated)
      */
     @Override
-    public IMatterStack extract(IMatterStack amount, boolean simulated, boolean forceLightExtract, int slot) {
-        if (this.isDenied(slot)) return MatterStack.empty();
-        if (!this.canExtract(slot) && !forceLightExtract) return MatterStack.empty();
-        if (this.getStored(slot).isEmpty()) return MatterStack.empty();
+    public Double extract(Double amount, boolean simulated, boolean forceLightExtract, int slot) {
+        if (this.isDenied(slot)) return 0d;
+        if (!this.canExtract(slot) && !forceLightExtract) return 0d;
 
-        IMatterStack stored = this.getStored(slot);
-        IMatterStack extractAmount = amount.isEmpty() ? amount.copy(stored.getType()) : amount.copy();
-        if (this.getMaxExtract(slot).getAmount() < extractAmount.getAmount() && !forceLightExtract)
-            extractAmount.setTo(this.getMaxExtract(slot));
-        if (stored.getAmount() < extractAmount.getAmount()) extractAmount.setTo(stored);
+        if (this.getMaxExtract(slot) < amount && !forceLightExtract) amount = this.getMaxExtract(slot);
+        if (this.getStored(slot) < amount) amount = this.getStored(slot);
 
-        if (!stored.remove(extractAmount, true)) return MatterStack.empty();
-
+        double finalAmount = amount;
         if (!simulated) {
-            stored.remove(extractAmount, false);
+            this.modStored(s -> s + finalAmount, slot);
         }
-        return extractAmount;
+        return finalAmount;
     }
+
+    /**
+     * A abstract method for setting/getting the color for the rendering bar.
+     *
+     * @param slot The slot to get the color.
+     * @return A {@code VectorColor} of the color for rendering the bar.
+     */
+    public abstract VectorColor getColor(int slot);
 
     /**
      * A method for rendering this to the GUI.
@@ -401,6 +410,37 @@ public abstract class MatterHandler implements IMatterHandler {
     }
 
     /**
+     * A method for converting this to a NBT tag.
+     *
+     * @return The NBT serialized {@code CompoundTag}.
+     */
+    @Override
+    public CompoundTag serializeNBT() {
+        CompoundTag tag = new CompoundTag();
+
+        ListTag storedTags = new ListTag();
+        for (int slot = 0; slot < this.getSlotCount(); slot++) {
+            storedTags.add(DoubleTag.valueOf(this.getStored(slot)));
+        }
+        tag.put(C.STORED, storedTags);
+
+        return tag;
+    }
+
+    /**
+     * A method for reconstructing this from a {@code CompoundTag}/NBT.
+     *
+     * @param tag The NBT tag to reconstruct this from.
+     */
+    @Override
+    public void deserializeNBT(CompoundTag tag) {
+        ListTag storedTags = tag.getList(C.STORED, Tag.TAG_DOUBLE);
+        for (int slot = 0; slot < this.getSlotCount(); slot++) {
+            this.setStored(storedTags.getDouble(slot), slot);
+        }
+    }
+
+    /**
      * A method fired when this was changed.
      */
     @Override
@@ -409,11 +449,46 @@ public abstract class MatterHandler implements IMatterHandler {
     }
 
     /**
-     * A abstract method to determine if the slot can store the {@code IMatterStack} matterStack.
+     * A method to make a new clone instance of this, and adjust the allowedSlots from the {@code deniedSlots}.
      *
-     * @param matterStack The {@code IMatterStack} to test.
-     * @param slot        The slot index to test.
-     * @return If the {@code matterStack} is valid.
+     * @param deniedSlots The slot indexes to deny.
+     * @return The cloned {@code SimpleUnitHandler}.
      */
-    abstract boolean isValid(IMatterStack matterStack, int slot);
+    public SimpleUnitHandler copyAndLimitFromDeniedSlots(List<Integer> deniedSlots) {
+        List<Integer> allowedSlots = new ArrayList<>();
+        for (int i = 0; i < this.getSlotCount(); i++) {
+            if (deniedSlots.contains(i)) continue;
+            allowedSlots.add(i);
+        }
+        return copyAndLimit(allowedSlots);
+    }
+
+    /**
+     * A method to make a new clone instance of this, and adjust tje allowed slots.
+     *
+     * @param allowedSlots The slot indexes to allow.
+     * @return The cloned {@code SimpleUnitHandler}
+     */
+    public SimpleUnitHandler copyAndLimit(List<Integer> allowedSlots) {
+        return new SimpleUnitHandler(this.capacity, this.maxReceive, this.maxExtract, allowedSlots, this.onChangeFunc) {
+            @Override
+            public VectorColor getColor(int slot) {
+                return SimpleUnitHandler.this.getColor(slot);
+            }
+        };
+    }
+
+    /**
+     * A method to make a new clone instance of this.
+     *
+     * @return THe cloned {@code SimpleUnitHandler}
+     */
+    public SimpleUnitHandler copy() {
+        return new SimpleUnitHandler(this.capacity, this.maxReceive, this.maxExtract, this.allowedSlots, this.onChangeFunc) {
+            @Override
+            public VectorColor getColor(int slot) {
+                return SimpleUnitHandler.this.getColor(slot);
+            }
+        };
+    }
 }

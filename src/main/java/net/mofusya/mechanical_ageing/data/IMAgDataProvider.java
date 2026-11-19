@@ -7,7 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.ModelProvider;
-import net.mofusya.mechanical_ageing.data.loot_tables.MAgBlockLootTableProvider;
+import net.mofusya.mechanical_ageing.data.loot_table.MAgBlockLootTableProvider;
 import net.mofusya.ornatelib.util.annotation.ParametersAreNonNullByDefault;
 
 import java.util.Collection;
