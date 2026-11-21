@@ -19,6 +19,7 @@ public final class C {
     public static final String RALTS_HANDLER = "raltsHandler";
     public static final String VAARR_HANDLER = "vaarrHandler";
     public static final String TSEALV_HANDLER = "tsealvHandler";
+    public static final String COLOR = "color";
 
     public static ResourceLocation modLoc(String path){
         return new ResourceLocation(C.MOD_ID, path);

@@ -8,6 +8,7 @@
   "oretype.mechanical_ageing.gold": "Gold",
 
   "matter.mechanical_ageing.empty": "Empty",
+  "matter.mechanical_ageing.water": "Water",
 
   "unit.mechanical_ageing.kelvin": "Kelvin",
   "unit.mechanical_ageing.kelvin.chamber": "Kelvin Chamber",

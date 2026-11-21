@@ -62,7 +62,7 @@ public final class MatterStack implements IMatterStack {
      */
     public static MatterStack deserializeNBT(CompoundTag tag) {
         return new MatterStack(
-                MAgMatters.REGISTRY.getEntries().get(new ResourceLocation(tag.getString(C.TYPE))).get(),
+                MAgMatterTypes.REGISTRY.getEntries().get(new ResourceLocation(tag.getString(C.TYPE))).get(),
                 tag.getDouble(C.AMOUNT),
                 JsonParser.parseString(tag.getString(C.TAGS)).getAsJsonObject()
         );
@@ -160,6 +160,6 @@ public final class MatterStack implements IMatterStack {
      * @return A new empty {@code MatterStack}.
      */
     public static MatterStack empty(){
-        return new MatterStack(MAgMatters.EMPTY.get(), 0d);
+        return new MatterStack(MAgMatterTypes.EMPTY.get(), 0d);
     }
 }

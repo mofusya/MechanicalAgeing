@@ -160,7 +160,7 @@ public interface IMatterStack {
      * @return If the {@code matterStack} has the same tags.
      */
     default boolean testTags(IMatterStack matterStack) {
-        return this.getTags().toString().equals(matterStack.toString());
+        return this.getTags().toString().equals(matterStack.getTags().toString());
     }
 
     /**
@@ -169,6 +169,6 @@ public interface IMatterStack {
      * @return Whether if this is empty.
      */
     default boolean isEmpty() {
-        return this.is(MAgMatters.EMPTY.get());
+        return this.is(MAgMatterTypes.EMPTY.get());
     }
 }

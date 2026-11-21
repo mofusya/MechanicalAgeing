@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import net.kairayk.yklibrary.util.scrpos.IScrPos;
 import net.minecraft.client.gui.GuiGraphics;
 import net.mofusya.mechanical_ageing.matter.IMatterStack;
-import net.mofusya.mechanical_ageing.matter.MAgMatters;
+import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.matter.MatterStack;
 import net.mofusya.mechanical_ageing.util.ListUtil;
 import net.mofusya.mechanical_ageing.util.TripleEntry;
@@ -265,7 +265,7 @@ public abstract class MatterStackHandler implements IMatterStackHandler {
      */
     @Override
     public IMatterStack getCapacity(int slot) {
-        return new MatterStack(MAgMatters.EMPTY.get(), this.capacity.get(slot));
+        return new MatterStack(MAgMatterTypes.EMPTY.get(), this.capacity.get(slot));
     }
 
     /**
@@ -277,7 +277,7 @@ public abstract class MatterStackHandler implements IMatterStackHandler {
     @Override
     public IMatterStack getSpace(int slot) {
         var capacity = this.getCapacity(slot);
-        capacity.remove(this.getStored(slot), false);
+        capacity.remove(new MatterStack(MAgMatterTypes.EMPTY.get(), this.getStored(slot).getAmount()), false);
         return capacity;
     }
 
@@ -289,7 +289,7 @@ public abstract class MatterStackHandler implements IMatterStackHandler {
      */
     @Override
     public IMatterStack getMaxReceive(int slot) {
-        return new MatterStack(MAgMatters.EMPTY.get(), this.maxReceive.get(slot));
+        return new MatterStack(MAgMatterTypes.EMPTY.get(), this.maxReceive.get(slot));
     }
 
     /**
@@ -300,7 +300,7 @@ public abstract class MatterStackHandler implements IMatterStackHandler {
      */
     @Override
     public IMatterStack getMaxExtract(int slot) {
-        return new MatterStack(MAgMatters.EMPTY.get(), this.maxExtract.get(slot));
+        return new MatterStack(MAgMatterTypes.EMPTY.get(), this.maxExtract.get(slot));
     }
 
     /**
@@ -346,12 +346,12 @@ public abstract class MatterStackHandler implements IMatterStackHandler {
             receiveAmount.setTo(this.getMaxReceive(slot));
         if (this.getSpace(slot).getAmount() < receiveAmount.getAmount()) receiveAmount.setTo(this.getSpace(slot));
 
-        if (!stored.add(receiveAmount, true)) return MatterStack.empty();
-
         if (!simulated) {
             if (stored.isEmpty()){
                 this.setStored(receiveAmount, slot);
             } else {
+                if (!stored.add(receiveAmount, true)) return MatterStack.empty();
+
                 stored.add(receiveAmount, false);
                 this.onChanged();
             }

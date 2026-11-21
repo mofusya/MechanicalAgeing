@@ -4,11 +4,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
@@ -17,15 +20,11 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.mofusya.mechanical_ageing.C;
-import net.mofusya.mechanical_ageing.handlers.IUnitHandler;
 import net.mofusya.mechanical_ageing.handlers.MAgCapabilities;
 import net.mofusya.mechanical_ageing.handlers.OptionalMasterHandler;
 import net.mofusya.mechanical_ageing.handlers.matter.IMatterStackHandler;
 import net.mofusya.mechanical_ageing.handlers.matter.MatterStackHandler;
-import net.mofusya.mechanical_ageing.handlers.units.unit.KelvinUnitHandler;
-import net.mofusya.mechanical_ageing.handlers.units.unit.RaltsUnitHandler;
-import net.mofusya.mechanical_ageing.handlers.units.unit.TsealvUnitHandler;
-import net.mofusya.mechanical_ageing.handlers.units.unit.VaarrUnitHandler;
+import net.mofusya.mechanical_ageing.handlers.units.unit.*;
 import net.mofusya.mechanical_ageing.machinetiles.MachineTile;
 import net.mofusya.mechanical_ageing.machinetiles.components.slot.ItemSlot;
 import net.mofusya.mechanical_ageing.machinetiles.components.slot.MatterSlot;
@@ -43,10 +42,10 @@ public class MachineBlockEntity extends SyncedBlockEntity implements MenuProvide
 
     private final OptionalMasterHandler<ItemStackHandler, IItemHandler> itemMasterHandler;
     private final OptionalMasterHandler<MatterStackHandler, IMatterStackHandler> matterMasterHandler;
-    private final OptionalMasterHandler<KelvinUnitHandler, IUnitHandler<Double>> kelvinMasterHandler;
-    private final OptionalMasterHandler<RaltsUnitHandler, IUnitHandler<Double>> raltsMasterHandler;
-    private final OptionalMasterHandler<VaarrUnitHandler, IUnitHandler<Double>> vaarrMasterHandler;
-    private final OptionalMasterHandler<TsealvUnitHandler, IUnitHandler<Double>> tsealvMasterHandler;
+    private final OptionalMasterHandler<KelvinUnitHandler, IKelvinUnitHandler> kelvinMasterHandler;
+    private final OptionalMasterHandler<RaltsUnitHandler, IRaltsUnitHandler> raltsMasterHandler;
+    private final OptionalMasterHandler<VaarrUnitHandler, IVaarrUnitHandler> vaarrMasterHandler;
+    private final OptionalMasterHandler<TsealvUnitHandler, ITsealvUnitHandler> tsealvMasterHandler;
 
     public MachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, MachineTile machineTile) {
         super(type, pos, state);
@@ -91,7 +90,25 @@ public class MachineBlockEntity extends SyncedBlockEntity implements MenuProvide
         this.tsealvMasterHandler = new OptionalMasterHandler<>(tsealvSlots.isEmpty() ? Optional.empty() : Optional.of(new TsealvUnitHandler(tsealvHandlerSettings, this::setChange)));
     }
 
-    @Override @NotNull
+    public void tick(Level level, BlockPos pos, BlockState state){
+        this.getMachineTile().tick(level, pos, state, this);
+    }
+
+    public void drop() {
+        if (this.getLevel() == null) return;
+
+        this.getItemMasterHandler().getOptionalHandler().ifPresent(hanlder -> {
+            SimpleContainer container = new SimpleContainer(hanlder.getSlots());
+            for (int i = 0; i < hanlder.getSlots(); i++) {
+                container.setItem(i, hanlder.getStackInSlot(i));
+            }
+
+            Containers.dropContents(this.getLevel(), this.getBlockPos(), container);
+        });
+    }
+
+    @Override
+    @NotNull
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (this.getLevel() == null) return super.getCapability(cap, side);
 
@@ -103,19 +120,19 @@ public class MachineBlockEntity extends SyncedBlockEntity implements MenuProvide
             return this.getLazyMatterHandler().cast();
         }
 
-        if (cap == MAgCapabilities.KELVIN && this.getLazyKelvinHandler().isPresent()){
+        if (cap == MAgCapabilities.KELVIN && this.getLazyKelvinHandler().isPresent()) {
             return this.getLazyKelvinHandler().cast();
         }
 
-        if (cap == MAgCapabilities.RALTS && this.getLazyRaltsHandler().isPresent()){
+        if (cap == MAgCapabilities.RALTS && this.getLazyRaltsHandler().isPresent()) {
             return this.getLazyRaltsHandler().cast();
         }
 
-        if (cap == MAgCapabilities.VAARR && this.getLazyVaarrHandler().isPresent()){
+        if (cap == MAgCapabilities.VAARR && this.getLazyVaarrHandler().isPresent()) {
             return this.getLazyVaarrHandler().cast();
         }
 
-        if (cap == MAgCapabilities.TSEALV && this.getLazyTsealvHandler().isPresent()){
+        if (cap == MAgCapabilities.TSEALV && this.getLazyTsealvHandler().isPresent()) {
             return this.getLazyTsealvHandler().cast();
         }
 
@@ -177,8 +194,8 @@ public class MachineBlockEntity extends SyncedBlockEntity implements MenuProvide
 
     @Override
     @Nullable
-    public AbstractContainerMenu createMenu(int p_39954_, Inventory p_39955_, Player p_39956_) {
-        return null;
+    public AbstractContainerMenu createMenu(int windowId, Inventory inventory, Player player) {
+        return new MachineMenu(windowId, inventory, this, Optional.empty(), this.getMachineTile());
     }
 
     public MachineTile getMachineTile() {
@@ -209,51 +226,51 @@ public class MachineBlockEntity extends SyncedBlockEntity implements MenuProvide
         return this.getMatterMasterHandler().getLazyHandler();
     }
 
-    public OptionalMasterHandler<KelvinUnitHandler, IUnitHandler<Double>> getKelvinMasterHandler() {
+    public OptionalMasterHandler<KelvinUnitHandler, IKelvinUnitHandler> getKelvinMasterHandler() {
         return kelvinMasterHandler;
     }
 
-    public KelvinUnitHandler getKelvinHandler(){
+    public KelvinUnitHandler getKelvinHandler() {
         return this.getKelvinMasterHandler().getHandler();
     }
 
-    public LazyOptional<IUnitHandler<Double>> getLazyKelvinHandler(){
+    public LazyOptional<IKelvinUnitHandler> getLazyKelvinHandler() {
         return this.getKelvinMasterHandler().getLazyHandler();
     }
 
-    public OptionalMasterHandler<RaltsUnitHandler, IUnitHandler<Double>> getRaltsMasterHandler() {
+    public OptionalMasterHandler<RaltsUnitHandler, IRaltsUnitHandler> getRaltsMasterHandler() {
         return raltsMasterHandler;
     }
 
-    public RaltsUnitHandler getRaltsHandler(){
+    public RaltsUnitHandler getRaltsHandler() {
         return this.getRaltsMasterHandler().getHandler();
     }
 
-    public LazyOptional<IUnitHandler<Double>> getLazyRaltsHandler(){
+    public LazyOptional<IRaltsUnitHandler> getLazyRaltsHandler() {
         return this.getRaltsMasterHandler().getLazyHandler();
     }
 
-    public OptionalMasterHandler<VaarrUnitHandler, IUnitHandler<Double>> getVaarrMasterHandler() {
+    public OptionalMasterHandler<VaarrUnitHandler, IVaarrUnitHandler> getVaarrMasterHandler() {
         return vaarrMasterHandler;
     }
 
-    public VaarrUnitHandler getVaarrHandler(){
+    public VaarrUnitHandler getVaarrHandler() {
         return this.getVaarrMasterHandler().getHandler();
     }
 
-    public LazyOptional<IUnitHandler<Double>> getLazyVaarrHandler(){
+    public LazyOptional<IVaarrUnitHandler> getLazyVaarrHandler() {
         return this.getVaarrMasterHandler().getLazyHandler();
     }
 
-    public OptionalMasterHandler<TsealvUnitHandler, IUnitHandler<Double>> getTsealvMasterHandler() {
+    public OptionalMasterHandler<TsealvUnitHandler, ITsealvUnitHandler> getTsealvMasterHandler() {
         return tsealvMasterHandler;
     }
 
-    public TsealvUnitHandler getTsealvHandler(){
+    public TsealvUnitHandler getTsealvHandler() {
         return this.getTsealvMasterHandler().getHandler();
     }
 
-    public LazyOptional<IUnitHandler<Double>> getLazyTsealvHandler(){
+    public LazyOptional<ITsealvUnitHandler> getLazyTsealvHandler() {
         return this.getTsealvMasterHandler().getLazyHandler();
     }
 }

@@ -6,10 +6,11 @@ import net.mofusya.ornatelib.registries.OrnateHolder;
 import net.mofusya.ornatelib.registries.OrnateRegister;
 import net.mofusya.ornatelib.registries.OrnateRegistry;
 
-public class MAgMatters {
+public class MAgMatterTypes {
     public static final OrnateRegistry<IMatterType> REGISTRY = new OrnateRegistry<>();
 
     public static final OrnateRegister<IMatterType> R = new OrnateRegister<>(C.MOD_ID, REGISTRY::register);
 
     public static final OrnateHolder<IMatterType> EMPTY = R.register("empty", id -> new MatterType(id, VectorColor.TRANSPARENT));
+    public static final OrnateHolder<IMatterType> WATER = R.register("water", id -> new MatterType(id, VectorColor.AZURE));
 }

@@ -1,17 +1,24 @@
 package net.mofusya.mechanical_ageing.machinetiles;
 
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.mofusya.mechanical_ageing.C;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineBlockEntity;
 import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineMenu;
+import net.mofusya.mechanical_ageing.machinetiles.baseclass.MachineScreen;
 import net.mofusya.mechanical_ageing.util.LazyPointer;
 import net.mofusya.ornatelib.registries.OrnateBlockEntityTypeRegister;
 import net.mofusya.ornatelib.registries.OrnateBlockRegister;
@@ -227,4 +234,16 @@ public final class MachineTileRegister {
         this.locked = true;
     }
     //endregion
+
+    @Mod.EventBusSubscriber(modid = C.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+    public static class ClientEvent{
+        @SubscribeEvent
+        public static void onClientSetup(FMLClientSetupEvent event){
+            event.enqueueWork(() -> MachineTileRegister.MACHINE_MENUS_TYPES.values().stream().map(LazyPointer::get).map(RegistryObject::get).forEach(ClientEvent::connect));
+        }
+
+        private static void connect(MenuType<MachineMenu> menu){
+            MenuScreens.register(menu, MachineScreen::new);
+        }
+    }
 }

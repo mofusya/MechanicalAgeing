@@ -1,14 +1,12 @@
 package net.mofusya.mechanical_ageing;
 
 import com.mojang.logging.LogUtils;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.mofusya.mechanical_ageing.items.MAgCreativeTabs;
 import net.mofusya.mechanical_ageing.machinetiles.MAgMachineTiles;
-import net.mofusya.mechanical_ageing.matter.MAgMatters;
+import net.mofusya.mechanical_ageing.matter.MAgMatterTypes;
 import net.mofusya.mechanical_ageing.ores.MAgOreTypes;
 import org.slf4j.Logger;
 
@@ -33,7 +31,7 @@ public class MAg
     public MAg() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        MAgMatters.R.register();
+        MAgMatterTypes.R.register();
         MAgOreTypes.R.register(modEventBus);
         MAgCreativeTabs.R.register(modEventBus);
         MAgMachineTiles.R.register(modEventBus);

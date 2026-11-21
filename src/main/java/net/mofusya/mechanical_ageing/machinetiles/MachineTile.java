@@ -7,6 +7,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -50,6 +51,16 @@ public class MachineTile {
         this.block = MachineTileRegister.getMachineBlock(id);
         this.blockEntityType = MachineTileRegister.getMachineBlockEntityType(id);
         this.menuType = MachineTileRegister.getMachineMenuType(id);
+    }
+
+    /**
+     * A method fired when this blockEntity is ticked.
+     * @param level The {@code Level} the blockEntity is ticked.
+     * @param pos The {@code BlockPos} the blockEntity is ticked.
+     * @param state The {@code BlockState} the blockEntity is ticked.
+     * @param blockEntity The {@code MachineBlockEntity} this method is fired from.
+     */
+    public void tick(Level level, BlockPos pos, BlockState state, MachineBlockEntity blockEntity){
     }
 
     //region Settings
